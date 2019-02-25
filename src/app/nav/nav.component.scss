@@ -16,6 +16,16 @@
   z-index: 1;
 }
 
+.navbar-top {
+  display: flex;
+  :first-child {
+    float: left;
+  }
+  a {
+    float: right;
+  }
+}
+
 .hidden {
   display: none;
 }

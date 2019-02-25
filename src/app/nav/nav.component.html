@@ -3,7 +3,7 @@
     fxShow="isHandset$ | async">
     <mat-nav-list>
       <!-- Put links here -->
-      <mat-list-item mat-button routerLink="">Home</mat-list-item>
+      <!-- <mat-list-item mat-button routerLink="{{ link }}">{{ item }}</mat-list-item> -->
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -12,10 +12,14 @@
         *ngIf="isHandset$ | async" fxShow="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>WitsDaily</span>
-      <div [class.hidden]="(isHandset$ | async)">
+      <a layout-align="start center" mat-button routerLink="">WitsDaily</a>
+      <span flex></span>
+      <div class="navbar-top">
         <!-- Put links here -->
-        <a mat-button routerLink="">Home</a>
+        <!-- <a mat-button routerLink=" {{ link }} ">{{ item }}</a> -->
+        <a mat-button routerLink="link">item</a>
+        <a mat-button routerLink="link">item</a>
+        <a mat-button routerLink="link">item</a>
       </div>
     </mat-toolbar>
   </mat-sidenav-content>
