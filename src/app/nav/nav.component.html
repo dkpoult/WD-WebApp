@@ -1,25 +1,31 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="dialog" [mode]="over"
-    fxShow="isHandset$ | async">
+  <mat-sidenav #drawer class="drawer" fixedInViewport="true" [attr.role]="dialog" [mode]="over"
+    fxShow="isHandset$ | async" [opened]="(!isHandset$ | async)" fxLayout="column">
     <mat-nav-list>
       <!-- Put links here -->
       <!-- <mat-list-item mat-button routerLink="{{ link }}">{{ item }}</mat-list-item> -->
+      <div>
+        <!-- TODO: Make these align on bottom-->
+        <button mat-button #loginbtn (click)="openLoginDialog">Log In</button>
+        <button mat-raised-button #signupbtn color="accent" (click)="openSignupDialog">Sign Up</button>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async" fxShow="isHandset$ | async">
+      <button type="button" aria-label="Toggle side nav" mat-icon-button (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <a layout-align="start center" mat-button routerLink="">WitsDaily</a>
-      <span flex></span>
-      <div class="navbar-top">
+      <a mat-button routerLink="">WitsDaily</a>
+      <span style="flex: 1 1 auto;"></span>
+      <div fxLayout="row" class="toolbar" [class.hidden]="isHandset$ | async">
         <!-- Put links here -->
         <!-- <a mat-button routerLink=" {{ link }} ">{{ item }}</a> -->
-        <a mat-button routerLink="link">item</a>
-        <a mat-button routerLink="link">item</a>
-        <a mat-button routerLink="link">item</a>
+        <div>
+          <button mat-button #loginbtn (click)="openLoginDialog()">Log In</button>
+          <button mat-raised-button #signupbtn color="accent" (click)="openSignupDialog()">Sign Up</button>
+        </div>
       </div>
     </mat-toolbar>
   </mat-sidenav-content>
