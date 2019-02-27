@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
+import { SharedService } from '../shared/shared.service';
 import { MatDialogRef } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-login-dialog',
@@ -9,22 +10,46 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class LoginDialogComponent implements OnInit {
 
+  hide = true;
+
   form: FormGroup;
+  loginFailed = false;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<LoginDialogComponent>
+    private dialogRef: MatDialogRef<LoginDialogComponent>,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      studentnumber: '',
-      password: ''
+    this.form = new FormGroup({
+      personNumber: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required])
     });
   }
 
+  hasErrors() {
+    return (
+      this.form.controls.personNumber.hasError('required') ||
+      this.form.controls.password.hasError('required') ||
+      (this.loginFailed && !this.form.dirty)
+    );
+  }
+
   submit(form) {
-    this.dialogRef.close(`${form.value.studentnumber}, ${form.value.password}`);
+    const user = form.value;
+    this.sharedService.authenticateUser(user).subscribe((response) => {
+      switch (response.responseCode) {
+        case 'successful':
+          this.loginFailed = false;
+          this.sharedService.loginUser(user.personNumber, response.userToken);
+          this.dialogRef.close();
+          break;
+        default:
+          this.loginFailed = true;
+          this.form.markAsPristine();
+          break;
+      }
+    });
   }
 
 }

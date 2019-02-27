@@ -1,14 +1,14 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="drawer" fixedInViewport="true" [attr.role]="dialog" [mode]="over"
-    fxShow="isHandset$ | async" [opened]="(!isHandset$ | async)" fxLayout="column">
+  <mat-sidenav class="drawer" fixedInViewport="true" [attr.role]="dialog" [mode]="over" fxShow="isHandset$ | async"
+    [opened]="(!isHandset$ | async)" fxLayout="column">
     <mat-nav-list>
       <!-- Put links here -->
       <!-- <mat-list-item mat-button routerLink="{{ link }}">{{ item }}</mat-list-item> -->
-      <div>
-        <!-- TODO: Make these align on bottom-->
-        <button mat-button #loginbtn (click)="openLoginDialog">Log In</button>
-        <button mat-raised-button #signupbtn color="accent" (click)="openSignupDialog">Sign Up</button>
-      </div>
+    </mat-nav-list>
+    <mat-nav-list fxFlexAlign="bottom">
+      <!-- TODO: Make these align on bottom-->
+      <button mat-button (click)="openLoginDialog()">Log In</button>
+      <button mat-raised-button color="accent" (click)="openSignupDialog()">Sign Up</button>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -23,8 +23,8 @@
         <!-- Put links here -->
         <!-- <a mat-button routerLink=" {{ link }} ">{{ item }}</a> -->
         <div>
-          <button mat-button #loginbtn (click)="openLoginDialog()">Log In</button>
-          <button mat-raised-button #signupbtn color="accent" (click)="openSignupDialog()">Sign Up</button>
+          <button mat-button (click)="openLoginDialog()">Log In</button>
+          <button mat-raised-button color="accent" (click)="openSignupDialog()">Sign Up</button>
         </div>
       </div>
     </mat-toolbar>
