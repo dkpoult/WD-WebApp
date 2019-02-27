@@ -1,17 +1,31 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule, MatDialogModule
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { SharedService } from './shared/shared.service';
+
+export function initialiseApp(config: SharedService) {
+  return () => config.initialise();
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +34,8 @@ import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
     SignupDialogComponent,
   ],
   imports: [
+    HttpClientModule,
+    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -31,9 +47,19 @@ import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initialiseApp,
+      deps: [SharedService],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [LoginDialogComponent, SignupDialogComponent]
 })

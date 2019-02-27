@@ -1,15 +1,29 @@
+<h1 mat-dialog-title>Log In</h1>
 <form [formGroup]="form" (ngSubmit)="submit(form)">
-  <h1 mat-dialog-title>Log In</h1>
-  <mat-dialog-content>
-    <ul>
-      <!---Student number input-->
-      <input mat-input formControlName="studentnumber" placeholder="Student Number">
-      <!--Password-->
-      <input mat-input formControlName="password" type="password" placeholder="Password">
-    </ul>
+  <mat-dialog-content layout="column">
+    <mat-form-field>
+      <mat-label>Person Number</mat-label>
+      <input formControlName="personNumber" matInput>
+      <mat-error>
+        Please enter a person number
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+      <mat-icon style="cursor: pointer;" matTooltip="Show/Hide Password" matSuffix (click)="hide = !hide">
+        {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-error>
+        Please enter a password
+      </mat-error>
+    </mat-form-field>
+    <mat-error *ngIf="loginFailed">
+      Invalid username or password
+    </mat-error>
   </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-button>Log In</button>
-    <button mat-button mat-dialog-close color="warn">Cancel</button>
+  <mat-dialog-actions layout="row">
+    <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Log In</button>
+    <span style="flex: 1 1 auto;"></span>
+    <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
   </mat-dialog-actions>
 </form>
