@@ -45,7 +45,7 @@ export class SharedService {
 
   signOut() {
     // TODO: Confirm dialog
-    this.logger.debug(`Logged out user ${this.user.personNumber}`);
+    this.logger.debug(`Logged out user ${this.user ? this.user.personNumber : 'with no person number'}`);
     this.user = null;
   }
 }
