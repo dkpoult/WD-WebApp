@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatToolbarModule,
@@ -35,6 +36,7 @@ export function initialiseApp(config: SharedService) {
   ],
   imports: [
     HttpClientModule,
+    FlexLayoutModule,
     LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     BrowserModule,
     AppRoutingModule,
@@ -50,7 +52,7 @@ export function initialiseApp(config: SharedService) {
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   providers: [
     {

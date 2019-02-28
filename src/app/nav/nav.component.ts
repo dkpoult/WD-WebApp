@@ -7,9 +7,9 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component';
 import { SharedService } from '../shared/shared.service';
 
-export interface LoginData {
-  person_number: string;
-  password: string;
+export interface MenuItem {
+  routerLink: string;
+  text: string;
 }
 
 @Component({
@@ -24,21 +24,22 @@ export class NavComponent {
       map(result => result.matches)
     );
 
+  // isLoggedIn$: Observable<boolean> = this.sharedService.isLoggedIn(); // TODO: Make this work
+
   loginDialogRef: MatDialogRef<LoginDialogComponent>;
   signupDialogRef: MatDialogRef<SignupDialogComponent>;
+
+  // Add menu items here for NOT logged in
+  // Remember to add to app-routing.module.ts too
+  menuItems: Array<MenuItem> = [
+    { routerLink: 'features', text: 'Features' },
+  ];
 
   constructor(private sharedService: SharedService, private breakpointObserver: BreakpointObserver, private dialog: MatDialog) { }
 
   // Should probably move this but i dont know where to put ti
   openLoginDialog() {
-    this.loginDialogRef = this.dialog.open(LoginDialogComponent, {
-      hasBackdrop: true,
-      autoFocus: true,
-    });
-    // this.loginDialogRef
-    //   .afterClosed()
-    //   .subscribe((data: LoginData) => {
-    //   });
+    this.loginDialogRef = this.dialog.open(LoginDialogComponent);
   }
   openSignupDialog() {
     this.signupDialogRef = this.dialog.open(SignupDialogComponent);

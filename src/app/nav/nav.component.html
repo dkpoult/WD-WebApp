@@ -1,30 +1,42 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav class="drawer" fixedInViewport="true" [attr.role]="dialog" [mode]="over" fxShow="isHandset$ | async"
-    [opened]="(!isHandset$ | async)" fxLayout="column">
+  <!--Sidenav for mobile-->
+  <mat-sidenav #drawer class="drawer" fixedInViewport="true" [attr.role]="dialog" [mode]="over"
+    fxShow="isHandset$ | async" [opened]="(!isHandset$ | async)" fxLayout="column" fxLayoutAlign="space-between center">
     <mat-nav-list>
-      <!-- Put links here -->
-      <!-- <mat-list-item mat-button routerLink="{{ link }}">{{ item }}</mat-list-item> -->
+      <!--Put links here-->
+      <!--<mat-list-item mat-button routerLink="{{ link }}">{{ item }}</mat-list-item>-->
+      <mat-list-item mat-button>Item</mat-list-item>
     </mat-nav-list>
-    <mat-nav-list fxFlexAlign="bottom">
-      <!-- TODO: Make these align on bottom-->
-      <button mat-button (click)="openLoginDialog()">Log In</button>
-      <button mat-raised-button color="accent" (click)="openSignupDialog()">Sign Up</button>
-    </mat-nav-list>
+    <!--The buttons on the bottom-->
+    <!--TODO: Align to bottom of sidebar, not bottom of list-->
+    <div *ngIf="!(sharedService.isLoggedIn())" fxLayoutAlign="space-between start" fxAlign="end">
+      <button fxFlex="50" mat-raised-button (click)="openLoginDialog()">Log In</button>
+      <button fxFlex="50" mat-raised-button color="accent" (click)="openSignupDialog()">Sign Up</button>
+    </div>
+    <div *ngIf="(sharedService.isLoggedIn())" fxLayoutAlign="space-between start" fxAlign="end">
+      <button fxFlex mat-raised-button color="accent" (click)="sharedService.signOut()">Sign Out</button>
+    </div>
   </mat-sidenav>
+  <!--Toolbar at the top-->
   <mat-sidenav-content>
     <mat-toolbar color="primary">
+      <!--Hamburger button-->
       <button type="button" aria-label="Toggle side nav" mat-icon-button (click)="drawer.toggle()"
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <a mat-button routerLink="">WitsDaily</a>
-      <span style="flex: 1 1 auto;"></span>
-      <div fxLayout="row" class="toolbar" [class.hidden]="isHandset$ | async">
-        <!-- Put links here -->
-        <!-- <a mat-button routerLink=" {{ link }} ">{{ item }}</a> -->
-        <div>
+      <!--This puts the buttons on the right-->
+      <span fxFlex></span>
+      <div class="toolbar" [class.hidden]="isHandset$ | async">
+        <!--Put links here -->
+        <!--<a mat-button routerLink=" {{ link }} ">{{ item }}</a>-->
+        <div *ngIf="!(sharedService.isLoggedIn())">
           <button mat-button (click)="openLoginDialog()">Log In</button>
           <button mat-raised-button color="accent" (click)="openSignupDialog()">Sign Up</button>
+        </div>
+        <div *ngIf="(sharedService.isLoggedIn())">
+          <button mat-raised-button color="accent" (click)="sharedService.signOut()">Sign Out</button>
         </div>
       </div>
     </mat-toolbar>
