@@ -5,7 +5,7 @@
     <!--Menu items if logged out-->
     <mat-nav-list *ngIf="!loggedIn()">
       <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedOut">
-        <a routerLink="{{ menuItem.link }}">{{ menuItem.text }}</a>
+        <a routerLink="{{ menuItem.path }}">{{ menuItem.text }}</a>
       </mat-list-item>
       <!--Login/Signup buttons-->
       <div fxLayoutAlign="space-between start" fxAlign="end">
@@ -16,7 +16,7 @@
     <!--Menu items if logged in-->
     <mat-nav-list *ngIf="loggedIn()">
       <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedIn">
-        <a routerLink="{{ menuItem.link }}">{{ menuItem.text }}</a>
+        <a routerLink="{{ menuItem.path }}">{{ menuItem.text }}</a>
       </mat-list-item>
       <!--Sign out button-->
       <div fxLayoutAlign="space-between start" fxAlign="end">
@@ -37,7 +37,7 @@
       <div class="toolbar" [class.hidden]="isHandset$ | async">
         <!--Menu items if logged out-->
         <div *ngIf="!loggedIn()">
-          <a mat-button *ngFor="let menuItem of menuItemsLoggedOut" routerLink="{{ menuItem.link }}">
+          <a mat-button *ngFor="let menuItem of menuItemsLoggedOut" routerLink="{{ menuItem.path }}">
             {{ menuItem.text }}
           </a>
           <button mat-button (click)="openLoginDialog()">Log In</button>
@@ -45,13 +45,14 @@
         </div>
         <!--Menu items if logged in-->
         <div *ngIf="loggedIn()">
-          <a mat-button *ngFor="let menuItem of menuItemsLoggedIn" routerLink="{{ menuItem.link }}">
+          <a mat-button *ngFor="let menuItem of menuItemsLoggedIn" routerLink="{{ menuItem.path }}">
             {{ menuItem.text }}
           </a>
           <button mat-raised-button color="accent" (click)="sharedService.signOut()">Sign Out</button>
         </div>
       </div>
     </mat-toolbar>
+    <!--Any component we navigate to will show here-->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

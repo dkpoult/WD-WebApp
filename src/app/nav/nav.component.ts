@@ -8,7 +8,7 @@ import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component'
 import { SharedService } from '../shared/shared.service';
 
 export interface MenuItem {
-  link: string;
+  path: string;
   text: string;
 }
 
@@ -32,12 +32,13 @@ export class NavComponent {
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedIn: Array<MenuItem> = [
+    { path: 'courses', text: 'Courses' }
   ];
 
   // Add menu items here for when NOT logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedOut: Array<MenuItem> = [
-    { link: 'features', text: 'Features' },
+    { path: 'features', text: 'Features' },
   ];
 
   constructor(private sharedService: SharedService, private breakpointObserver: BreakpointObserver, private dialog: MatDialog) { }

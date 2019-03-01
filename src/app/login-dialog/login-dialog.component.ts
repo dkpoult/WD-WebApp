@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '
 import { SharedService } from '../shared/shared.service';
 import { MatDialogRef } from '@angular/material';
 import { NGXLogger } from 'ngx-logger';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-dialog',
@@ -19,7 +20,8 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<LoginDialogComponent>,
     private sharedService: SharedService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -45,6 +47,7 @@ export class LoginDialogComponent implements OnInit {
         case 'successful':
           this.loginFailed = false;
           this.sharedService.loginUser(user.personNumber, response.userToken);
+          this.router.navigateByUrl('/courses');
           this.dialogRef.close();
           break;
         default:
