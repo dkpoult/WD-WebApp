@@ -43,7 +43,6 @@ export class NavComponent {
 
   constructor(private sharedService: SharedService, private breakpointObserver: BreakpointObserver, private dialog: MatDialog) { }
 
-  // Should probably move this but i dont know where to put ti
   openLoginDialog() {
     this.loginDialogRef = this.dialog.open(LoginDialogComponent);
   }

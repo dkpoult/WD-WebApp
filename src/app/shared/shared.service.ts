@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 export class SharedService {
   public apiRoot: string;
 
-  user: User;
+  public localStorage: any = window.localStorage;
 
   constructor(private http: HttpClient, private logger: NGXLogger) { }
 
@@ -32,20 +32,29 @@ export class SharedService {
   }
 
   isLoggedIn(): boolean {
-    // TODO: Validate token
-    // TODO: Actually save user as logged in
-    return this.user ? true : false;
-    // return of(this.user ? true : false); // Makes this an observable, but I don't know how to make use of that
+    let user = this.localStorage.getItem('user');
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+
+  getLoggedInUser() {
+    return JSON.parse(this.localStorage.getItem('user'));
   }
 
   loginUser(personNumber: string, token: string) {
-    this.user = new User(personNumber, token);
+    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, token)));
+    console.log(this.localStorage.getItem('user'));
     this.logger.debug(`Logged in user ${personNumber} with token ${token}`);
+  }
+
+  userIsValid(): any {
+    return this.isLoggedIn();
   }
 
   signOut() {
     // TODO: Confirm dialog
-    this.logger.debug(`Logged out user ${this.user ? this.user.personNumber : 'with no person number'}`);
-    this.user = null;
+    this.localStorage.removeItem('user');
   }
 }
