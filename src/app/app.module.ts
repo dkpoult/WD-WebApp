@@ -25,6 +25,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { SharedService } from './shared/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
+import { MainComponent } from './main/main.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -37,6 +38,7 @@ export function initialiseApp(config: SharedService) {
     SignupDialogComponent,
     FeaturesComponent,
     CoursesComponent,
+    MainComponent,
   ],
   imports: [
     HttpClientModule,

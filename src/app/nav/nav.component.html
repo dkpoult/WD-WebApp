@@ -4,7 +4,7 @@
     fxShow="isHandset$ | async" [opened]="(!isHandset$ | async)">
     <!--Menu items if logged out-->
     <mat-nav-list *ngIf="!loggedIn()">
-      <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedOut">
+      <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedOut" (click)="drawer.close()">
         <a routerLink="{{ menuItem.path }}">{{ menuItem.text }}</a>
       </mat-list-item>
       <!--Login/Signup buttons-->
@@ -16,12 +16,12 @@
     </mat-nav-list>
     <!--Menu items if logged in-->
     <mat-nav-list *ngIf="loggedIn()">
-      <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedIn">
+      <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedIn" (click)="drawer.close()">
         <a routerLink="{{ menuItem.path }}">{{ menuItem.text }}</a>
       </mat-list-item>
       <!--Sign out button-->
       <div fxLayoutAlign="space-between start" fxAlign="end">
-        <button fxFlex mat-raised-button color="accent" (click)="sharedService.signOut()">Sign Out</button>
+        <button fxFlex mat-raised-button color="accent" (click)="signOut(); drawer.close()">Sign Out</button>
       </div>
     </mat-nav-list>
   </mat-sidenav>
@@ -29,9 +29,9 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <!--Hamburger button-->
-      <button type="button" aria-label="Toggle side nav" mat-icon-button (click)="drawer.toggle()"
+      <button type="button" aria-label="Open side nav" mat-icon-button (click)="drawer.open()"
         *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        <mat-icon aria-label="Side nav open icon">menu</mat-icon>
       </button>
       <a mat-button routerLink="">WitsDaily</a>
       <span fxFlex></span>
@@ -49,7 +49,7 @@
           <a mat-button *ngFor="let menuItem of menuItemsLoggedIn" routerLink="{{ menuItem.path }}">
             {{ menuItem.text }}
           </a>
-          <button mat-raised-button color="accent" (click)="sharedService.signOut()">Sign Out</button>
+          <button mat-raised-button color="accent" (click)="signOut()">Sign Out</button>
         </div>
       </div>
     </mat-toolbar>

@@ -48,7 +48,7 @@ export class LoginDialogComponent implements OnInit {
           this.loginFailed = false;
           this.sharedService.loginUser(user.personNumber, response.userToken);
           this.router.navigateByUrl('/courses');
-          this.dialogRef.close();
+          this.dialogRef.close(true);
           break;
         default:
           this.loginFailed = true;

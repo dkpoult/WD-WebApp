@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSidenav } from '@angular/material';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component';
 import { SharedService } from '../shared/shared.service';
+import { Router } from '@angular/router';
 
 export interface MenuItem {
   path: string;
@@ -24,10 +25,10 @@ export class NavComponent {
       map(result => result.matches)
     );
 
-  // isLoggedIn$: Observable<boolean> = this.sharedService.isLoggedIn(); // TODO: Make this work
-
   loginDialogRef: MatDialogRef<LoginDialogComponent>;
   signupDialogRef: MatDialogRef<SignupDialogComponent>;
+
+  @ViewChild('drawer') drawer: MatSidenav;
 
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
@@ -41,13 +42,28 @@ export class NavComponent {
     { path: 'features', text: 'Features' },
   ];
 
-  constructor(private sharedService: SharedService, private breakpointObserver: BreakpointObserver, private dialog: MatDialog) { }
+  constructor(
+    private sharedService: SharedService,
+    private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
+    private router: Router) { }
 
   openLoginDialog() {
     this.loginDialogRef = this.dialog.open(LoginDialogComponent);
+    this.loginDialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.drawer.close();
+      }
+    });
   }
   openSignupDialog() {
     this.signupDialogRef = this.dialog.open(SignupDialogComponent);
+  }
+
+  signOut() {
+    // TODO: Are you sure? dialog
+    this.router.navigateByUrl('');
+    this.sharedService.signOut();
   }
 
   loggedIn() {

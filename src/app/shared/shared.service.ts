@@ -32,7 +32,7 @@ export class SharedService {
   }
 
   isLoggedIn(): boolean {
-    let user = this.localStorage.getItem('user');
+    const user = this.localStorage.getItem('user');
     if (!user) {
       return false;
     }
