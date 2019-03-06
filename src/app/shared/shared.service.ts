@@ -20,6 +20,10 @@ export class SharedService {
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; });
   }
 
+  linkUser(user: User): Observable<any> {
+    return this.http.post(`${this.apiRoot}/register`, user);
+  }
+
   authenticateUser(user: User): Observable<any> {
     return this.http.post(`${this.apiRoot}/login`, user);
   }
@@ -29,6 +33,28 @@ export class SharedService {
       .pipe(
         map((response: any) => response.result)
       );
+  }
+
+  createCourse(course: any): Observable<any> {
+    let user = this.getLoggedInUser();
+    let body = {
+      courseCode: course.code,
+      courseName: course.name,
+      courseDescription: course.description ? course.description : '',
+      personNumber: user.personNumber,
+      userToken: user.token
+    }
+    return this.http.post(`${this.apiRoot}/create_course`, body);
+  }
+
+  linkCourse(course: any): Observable<any> {
+    let user = this.getLoggedInUser();
+    let body = {
+      courseId: course.id,
+      personNumber: user.personNumber,
+      userToken: user.token
+    }
+    return this.http.post(`${this.apiRoot}/link_course`, body);
   }
 
   isLoggedIn(): boolean {

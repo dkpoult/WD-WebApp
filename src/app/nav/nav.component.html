@@ -10,8 +10,8 @@
       <!--Login/Signup buttons-->
       <div fxLayoutAlign="space-between start" fxAlign="end">
         <button fxFlex="50" mat-raised-button (click)="openLoginDialog()">Log In</button>
-        <button fxFlex="50" mat-raised-button color="accent" (click)="openSignupDialog()">Sign
-          Up</button>
+        <button fxFlex="50" mat-raised-button color="accent" (click)="openSignupDialog()">Link
+          Account</button>
       </div>
     </mat-nav-list>
     <!--Menu items if logged in-->
@@ -42,7 +42,7 @@
             {{ menuItem.text }}
           </a>
           <button mat-button (click)="openLoginDialog()">Log In</button>
-          <button mat-raised-button color="accent" (click)="openSignupDialog()">Sign Up</button>
+          <button mat-raised-button color="accent" (click)="openSignupDialog()">Link Account</button>
         </div>
         <!--Menu items if logged in-->
         <div *ngIf="loggedIn()">

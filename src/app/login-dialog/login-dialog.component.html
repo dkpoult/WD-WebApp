@@ -4,14 +4,14 @@
     <mat-dialog-content>
       <mat-form-field>
         <mat-label>Person Number</mat-label>
-        <input formControlName="personNumber" matInput>
+        <input formControlName="personNumber">
         <mat-error>
           Please enter a person number
         </mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+        <input formControlName="password" [type]="hide ? 'password' : 'text'">
         <mat-icon style="cursor: pointer;" matTooltip="Show/Hide Password" matSuffix (click)="hide = !hide">
           {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         <mat-error>
