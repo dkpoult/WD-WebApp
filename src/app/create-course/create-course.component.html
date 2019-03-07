@@ -1,0 +1,33 @@
+<section style="max-width: 500px;">
+  <h1 mat-dialog-title>Create Course</h1>
+  <form [formGroup]="form" (ngSubmit)="submit(form)">
+    <mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Course Code</mat-label>
+        <input matInput formControlName="code">
+        <mat-error>
+          Please enter a course code
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Course Name</mat-label>
+        <input matInput formControlName="name">
+        <mat-error>
+          Please enter a course name
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Course Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-error *ngIf="alreadyExists && !form.dirty">
+        Course already exists
+      </mat-error>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Create</button>
+      <span fxFlex></span>
+      <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+</section>
