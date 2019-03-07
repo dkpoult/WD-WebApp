@@ -11,12 +11,11 @@ import { LinkCourseComponent } from '../link-course/link-course.component';
 })
 export class CoursesComponent implements OnInit {
 
-  
   createCourseDialogRef: MatDialogRef<CreateCourseComponent>;
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
 
   constructor(
-    private sharedService: SharedService, 
+    private sharedService: SharedService,
     private dialog: MatDialog) { }
 
   ngOnInit() {

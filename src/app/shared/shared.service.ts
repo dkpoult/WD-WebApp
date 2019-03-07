@@ -43,7 +43,7 @@ export class SharedService {
       courseDescription: course.description ? course.description : '',
       personNumber: user.personNumber,
       userToken: user.token
-    }
+    };
     return this.http.post(`${this.apiRoot}/create_course`, body);
   }
 
@@ -53,7 +53,7 @@ export class SharedService {
       courseId: course.id,
       personNumber: user.personNumber,
       userToken: user.token
-    }
+    };
     return this.http.post(`${this.apiRoot}/link_course`, body);
   }
 
