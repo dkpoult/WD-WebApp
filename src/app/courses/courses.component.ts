@@ -14,11 +14,14 @@ export class CoursesComponent implements OnInit {
   createCourseDialogRef: MatDialogRef<CreateCourseComponent>;
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
 
+  courses: Array<any>;
+
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog) { }
 
   ngOnInit() {
+    this.getCourses();
   }
 
   openCreateCourseDialog() {
@@ -29,4 +32,10 @@ export class CoursesComponent implements OnInit {
     this.linkCourseDialogRef = this.dialog.open(LinkCourseComponent);
   }
 
+  getCourses() {
+    this.sharedService.getCourses(this.sharedService.getLoggedInUser())
+      .subscribe((response: any) => {
+        this.courses = response.courses;
+      });
+  }
 }

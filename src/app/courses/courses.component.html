@@ -1,4 +1,12 @@
 <p>
     This is where the user can do things related to courses
 </p>
-<button mat-raised-button color="primary" (click)="openCreateCourseDialog()">Create Course</button> or <button mat-raised-button color="accent" (click)="openLinkCourseDialog()">Link Existing Course</button>
+<mat-card *ngFor="let course of courses">
+    <mat-card-content routerLink="{{ course.courseCode }}">
+        <mat-card-title>{{ course.courseName }}</mat-card-title>
+        <mat-card-subtitle>{{ course.courseCode }}</mat-card-subtitle>
+    </mat-card-content>
+</mat-card>
+<button mat-raised-button color="primary" (click)="openCreateCourseDialog()">Create Course</button>
+or
+<button mat-raised-button color="accent" (click)="openLinkCourseDialog()">Link Existing Course</button>

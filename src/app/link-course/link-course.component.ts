@@ -13,6 +13,7 @@ import { CreateCourseComponent } from '../create-course/create-course.component'
 export class LinkCourseComponent implements OnInit {
 
   alreadyExists = false;
+  missingPermissions = false;
 
   form: FormGroup;
 
@@ -31,7 +32,8 @@ export class LinkCourseComponent implements OnInit {
   hasErrors() {
     return (
       this.form.controls.id.hasError('required') ||
-      (this.alreadyExists && !this.form.dirty)
+      (this.alreadyExists && !this.form.dirty) ||
+      (this.missingPermissions && !this.form.dirty)
     );
   }
 
@@ -47,7 +49,12 @@ export class LinkCourseComponent implements OnInit {
           this.alreadyExists = true;
           this.form.markAsPristine();
           break;
+        case 'failed_missing_perms':
+          this.missingPermissions = true;
+          this.form.markAsPristine();
+          break;
         default:
+          console.log(response);
           this.form.markAsPristine();
           break;
       }

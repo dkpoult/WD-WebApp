@@ -41,6 +41,7 @@ export class CreateCourseComponent implements OnInit {
     this.logger.debug('Attempting creation');
     const course = form.value;
     this.sharedService.createCourse(course).subscribe((response) => {
+      console.log(response);
       switch (response.responseCode) {
         case 'successful':
           this.dialogRef.close(true);

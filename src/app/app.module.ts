@@ -17,7 +17,8 @@ import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
 import { CreateCourseComponent } from './create-course/create-course.component';
 import { LinkCourseComponent } from './link-course/link-course.component';
-import { MaterialModule } from './material/material.module';
+import { MaterialModule } from './shared/material.module';
+import { CourseDetailsComponent } from './course-details/course-details.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -33,6 +34,7 @@ export function initialiseApp(config: SharedService) {
     MainComponent,
     CreateCourseComponent,
     LinkCourseComponent,
+    CourseDetailsComponent,
   ],
   imports: [
     HttpClientModule,

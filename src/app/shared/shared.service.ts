@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { NGXLogger } from 'ngx-logger';
 import { User } from './user';
-import { map } from 'rxjs/operators';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +15,7 @@ export class SharedService {
 
   // Gets called from app.module when the system starts up
   initialise(): void {
+    this.apiRoot = 'https://wd.dimensionalapps.com';
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; });
   }
 
@@ -28,11 +27,12 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/login`, user);
   }
 
-  authenticateToken(user: User): Observable<boolean> {
-    return this.http.post(`${this.apiRoot}/login`, user)
-      .pipe(
-        map((response: any) => response.result)
-      );
+  getCourses(user: User): Observable<any> {
+    let body = {
+      personNumber: user.personNumber,
+      userToken: user.token
+    };
+    return this.http.post(`${this.apiRoot}/get_courses`, body);
   }
 
   createCourse(course: any): Observable<any> {
@@ -71,7 +71,6 @@ export class SharedService {
 
   loginUser(personNumber: string, token: string) {
     this.localStorage.setItem('user', JSON.stringify(new User(personNumber, token)));
-    console.log(this.localStorage.getItem('user'));
     this.logger.debug(`Logged in user ${personNumber} with token ${token}`);
   }
 

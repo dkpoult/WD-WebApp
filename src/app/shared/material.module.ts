@@ -9,7 +9,8 @@ import {
   MatListModule,
   MatFormFieldModule,
   MatInputModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatCardModule
 } from '@angular/material';
 /**
  * NgModule that includes all Material modules.
@@ -24,6 +25,7 @@ const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatInputModule,
   MatTooltipModule,
+  MatCardModule
 ];
 
 @NgModule({
