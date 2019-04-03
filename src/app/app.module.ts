@@ -18,8 +18,10 @@ import { MainComponent } from './main/main.component';
 import { CreateCourseComponent } from './create-course/create-course.component';
 import { LinkCourseComponent } from './link-course/link-course.component';
 import { MaterialModule } from './shared/material.module';
-import { CourseDetailsComponent } from './course-details/course-details.component';
 import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component';
+import { EnrolComponent } from './enrol/enrol.component';
+import { ForumComponent } from './forum/forum.component';
+import { ConfirmEnrolmentComponent } from './confirm-enrolment/confirm-enrolment.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -35,8 +37,10 @@ export function initialiseApp(config: SharedService) {
     MainComponent,
     CreateCourseComponent,
     LinkCourseComponent,
-    CourseDetailsComponent,
     SpeedDialFabComponent,
+    EnrolComponent,
+    ForumComponent,
+    ConfirmEnrolmentComponent,
   ],
   imports: [
     HttpClientModule,
@@ -60,6 +64,13 @@ export function initialiseApp(config: SharedService) {
   ],
   bootstrap: [AppComponent],
   // Add dialogs here
-  entryComponents: [LoginDialogComponent, SignupDialogComponent, CreateCourseComponent, LinkCourseComponent]
+  entryComponents: [
+    LoginDialogComponent,
+    SignupDialogComponent,
+    CreateCourseComponent,
+    LinkCourseComponent,
+    EnrolComponent,
+    ConfirmEnrolmentComponent
+  ]
 })
 export class AppModule { }

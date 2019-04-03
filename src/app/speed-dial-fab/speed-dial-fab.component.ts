@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-
+// TODO: Animation on open/close
 @Component({
   selector: 'app-speed-dial-fab',
   templateUrl: './speed-dial-fab.component.html',
@@ -9,7 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class SpeedDialFabComponent implements OnInit {
   @Input() icon = 'add';
   @Input() actions: Array<any>;
-
+  @Output() clicked = new EventEmitter<string>();
   opened = false;
 
   constructor() { }
@@ -19,7 +19,11 @@ export class SpeedDialFabComponent implements OnInit {
 
   toggle() {
     this.opened = !this.opened;
-    console.log(this.actions);
+  }
+
+  doAction(action: any) {
+    this.clicked.emit(action.event);
+    this.toggle();
   }
 
 }

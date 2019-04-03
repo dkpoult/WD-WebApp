@@ -27,34 +27,91 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/login`, user);
   }
 
-  getCourses(user: User): Observable<any> {
-    let body = {
+  getCourses(): Observable<any> {
+    const user = this.getLoggedInUser();
+    const body = {
       personNumber: user.personNumber,
       userToken: user.token
     };
     return this.http.post(`${this.apiRoot}/get_courses`, body);
   }
 
+  getAvailableCourses() {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token
+    };
+    return this.http.post(`${this.apiRoot}/get_available_courses`, body);
+  }
+
+  enrolInCourse(course: any, password?: string) {
+    console.log("Enrolling");
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      courseCode: course,
+      password
+    };
+    return this.http.post(`${this.apiRoot}/enrol_in_course`, body);
+  }
+
   createCourse(course: any): Observable<any> {
-    let user = this.getLoggedInUser();
-    let body = {
+    const user = this.getLoggedInUser();
+    const body = {
       courseCode: course.code,
       courseName: course.name,
       courseDescription: course.description ? course.description : '',
+      password: course.password ? course.password : undefined,
       personNumber: user.personNumber,
-      userToken: user.token
+      userToken: user.token,
     };
     return this.http.post(`${this.apiRoot}/create_course`, body);
   }
 
   linkCourse(course: any): Observable<any> {
-    let user = this.getLoggedInUser();
-    let body = {
+    const user = this.getLoggedInUser();
+    const body = {
       courseId: course.id,
       personNumber: user.personNumber,
       userToken: user.token
     };
     return this.http.post(`${this.apiRoot}/link_course`, body);
+  }
+
+  getPosts(forum: string): Observable<any> {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      forumCode: forum
+    };
+    return this.http.post(`${this.apiRoot}/get_posts`, body);
+  }
+
+  makePost(post: any): Observable<any> {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      forumCode: post.forum,
+      title: post.title,
+      body: post.body
+    };
+    console.log(body);
+    return this.http.post(`${this.apiRoot}/make_post`, body);
+  }
+
+  vote(post: any, vote: number) {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      postCode: post.code,
+      vote
+    };
+    return this.http.post(`${this.apiRoot}/make_vote`, body);
   }
 
   isLoggedIn(): boolean {
@@ -65,7 +122,7 @@ export class SharedService {
     return true;
   }
 
-  getLoggedInUser() {
+  getLoggedInUser(): User {
     return JSON.parse(this.localStorage.getItem('user'));
   }
 

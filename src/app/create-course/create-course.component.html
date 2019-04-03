@@ -5,8 +5,11 @@
       <mat-form-field>
         <mat-label>Course Code</mat-label>
         <input matInput formControlName="code">
-        <mat-error>
+        <mat-error *ngIf="form.controls['code'].hasError('required')">
           Please enter a course code
+        </mat-error>
+        <mat-error *ngIf="form.controls['code'].hasError('minlength') || form.controls['code'].hasError('maxlength')">
+          Course code must be 8 characters long
         </mat-error>
       </mat-form-field>
       <mat-form-field>
@@ -19,6 +22,11 @@
       <mat-form-field>
         <mat-label>Course Description</mat-label>
         <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-form-field required="false">
+        <mat-label>Enrolment Key</mat-label>
+        <mat-hint>(Optional)</mat-hint>
+        <input matInput formControlName="password">
       </mat-form-field>
       <mat-error *ngIf="alreadyExists && !form.dirty">
         Course already exists

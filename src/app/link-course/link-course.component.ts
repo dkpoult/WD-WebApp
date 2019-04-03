@@ -32,8 +32,8 @@ export class LinkCourseComponent implements OnInit {
   hasErrors() {
     return (
       this.form.controls.id.hasError('required') ||
-      (this.alreadyExists && !this.form.dirty) ||
-      (this.missingPermissions && !this.form.dirty)
+      (this.alreadyExists && this.form.pristine) ||
+      (this.missingPermissions && this.form.pristine)
     );
   }
 

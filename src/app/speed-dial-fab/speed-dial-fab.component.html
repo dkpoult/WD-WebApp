@@ -6,7 +6,7 @@
   </button>
   <div *ngIf="opened">
     <button *ngFor="let act of actions" mat-mini-fab class="fab-secondary" color="secondary" matTooltip="{{ act.text }}"
-      (click)="act.action">
+      (click)="doAction(act)">
       <mat-icon>{{ act.icon }}</mat-icon>
     </button>
   </div>

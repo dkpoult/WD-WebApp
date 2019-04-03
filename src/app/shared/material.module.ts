@@ -10,8 +10,11 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatTooltipModule,
-  MatCardModule
+  MatCardModule,
+  MatProgressSpinnerModule,
+  MatRippleModule
 } from '@angular/material';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 /**
  * NgModule that includes all Material modules.
  */
@@ -25,7 +28,10 @@ const MATERIAL_MODULES = [
   MatFormFieldModule,
   MatInputModule,
   MatTooltipModule,
-  MatCardModule
+  MatCardModule,
+  MatProgressSpinnerModule,
+  MatRippleModule,
+  ScrollingModule
 ];
 
 @NgModule({
