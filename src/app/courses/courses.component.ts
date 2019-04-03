@@ -15,6 +15,22 @@ export class CoursesComponent implements OnInit {
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
 
   courses: Array<any>;
+  fabActions = [
+    {
+      icon: 'add',
+      text: 'Enrol In A Course'
+    },
+    {
+      icon: 'insert_link',
+      text: 'Link Moodle Course',
+      action: this.openLinkCourseDialog
+    },
+    {
+      icon: 'add',
+      text: 'Create New Course',
+      action: this.openCreateCourseDialog
+    }
+  ];
 
   constructor(
     private sharedService: SharedService,

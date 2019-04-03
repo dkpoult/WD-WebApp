@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+
 @Component({
   selector: 'app-course-details',
   templateUrl: './course-details.component.html',
@@ -16,9 +17,9 @@ export class CourseDetailsComponent implements OnInit {
   ngOnInit() {
     this.course$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
-        params.get('code')
+        params.getAll('code')
       ));
-    this.course$.subscribe(response => console.log(response));
   }
+
 
 }

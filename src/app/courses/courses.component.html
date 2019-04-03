@@ -1,12 +1,22 @@
-<p>
-    This is where the user can do things related to courses
-</p>
 <mat-card *ngFor="let course of courses">
-    <mat-card-content routerLink="{{ course.courseCode }}">
-        <mat-card-title>{{ course.courseName }}</mat-card-title>
-        <mat-card-subtitle>{{ course.courseCode }}</mat-card-subtitle>
-    </mat-card-content>
+    <mat-card-title>{{ course.courseCode }}</mat-card-title>
+    <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
+    <mat-card-content>{{ course.courseDescription }}</mat-card-content>
+    <mat-card-actions>
+        <button mat-icon-button matTooltip="Questions">
+            <mat-icon>chat</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Forum">
+            <mat-icon>forum</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Announcements">
+            <mat-icon>announcement</mat-icon>
+        </button>
+        <!--! For when muting courses is a thing-->
+        <!-- <button mat-icon-button>
+            <mat-icon>notifications</mat-icon>
+        </button> -->
+    </mat-card-actions>
 </mat-card>
-<button mat-raised-button color="primary" (click)="openCreateCourseDialog()">Create Course</button>
-or
-<button mat-raised-button color="accent" (click)="openLinkCourseDialog()">Link Existing Course</button>
+
+<app-speed-dial-fab class="speed-dial" [icon]="'class'" [actions]="fabActions"></app-speed-dial-fab>

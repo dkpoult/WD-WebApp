@@ -1,0 +1,13 @@
+<div id="fab-dismiss" *ngIf="opened" (click)="toggle()">
+</div>
+<div class="fab-container">
+  <button mat-fab class="fab-toggler" (click)="toggle()">
+    <mat-icon>{{ icon }}</mat-icon>
+  </button>
+  <div *ngIf="opened">
+    <button *ngFor="let act of actions" mat-mini-fab class="fab-secondary" color="secondary" matTooltip="{{ act.text }}"
+      (click)="act.action">
+      <mat-icon>{{ act.icon }}</mat-icon>
+    </button>
+  </div>
+</div>
