@@ -19,6 +19,7 @@ import { CreateCourseComponent } from './create-course/create-course.component';
 import { LinkCourseComponent } from './link-course/link-course.component';
 import { MaterialModule } from './shared/material.module';
 import { CourseDetailsComponent } from './course-details/course-details.component';
+import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -35,6 +36,7 @@ export function initialiseApp(config: SharedService) {
     CreateCourseComponent,
     LinkCourseComponent,
     CourseDetailsComponent,
+    SpeedDialFabComponent,
   ],
   imports: [
     HttpClientModule,

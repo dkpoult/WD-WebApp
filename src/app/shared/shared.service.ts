@@ -15,7 +15,7 @@ export class SharedService {
 
   // Gets called from app.module when the system starts up
   initialise(): void {
-    this.apiRoot = 'https://wd.dimensionalapps.com';
+    this.apiRoot = 'https://wd.dimensionalapps.com'; // TODO: Hack, rather make everything wait for initialisation first
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; });
   }
 
