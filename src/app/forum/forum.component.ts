@@ -41,8 +41,7 @@ export class ForumComponent implements OnInit {
   }
 
   getPosts() {
-    const forum = this.course;
-    this.sharedService.getPosts(forum).subscribe((response: any) => {
+    this.sharedService.getPosts(this.course).subscribe((response: any) => {
       if (response.responseCode.startsWith('failed')) {
         this.logger.error(response.responseCode);
         return;

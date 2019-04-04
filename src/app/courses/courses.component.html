@@ -10,13 +10,14 @@
             <button mat-icon-button matTooltip="Questions" routerLink="{{ course.courseCode }}/forum">
                 <mat-icon>live_help</mat-icon>
             </button>
+            <button mat-icon-button matTooltip="Announcements" routerLink="{{ course.courseCode }}/announcements">
+                <mat-icon matBadge="" matBadgeColor="warn" matBadgeDescription="Unread Notifications">
+                    announcement
+                </mat-icon>
+            </button>
             <!--! For when forums are a thing-->
             <!-- <button mat-icon-button matTooltip="Forums">
                 <mat-icon>forum</mat-icon>
-            </button> -->
-            <!--! For when making announcements is a thing-->
-            <!-- <button mat-icon-button matTooltip="Announcements">
-                <mat-icon>announcement</mat-icon>
             </button> -->
             <!--! For when timetables are a thing-->
             <!-- <button mat-icon-button matTooltip="Announcements">

@@ -27,6 +27,8 @@ import { PostComponent } from './post/post.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostActionButtonsComponent } from './post-action-buttons/post-action-buttons.component';
 import { CreateCommentComponent } from './create-comment/create-comment.component';
+import { AnnouncementsComponent } from './announcements/announcements.component';
+import { MakeAnnouncementComponent } from './make-announcement/make-announcement.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -51,6 +53,8 @@ export function initialiseApp(config: SharedService) {
     CommentComponent,
     PostActionButtonsComponent,
     CreateCommentComponent,
+    AnnouncementsComponent,
+    MakeAnnouncementComponent,
   ],
   imports: [
     HttpClientModule,
@@ -82,7 +86,8 @@ export function initialiseApp(config: SharedService) {
     EnrolComponent,
     ConfirmEnrolmentComponent,
     CreatePostComponent,
-    CreateCommentComponent
+    CreateCommentComponent,
+    MakeAnnouncementComponent
   ]
 })
 export class AppModule { }

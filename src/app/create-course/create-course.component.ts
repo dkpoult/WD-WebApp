@@ -32,8 +32,7 @@ export class CreateCourseComponent implements OnInit {
 
   hasErrors() {
     return (
-      this.form.controls.code.invalid ||
-      this.form.controls.name.invalid ||
+      (this.form.invalid) ||
       (this.alreadyExists && this.form.pristine)
     );
   }

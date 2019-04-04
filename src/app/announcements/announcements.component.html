@@ -1,0 +1,13 @@
+<ng-container *ngIf="gotCourse; else elseTemplate">
+  <mat-card class="announcement" *ngFor="let announcement of course.announcements">
+    <mat-card-title>{{ announcement.title }}</mat-card-title>
+    <mat-card-subtitle>{{ announcement.time }}</mat-card-subtitle>
+    <mat-card-content>{{ announcement.body }}</mat-card-content>
+  </mat-card>
+  <button #fab mat-fab class="fab" matTooltip="Create A Post" (click)="openMakeAnnouncementDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
+</ng-container>
+<ng-template #elseTemplate>
+  <mat-spinner class="spinner"></mat-spinner>
+</ng-template>

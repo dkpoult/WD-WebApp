@@ -30,8 +30,7 @@ export class ConfirmEnrolmentComponent implements OnInit {
 
   hasErrors() {
     return (
-      this.data.password &&
-      this.form.controls.password.hasError('required') ||
+      (this.data.password && this.form.invalid) ||
       (this.wrongPassword && this.form.pristine)
     );
   }

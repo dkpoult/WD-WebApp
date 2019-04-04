@@ -28,7 +28,7 @@ export class CreatePostComponent implements OnInit {
   }
 
   hasErrors() {
-    return (this.form.controls.title.invalid);
+    return (this.form.invalid);
   }
 
   submit(form: FormGroup) {
@@ -46,7 +46,7 @@ export class CreatePostComponent implements OnInit {
           this.form.markAsPristine();
           break;
       }
-    })
+    });
   }
 
 }

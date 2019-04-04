@@ -25,7 +25,7 @@ export class CreateCommentComponent implements OnInit {
   }
 
   hasErrors() {
-    return this.form.controls.body.invalid;
+    return (this.form.invalid);
   }
 
   submit(form: FormGroup) {

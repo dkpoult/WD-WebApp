@@ -12,7 +12,8 @@ import {
   MatTooltipModule,
   MatCardModule,
   MatProgressSpinnerModule,
-  MatRippleModule
+  MatRippleModule,
+  MatBadgeModule
 } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 /**
@@ -31,7 +32,8 @@ const MATERIAL_MODULES = [
   MatCardModule,
   MatProgressSpinnerModule,
   MatRippleModule,
-  ScrollingModule
+  ScrollingModule,
+  MatBadgeModule
 ];
 
 @NgModule({

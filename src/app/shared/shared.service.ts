@@ -37,6 +37,19 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/get_courses`, body);
   }
 
+  getCourse(courseCode: string): Observable<any> {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/get_course`, body)
+      .pipe(map((result: any) => {
+        return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
+      })); // TODO: Will give issues when the POST fails and no courses array is returned
+  }
+
   getAvailableCourses() {
     const user = this.getLoggedInUser();
     const body = {
@@ -100,7 +113,7 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/get_post`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
-      }));
+      })); // TODO: Will give issues when the POST fails and no posts array is returned
   }
 
   makePost(post: any): Observable<any> {
@@ -135,6 +148,18 @@ export class SharedService {
       vote
     };
     return this.http.post(`${this.apiRoot}/make_vote`, body);
+  }
+
+  makeAnnouncement(courseCode: string, announcement: any) {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      body: announcement.body,
+      title: announcement.title,
+      courseCode,
+    };
+    return this.http.post(`${this.apiRoot}/make_announcement`, body);
   }
 
   isLoggedIn(): boolean {

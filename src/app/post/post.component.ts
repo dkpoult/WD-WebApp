@@ -35,7 +35,6 @@ export class PostComponent implements OnInit {
     this.sharedService.getPost(this.postCode).subscribe((response: any) => {
       this.gotPost = true;
       this.post = response.post;
-      console.log(this.post);
     });
   }
 }

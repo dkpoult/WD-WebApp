@@ -33,8 +33,7 @@ export class SignupDialogComponent implements OnInit {
 
   hasErrors() {
     return (
-      this.form.controls.personNumber.invalid ||
-      this.form.controls.password.invalid ||
+      (this.form.invalid) ||
       (this.noUser && this.form.pristine)
     );
   }
