@@ -1,17 +1,13 @@
 <section style="max-width: 500px;">
-  <h1 mat-dialog-title>Make a submission</h1>
+  <h1 mat-dialog-title>Reply</h1>
   <form [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
       <mat-form-field>
-        <mat-label>Title</mat-label>
-        <input matInput formControlName="title">
-        <mat-error>
-          Please enter a title for your post
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Body</mat-label>
+        <mat-label>Comment</mat-label>
         <textarea matInput formControlName="body"></textarea>
+        <mat-error>
+          Please enter a comment
+        </mat-error>
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions>

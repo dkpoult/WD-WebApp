@@ -4,13 +4,7 @@
     <mat-card-subtitle>{{ post.poster }}</mat-card-subtitle>
     <mat-card-content>{{ post.body }}</mat-card-content>
     <mat-card-actions>
-      <button mat-icon-button matTooltip="Upvote" (click)="vote(post, 1)">
-        <mat-icon>thumb_up</mat-icon>
-      </button>
-      <button mat-icon-button matTooltip="Downvote" (click)="vote(post, -1)">
-        <mat-icon>thumb_down</mat-icon>
-      </button>
-      <i class="score">({{ post.upscore - post.downscore }})</i>
+      <app-post-action-buttons [post]="post"></app-post-action-buttons>
     </mat-card-actions>
   </mat-card>
 </div>

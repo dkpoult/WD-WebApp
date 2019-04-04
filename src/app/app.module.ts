@@ -24,6 +24,9 @@ import { ForumComponent } from './forum/forum.component';
 import { ConfirmEnrolmentComponent } from './confirm-enrolment/confirm-enrolment.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import { PostComponent } from './post/post.component';
+import { CommentComponent } from './comment/comment.component';
+import { PostActionButtonsComponent } from './post-action-buttons/post-action-buttons.component';
+import { CreateCommentComponent } from './create-comment/create-comment.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -45,6 +48,9 @@ export function initialiseApp(config: SharedService) {
     ConfirmEnrolmentComponent,
     CreatePostComponent,
     PostComponent,
+    CommentComponent,
+    PostActionButtonsComponent,
+    CreateCommentComponent,
   ],
   imports: [
     HttpClientModule,
@@ -75,7 +81,8 @@ export function initialiseApp(config: SharedService) {
     LinkCourseComponent,
     EnrolComponent,
     ConfirmEnrolmentComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    CreateCommentComponent
   ]
 })
 export class AppModule { }

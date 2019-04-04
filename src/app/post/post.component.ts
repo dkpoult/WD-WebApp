@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { SharedService } from '../shared/shared.service';
 import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -31,11 +32,10 @@ export class PostComponent implements OnInit {
   }
 
   getPost() {
-    console.log(this.postCode);
     this.sharedService.getPost(this.postCode).subscribe((response: any) => {
       this.gotPost = true;
       this.post = response.post;
+      console.log(this.post);
     });
   }
-
 }

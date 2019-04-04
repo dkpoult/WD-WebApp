@@ -1,0 +1,8 @@
+<mat-card class="comment">
+  <mat-card-subtitle>{{ comment.poster }}</mat-card-subtitle>
+  <mat-card-content>{{ comment.body }}</mat-card-content>
+  <mat-card-actions>
+    <app-post-action-buttons [post]="comment"></app-post-action-buttons>
+  </mat-card-actions>
+  <app-comment *ngFor="let comment of comment.comments" [comment]="comment"></app-comment>
+</mat-card>

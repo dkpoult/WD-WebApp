@@ -40,19 +40,6 @@ export class ForumComponent implements OnInit {
     });
   }
 
-  vote(post: any, vote: number) {
-    let vote$: Observable<any>;
-    if (post.voted === vote) {
-      vote$ = this.sharedService.vote(post, 0);
-    } else {
-      vote$ = this.sharedService.vote(post, vote);
-    }
-    vote$.subscribe((response: any) => {
-      // ! Should probably only update the one post
-      this.getPosts();
-    });
-  }
-
   getPosts() {
     const forum = this.course;
     this.sharedService.getPosts(forum).subscribe((response: any) => {

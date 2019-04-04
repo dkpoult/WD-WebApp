@@ -98,10 +98,9 @@ export class SharedService {
       postCode: post
     };
     return this.http.post(`${this.apiRoot}/get_post`, body)
-      .pipe(
-        map((result: any) => {
-          return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
-        }));
+      .pipe(map((result: any) => {
+        return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
+      }));
   }
 
   makePost(post: any): Observable<any> {
@@ -114,6 +113,17 @@ export class SharedService {
       body: post.body
     };
     return this.http.post(`${this.apiRoot}/make_post`, body);
+  }
+
+  makeComment(post: any, comment: string): Observable<any> {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      postCode: post.code,
+      body: comment
+    };
+    return this.http.post(`${this.apiRoot}/make_comment`, body);
   }
 
   vote(post: any, vote: number) {
