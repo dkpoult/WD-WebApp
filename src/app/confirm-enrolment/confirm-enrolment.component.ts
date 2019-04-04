@@ -36,39 +36,22 @@ export class ConfirmEnrolmentComponent implements OnInit {
     );
   }
 
-  submit(form) {
-    this.sharedService.enrolInCourse(this.data.code, form.controls.password.value)
-    if (this.data.password) {
-      this.sharedService.enrolInCourse(this.data.code, form.controls.password.value).subscribe((response: any) => {
-        console.log(response);
-        switch (response.responseCode) {
-          case 'successful':
-            this.dialogRef.close(true);
-            break;
-          case 'failed_invalid_params':
-            this.wrongPassword = true;
-            this.form.markAsPristine();
-            break;
-          default:
-            console.log(response);
-            this.form.markAsPristine();
-            break;
-        }
-      });
-    } else {
-      this.sharedService.enrolInCourse(this.data.code).subscribe((response: any) => {
-        console.log(response);
-        switch (response.responseCode) {
-          case 'successful':
-            this.dialogRef.close(true);
-            break;
-          default:
-            console.log(response);
-            this.form.markAsPristine();
-            break;
-        }
-      });
-    }
+  submit(form?: FormGroup) {
+    this.sharedService.enrolInCourse(this.data.code, form.controls.password.value).subscribe((response: any) => {
+      switch (response.responseCode) {
+        case 'successful':
+          this.dialogRef.close(true);
+          break;
+        case 'failed_invalid_params':
+          this.wrongPassword = true;
+          this.form.markAsPristine();
+          break;
+        default:
+          console.log(response);
+          this.form.markAsPristine();
+          break;
+      }
+    });
   }
 
 }

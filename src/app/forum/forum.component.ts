@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { CreatePostComponent } from '../create-post/create-post.component';
 
 @Component({
   selector: 'app-forum',
@@ -11,6 +13,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./forum.component.scss']
 })
 export class ForumComponent implements OnInit {
+
+  createPostDialogRef: MatDialogRef<CreatePostComponent>;
 
   course$: Observable<string>;
   course: string;
@@ -21,7 +25,8 @@ export class ForumComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private route: ActivatedRoute,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -43,7 +48,6 @@ export class ForumComponent implements OnInit {
       vote$ = this.sharedService.vote(post, vote);
     }
     vote$.subscribe((response: any) => {
-      console.log(response);
       // ! Should probably only update the one post
       this.getPosts();
     });
@@ -61,4 +65,12 @@ export class ForumComponent implements OnInit {
     });
   }
 
+  openCreatePostDialog() {
+    this.createPostDialogRef = this.dialog.open(CreatePostComponent, { data: this.course });
+    this.createPostDialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.getPosts();
+      }
+    });
+  }
 }

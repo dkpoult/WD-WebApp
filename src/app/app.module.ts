@@ -22,6 +22,8 @@ import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component
 import { EnrolComponent } from './enrol/enrol.component';
 import { ForumComponent } from './forum/forum.component';
 import { ConfirmEnrolmentComponent } from './confirm-enrolment/confirm-enrolment.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { PostComponent } from './post/post.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -41,6 +43,8 @@ export function initialiseApp(config: SharedService) {
     EnrolComponent,
     ForumComponent,
     ConfirmEnrolmentComponent,
+    CreatePostComponent,
+    PostComponent,
   ],
   imports: [
     HttpClientModule,
@@ -70,7 +74,8 @@ export function initialiseApp(config: SharedService) {
     CreateCourseComponent,
     LinkCourseComponent,
     EnrolComponent,
-    ConfirmEnrolmentComponent
+    ConfirmEnrolmentComponent,
+    CreatePostComponent
   ]
 })
 export class AppModule { }

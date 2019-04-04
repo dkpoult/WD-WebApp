@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { NGXLogger } from 'ngx-logger';
 import { User } from './user';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -46,7 +47,6 @@ export class SharedService {
   }
 
   enrolInCourse(course: any, password?: string) {
-    console.log("Enrolling");
     const user = this.getLoggedInUser();
     const body = {
       personNumber: user.personNumber,
@@ -90,6 +90,20 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/get_posts`, body);
   }
 
+  getPost(post: string): Observable<any> {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      postCode: post
+    };
+    return this.http.post(`${this.apiRoot}/get_post`, body)
+      .pipe(
+        map((result: any) => {
+          return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
+        }));
+  }
+
   makePost(post: any): Observable<any> {
     const user = this.getLoggedInUser();
     const body = {
@@ -99,7 +113,6 @@ export class SharedService {
       title: post.title,
       body: post.body
     };
-    console.log(body);
     return this.http.post(`${this.apiRoot}/make_post`, body);
   }
 

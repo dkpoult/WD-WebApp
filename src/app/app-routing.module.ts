@@ -4,12 +4,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
+import { PostComponent } from './post/post.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
   { path: 'features', component: FeaturesComponent },
   { path: 'courses', component: CoursesComponent },
-  { path: 'courses/:code/forum', component: ForumComponent }
+  { path: 'courses/:code/forum', component: ForumComponent },
+  { path: 'courses/:code/forum/:post', component: PostComponent }
+
 ];
 
 @NgModule({

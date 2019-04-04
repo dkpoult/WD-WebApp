@@ -33,7 +33,6 @@ export class EnrolComponent implements OnInit {
         if (response.responseCode.startsWith('failed')) {
           return;
         }
-        console.log(response);
         this.courses = response.courses;
         this.gotCourses = true;
       });

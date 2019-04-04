@@ -1,5 +1,5 @@
 <div *ngIf="gotPosts">
-  <mat-card *ngFor="let post of posts">
+  <mat-card mat-ripple *ngFor="let post of posts" routerLink="{{ post.code }}">
     <mat-card-title>{{ post.title }}</mat-card-title>
     <mat-card-subtitle>{{ post.poster }}</mat-card-subtitle>
     <mat-card-content>{{ post.body }}</mat-card-content>
@@ -14,3 +14,6 @@
     </mat-card-actions>
   </mat-card>
 </div>
+<button #fab mat-fab class="fab" matTooltip="Create A Post" (click)="openCreatePostDialog()">
+  <mat-icon>add</mat-icon>
+</button>

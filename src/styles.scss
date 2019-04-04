@@ -37,3 +37,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     top: 20%;
     position: fixed;
 }
+div.mat-ripple-element {
+    position: absolute !important;
+  }
