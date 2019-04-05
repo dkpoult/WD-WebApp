@@ -37,6 +37,15 @@ export class AnnouncementsComponent implements OnInit {
       });
   }
 
+  isLecturer() {
+    if (!this.gotCourse) {
+      return false;
+    }
+    const user = this.sharedService.getLoggedInUser();
+    const lecturer = this.course.lecturer;
+    return user.personNumber === lecturer.personNumber;
+  }
+
   getCourse(): any {
     this.sharedService.getCourse(this.code).subscribe((response: any) => {
       if (response.responseCode.startsWith('failed')) {

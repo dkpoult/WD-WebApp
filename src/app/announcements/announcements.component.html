@@ -4,7 +4,8 @@
     <mat-card-subtitle>{{ announcement.time }}</mat-card-subtitle>
     <mat-card-content>{{ announcement.body }}</mat-card-content>
   </mat-card>
-  <button #fab mat-fab class="fab" matTooltip="Create A Post" (click)="openMakeAnnouncementDialog()">
+  <button *ngIf="isLecturer()" #fab mat-fab class="fab" matTooltip="Create A Post"
+    (click)="openMakeAnnouncementDialog()">
     <mat-icon>add</mat-icon>
   </button>
 </ng-container>

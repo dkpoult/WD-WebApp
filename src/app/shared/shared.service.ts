@@ -139,6 +139,17 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/make_comment`, body);
   }
 
+  markAsAnswer(postCode: string, commentCode: string) {
+    const user = this.getLoggedInUser();
+    const body = {
+      personNumber: user.personNumber,
+      userToken: user.token,
+      postCode,
+      commentCode
+    };
+    return this.http.post(`${this.apiRoot}/set_answer`, body);
+  }
+
   vote(post: any, vote: number) {
     const user = this.getLoggedInUser();
     const body = {

@@ -37,4 +37,15 @@ export class PostComponent implements OnInit {
       this.post = response.post;
     });
   }
+
+  markNewAnswer(comment: any) {
+    this.post.answer = comment;
+  }
+
+  isAnswer(comment: any) {
+    if (!this.gotPost || !this.post.answer) {
+      return false;
+    }
+    return this.post.answer.code === comment.code;
+  }
 }
