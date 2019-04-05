@@ -23,24 +23,24 @@ export class CreateCourseComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      code: new FormControl('', [Validators.required]),
+      code: new FormControl('', [Validators.required, Validators.maxLength(8), Validators.minLength(8)]),
       name: new FormControl('', [Validators.required]),
-      description: new FormControl('', [])
+      description: new FormControl('', []),
+      password: new FormControl('', [])
     });
   }
 
   hasErrors() {
     return (
-      this.form.controls.code.hasError('required') ||
-      this.form.controls.name.hasError('required') ||
-      (this.alreadyExists && !this.form.dirty)
+      (this.form.invalid) ||
+      (this.alreadyExists && this.form.pristine)
     );
   }
 
   submit(form) {
-    this.logger.debug('Attempting creation');
     const course = form.value;
     this.sharedService.createCourse(course).subscribe((response) => {
+      console.log(response);
       switch (response.responseCode) {
         case 'successful':
           this.dialogRef.close(true);

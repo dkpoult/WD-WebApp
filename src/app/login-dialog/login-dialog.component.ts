@@ -33,9 +33,8 @@ export class LoginDialogComponent implements OnInit {
 
   hasErrors() {
     return (
-      this.form.controls.personNumber.hasError('required') ||
-      this.form.controls.password.hasError('required') ||
-      (this.loginFailed && !this.form.dirty)
+      (this.form.invalid) ||
+      (this.loginFailed && this.form.pristine)
     );
   }
 

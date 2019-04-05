@@ -1,0 +1,9 @@
+<section *ngIf="gotPost">
+  <div class="post">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.body }}</p>
+    <app-post-action-buttons [post]="post"></app-post-action-buttons>
+    <app-comment *ngFor="let comment of post.comments" (newAnswer)="markNewAnswer($event)" [postCode]="post.code"
+      [isAnswer]="isAnswer(comment)" [comment]="comment"></app-comment>
+  </div>
+</section>

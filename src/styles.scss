@@ -32,3 +32,11 @@ $wd-web-theme: mat-light-theme($wd-web-primary, $wd-web-accent, $wd-web-warn);
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.spinner {
+    right: 50%;
+    top: 20%;
+    position: fixed;
+}
+mat-form-field {
+    width: 100%;
+}
