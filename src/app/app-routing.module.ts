@@ -9,12 +9,23 @@ import { AnnouncementsComponent } from './announcements/announcements.component'
 
 const routes: Routes = [
   { path: '', component: MainComponent },
-  { path: 'features', component: FeaturesComponent },
-  { path: 'courses', component: CoursesComponent },
-  { path: 'courses/:code/forum', component: ForumComponent },
-  { path: 'courses/:code/announcements', component: AnnouncementsComponent },
-  { path: 'courses/:code/forum/:post', component: PostComponent }
-
+  {
+    path: 'courses', children: [
+      { path: '', component: CoursesComponent },
+      {
+        path: ':code', children: [
+          {
+            path: 'forum', children: [
+              { path: '', component: ForumComponent },
+              { path: ':post', component: PostComponent }
+            ]
+          },
+          { path: 'announcements', component: AnnouncementsComponent }
+        ]
+      }
+    ]
+  },
+  { path: '**', component: MainComponent, redirectTo: '' }
 ];
 
 @NgModule({
