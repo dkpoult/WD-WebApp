@@ -15,6 +15,9 @@
                     announcement
                 </mat-icon>
             </button>
+            <button *ngIf="isLecturer(course)" mat-icon-button matTooltip="Edit" (click)="openEditDialog(course)">
+                <mat-icon>edit</mat-icon>
+            </button>
             <!--! For when forums are a thing-->
             <!-- <button mat-icon-button matTooltip="Forums">
                 <mat-icon>forum</mat-icon>

@@ -6,6 +6,7 @@ import { LinkCourseComponent } from '../link-course/link-course.component';
 import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.component';
 import { EnrolComponent } from '../enrol/enrol.component';
 import { NGXLogger } from 'ngx-logger';
+import { EditCourseComponent } from '../edit-course/edit-course.component';
 
 @Component({
   selector: 'app-courses',
@@ -17,6 +18,7 @@ export class CoursesComponent implements OnInit {
   createCourseDialogRef: MatDialogRef<CreateCourseComponent>;
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
   enrolDialogRef: MatDialogRef<EnrolComponent>;
+  editDialogRef: MatDialogRef<EditCourseComponent>;
 
   courses: Array<any>;
   gotCourses = false;
@@ -48,6 +50,16 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit() {
     this.getCourses();
+  }
+
+  openEditDialog(course) {
+    this.editDialogRef = this.dialog.open(EditCourseComponent, { data: course });
+    this.editDialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        // TODO: This can be done without a request
+        this.getCourses();
+      }
+    });
   }
 
   openEnrolDialog() {
@@ -87,6 +99,10 @@ export class CoursesComponent implements OnInit {
         this.courses = response.courses;
         this.gotCourses = true;
       });
+  }
+
+  isLecturer(course) {
+    return this.sharedService.currentUser.personNumber === course.lecturer.personNumber;
   }
 
   doAction(action: string) {

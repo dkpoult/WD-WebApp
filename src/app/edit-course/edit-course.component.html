@@ -1,16 +1,10 @@
 <section style="max-width: 500px;">
-  <h1 mat-dialog-title>Create Course</h1>
+  <h1 mat-dialog-title>Edit Course</h1>
   <form [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
       <mat-form-field>
         <mat-label>Course Code</mat-label>
-        <input matInput formControlName="code">
-        <mat-error *ngIf="form.controls['code'].hasError('required')">
-          Please enter a course code
-        </mat-error>
-        <mat-error *ngIf="form.controls['code'].hasError('minlength') || form.controls['code'].hasError('maxlength')">
-          Course code must be 8 characters long
-        </mat-error>
+        <input matInput disabled="true" value="{{ courseCode }}">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Course Name</mat-label>
@@ -29,12 +23,12 @@
         <mat-hint>(Optional)</mat-hint>
         <input matInput formControlName="password">
       </mat-form-field>
-      <mat-error *ngIf="alreadyExists && !form.dirty">
-        Course already exists
-      </mat-error>
+      <mat-checkbox formControlName="clearKey" (change)="toggleClearKey()">
+        Clear Enrolment Key
+      </mat-checkbox>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Create</button>
+      <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Update</button>
       <span fxFlex></span>
       <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
     </mat-dialog-actions>

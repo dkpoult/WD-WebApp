@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
   <!--Sidenav for mobile-->
-  <mat-sidenav #drawer class="drawer" fixedInViewport="true" [attr.role]="dialog" [mode]="over"
+  <mat-sidenav #drawer class="drawer" fixedInViewport="true" [attr.role]="'dialog'" [mode]="'over'"
     fxShow="isHandset$ | async" [opened]="(!isHandset$ | async)">
     <!--Menu items if logged out-->
     <mat-nav-list *ngIf="!loggedIn()">
@@ -24,6 +24,12 @@
         <button fxFlex mat-raised-button color="accent" (click)="signOut(); drawer.close()">Sign Out</button>
       </div>
     </mat-nav-list>
+    <!--Menu items all the time-->
+    <mat-nav-list>
+      <mat-slide-toggle [checked]="isDarkMode$ | async" (change)="toggleDarkMode()">
+        <mat-icon>brightness_3</mat-icon>
+      </mat-slide-toggle>
+    </mat-nav-list>
   </mat-sidenav>
   <!--Toolbar at the top-->
   <mat-sidenav-content>
@@ -35,6 +41,12 @@
       </button>
       <a mat-button routerLink="">WitsDaily</a>
       <span fxFlex></span>
+      <!--Menu items all the time-->
+      <mat-nav-list [class.hidden]="isHandset$ | async">
+        <mat-slide-toggle [checked]="isDarkMode$ | async" (change)="toggleDarkMode()">
+          <mat-icon>brightness_3</mat-icon>
+        </mat-slide-toggle>
+      </mat-nav-list>
       <div class="toolbar" [class.hidden]="isHandset$ | async">
         <!--Menu items if logged out-->
         <div *ngIf="!loggedIn()">

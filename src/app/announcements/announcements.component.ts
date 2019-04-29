@@ -41,9 +41,8 @@ export class AnnouncementsComponent implements OnInit {
     if (!this.gotCourse) {
       return false;
     }
-    const user = this.sharedService.getLoggedInUser();
     const lecturer = this.course.lecturer;
-    return user.personNumber === lecturer.personNumber;
+    return this.sharedService.currentUser.personNumber === lecturer.personNumber;
   }
 
   getCourse(): any {
