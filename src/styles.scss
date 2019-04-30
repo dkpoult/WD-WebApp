@@ -32,7 +32,7 @@ $wd-web-theme: mat-light-theme($wd-web-primary, $wd-web-accent, $wd-web-warn);
     @import 'assets/theming/wd-light-theme.scss'; // Default Wits colours theme
 }
 .dark {
-    @import 'assets/theming/wd-dark-theme.scss'; // Default Wits colours theme
+    @import 'assets/theming/wd-dark-theme.scss'; // Dark colours theme
 }
 
 html, body { height: 100%; }

@@ -47,7 +47,7 @@ export class SharedService {
     };
     return this.http.post(`${this.apiRoot}/course/get_course`, body)
       .pipe(map((result: any) => {
-        return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
+        return result.courses[0]; // POST responds with array of single course
       })); // TODO: Will give issues when the POST fails and no courses array is returned
   }
 
@@ -86,8 +86,8 @@ export class SharedService {
       courseCode: newInfo.courseCode,
       courseName: newInfo.name,
       courseDescription: newInfo.description,
-      password: newInfo.clearKey ? '' : newInfo.password,
       sessions: newInfo.sessions,
+      password: newInfo.clearKey ? null : newInfo.password,
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.token
     };

@@ -1,7 +1,10 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+
+// TODO: This component needs a guard
 
 @Component({
   selector: 'app-edit-course',
@@ -10,24 +13,38 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 })
 export class EditCourseComponent implements OnInit {
 
-  courseCode: string;
-
+  gotCourse = false;
   form: FormGroup;
+  courseCode: string;
+  course: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data,
-    private dialogRef: MatDialogRef<EditCourseComponent>,
+    private route: ActivatedRoute,
     private sharedService: SharedService,
   ) { }
 
   ngOnInit() {
-    this.courseCode = this.data.courseCode;
-    this.form = new FormGroup({
-      courseCode: new FormControl(this.courseCode),
-      name: new FormControl(this.data.courseName, [Validators.required]),
-      description: new FormControl(this.data.courseDescription),
-      password: new FormControl(''),
-      clearKey: new FormControl(false)
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        params.getAll('code')
+      )).subscribe((result: any) => {
+        this.courseCode = result;
+        this.getCourse();
+      });
+  }
+
+  getCourse() {
+    this.sharedService.getCourse(this.courseCode).subscribe((response: any) => {
+      this.gotCourse = true;
+      this.course = response;
+      console.log(this.course.hasPassword);
+      this.form = new FormGroup({
+        courseCode: new FormControl(this.courseCode),
+        name: new FormControl(this.course.courseName, [Validators.required]),
+        description: new FormControl(this.course.courseDescription),
+        password: new FormControl(''),
+        clearKey: new FormControl({ value: false, disabled: !this.course.hasPassword })
+      });
     });
   }
 
@@ -48,15 +65,9 @@ export class EditCourseComponent implements OnInit {
 
   submit(form) {
     const course = form.value;
-    this.sharedService.updateCourse(course).subscribe((response) => {
-      switch (response.responseCode) {
-        case 'successful':
-          this.dialogRef.close(course);
-          break;
-        default:
-          this.form.markAsPristine();
-          break;
-      }
+    this.sharedService.updateCourse(course).subscribe((response: any) => {
+      form.markAsPristine();
+      this.getCourse();
     });
   }
 

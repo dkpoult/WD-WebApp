@@ -79,7 +79,7 @@ export function initialiseApp(config: SharedService) {
     }
   ],
   bootstrap: [AppComponent],
-  // Add dialogs here
+  // * Add dialogs here
   entryComponents: [
     LoginDialogComponent,
     SignupDialogComponent,
@@ -90,7 +90,7 @@ export function initialiseApp(config: SharedService) {
     CreatePostComponent,
     CreateCommentComponent,
     MakeAnnouncementComponent,
-    EditCourseComponent
+    // EditCourseComponent // This is now a routed page, not a popup
   ]
 })
 export class AppModule { }

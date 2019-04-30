@@ -7,18 +7,19 @@
         <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
         <mat-card-content>{{ course.courseDescription }}</mat-card-content>
         <mat-card-actions>
-            <button mat-icon-button matTooltip="Questions" routerLink="{{ course.courseCode }}/forum">
-                <mat-icon>live_help</mat-icon>
+            <button mat-icon-button matTooltip="Forum" routerLink="{{ course.courseCode }}/forum">
+                <mat-icon>forum</mat-icon>
             </button>
             <button mat-icon-button matTooltip="Announcements" routerLink="{{ course.courseCode }}/announcements">
                 <mat-icon matBadge="" matBadgeColor="warn" matBadgeDescription="Unread Notifications">
                     announcement
                 </mat-icon>
             </button>
-            <button *ngIf="isLecturer(course)" mat-icon-button matTooltip="Edit" (click)="openEditDialog(course)">
+            <button *ngIf="isLecturer(course)" mat-icon-button matTooltip="Edit"
+                routerLink="{{ course.courseCode }}/edit">
                 <mat-icon>edit</mat-icon>
             </button>
-            <!--! For when forums are a thing-->
+            <!--! For when chat is a thing-->
             <!-- <button mat-icon-button matTooltip="Forums">
                 <mat-icon>forum</mat-icon>
             </button> -->

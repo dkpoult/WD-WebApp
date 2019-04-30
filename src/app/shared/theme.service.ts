@@ -15,6 +15,5 @@ export class ThemeService {
 
   setDarkMode(isDarkMode: boolean) {
     this.darkMode.next(isDarkMode);
-    document.getElementsByTagName('body')[0].classList.toggle('dark'); // TODO: Don't use this, figure out why the observable is not working
   }
 }

@@ -1,4 +1,4 @@
-<section style="max-width: 500px;">
+<section *ngIf="gotCourse">
   <h1 mat-dialog-title>Edit Course</h1>
   <form [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
@@ -28,9 +28,9 @@
       </mat-checkbox>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Update</button>
+      <button mat-button [disabled]="hasErrors() || form.pristine" type="submit">Save</button>
       <span fxFlex></span>
-      <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
+      <button mat-button type="button" routerLink="../../" color="warn">Cancel</button>
     </mat-dialog-actions>
   </form>
 </section>

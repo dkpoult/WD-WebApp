@@ -26,7 +26,7 @@
     </mat-nav-list>
     <!--Menu items all the time-->
     <mat-nav-list>
-      <mat-slide-toggle [checked]="isDarkMode$ | async" (change)="toggleDarkMode()">
+      <mat-slide-toggle [checked]="isDarkMode$ | async" (change)="toggleDarkMode($event.checked)">
         <mat-icon>brightness_3</mat-icon>
       </mat-slide-toggle>
     </mat-nav-list>
@@ -43,7 +43,7 @@
       <span fxFlex></span>
       <!--Menu items all the time-->
       <mat-nav-list [class.hidden]="isHandset$ | async">
-        <mat-slide-toggle [checked]="isDarkMode$ | async" (change)="toggleDarkMode()">
+        <mat-slide-toggle [checked]="isDarkMode$ | async" (change)="toggleDarkMode($event.checked)">
           <mat-icon>brightness_3</mat-icon>
         </mat-slide-toggle>
       </mat-nav-list>

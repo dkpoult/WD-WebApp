@@ -6,6 +6,7 @@ import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
 import { PostComponent } from './post/post.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
+import { EditCourseComponent } from './edit-course/edit-course.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
               { path: ':post', component: PostComponent }
             ]
           },
+          { path: 'edit', component: EditCourseComponent },
           { path: 'announcements', component: AnnouncementsComponent }
         ]
       }
