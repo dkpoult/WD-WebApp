@@ -1,10 +1,8 @@
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-
-// TODO: This component needs a guard
 
 @Component({
   selector: 'app-edit-course',
@@ -36,15 +34,28 @@ export class EditCourseComponent implements OnInit {
   getCourse() {
     this.sharedService.getCourse(this.courseCode).subscribe((response: any) => {
       this.gotCourse = true;
-      this.course = response;
-      console.log(this.course.hasPassword);
+      this.course = response.course;
+
+      const sessions: Array<FormGroup> = [];
+      this.course.sessions.forEach(session => {
+        sessions.push(new FormGroup({
+          duration: session.duration,
+          venue: session.venue,
+          repeatType: session.repeatType,
+          repeatGap: session.repeatGap,
+          nextDate: session.nextDate,
+          sessionType: session.sessionType,
+        }));
+      });
       this.form = new FormGroup({
         courseCode: new FormControl(this.courseCode),
         name: new FormControl(this.course.courseName, [Validators.required]),
         description: new FormControl(this.course.courseDescription),
         password: new FormControl(''),
-        clearKey: new FormControl({ value: false, disabled: !this.course.hasPassword })
+        clearKey: new FormControl({ value: false, disabled: !this.course.hasPassword }),
+        sessions: new FormArray(sessions)
       });
+      console.log(this.form);
     });
   }
 

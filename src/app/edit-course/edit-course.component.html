@@ -1,4 +1,4 @@
-<section *ngIf="gotCourse">
+<section *ngIf="gotCourse" style="padding: 15px;">
   <h1 mat-dialog-title>Edit Course</h1>
   <form [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
@@ -23,14 +23,20 @@
         <mat-hint>(Optional)</mat-hint>
         <input matInput formControlName="password">
       </mat-form-field>
-      <mat-checkbox formControlName="clearKey" (change)="toggleClearKey()">
+      <mat-checkbox formControlName="clearKey" [hidden]="!course.hasPassword" (change)="toggleClearKey()">
         Clear Enrolment Key
       </mat-checkbox>
+      <!-- <mat-form-field formControlName="sessions">
+        <mat-label>Enrolment Key</mat-label>
+        <mat-hint>(Optional)</mat-hint>
+        <input matInput formControlName="password">
+      </mat-form-field> -->
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button [disabled]="hasErrors() || form.pristine" type="submit">Save</button>
       <span fxFlex></span>
-      <button mat-button type="button" routerLink="../../" color="warn">Cancel</button>
+      <button mat-button [disabled]="hasErrors()" type="submit">Apply</button>
+      <button mat-button type="button" routerLink="../../" color="warn">Back</button>
+      <span fxFlex></span>
     </mat-dialog-actions>
   </form>
 </section>

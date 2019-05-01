@@ -89,8 +89,7 @@ export function initialiseApp(config: SharedService) {
     ConfirmEnrolmentComponent,
     CreatePostComponent,
     CreateCommentComponent,
-    MakeAnnouncementComponent,
-    // EditCourseComponent // This is now a routed page, not a popup
+    MakeAnnouncementComponent
   ]
 })
 export class AppModule { }

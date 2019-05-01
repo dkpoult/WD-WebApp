@@ -66,8 +66,8 @@ $wd-accent: (
     )
 );
 
-$wd-theme-primary: mat-palette($wd-primary);
-$wd-theme-accent: mat-palette($wd-accent);
+$wd-theme-primary: mat-palette($wd-primary, A200, A100, A400);
+$wd-theme-accent: mat-palette($wd-accent, 500, 300, 700);
 $wd-theme-warn: mat-palette($mat-red);
 
 $wd-theme: mat-dark-theme($wd-theme-primary, $wd-theme-accent, $wd-theme-warn);

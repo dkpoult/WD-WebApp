@@ -47,6 +47,7 @@ export class AnnouncementsComponent implements OnInit {
 
   getCourse(): any {
     this.sharedService.getCourse(this.code).subscribe((response: any) => {
+      console.log(response);
       if (response.responseCode.startsWith('failed')) {
         this.logger.error(response.responseCode);
         return;
