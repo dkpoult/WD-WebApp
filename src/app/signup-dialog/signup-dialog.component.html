@@ -19,7 +19,7 @@
           Please enter a password
         </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="noUser && !form.dirty">
+      <mat-error *ngIf="noUser && form.pristine">
         Invalid username or password
       </mat-error>
     </mat-dialog-content>

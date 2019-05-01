@@ -9,7 +9,7 @@
           Please enter an enrolment key
         </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="wrongPassword && !form.dirty">
+      <mat-error *ngIf="wrongPassword && form.pristine">
         Invalid enrolment key
       </mat-error>
     </mat-dialog-content>

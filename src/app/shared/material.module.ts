@@ -15,7 +15,8 @@ import {
   MatRippleModule,
   MatBadgeModule,
   MatCheckboxModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatSelectModule,
 } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 /**
@@ -37,7 +38,8 @@ const MATERIAL_MODULES = [
   ScrollingModule,
   MatBadgeModule,
   MatCheckboxModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatSelectModule
 ];
 
 @NgModule({

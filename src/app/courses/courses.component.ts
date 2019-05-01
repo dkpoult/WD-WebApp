@@ -52,16 +52,6 @@ export class CoursesComponent implements OnInit {
     this.getCourses();
   }
 
-  openEditDialog(course) {
-    this.editDialogRef = this.dialog.open(EditCourseComponent, { data: course });
-    this.editDialogRef.afterClosed().subscribe((result: boolean) => {
-      if (result) {
-        // TODO: This can be done without a request
-        this.getCourses();
-      }
-    });
-  }
-
   openEnrolDialog() {
     this.enrolDialogRef = this.dialog.open(EnrolComponent);
     this.enrolDialogRef.afterClosed().subscribe((result: boolean) => {
@@ -82,7 +72,7 @@ export class CoursesComponent implements OnInit {
 
   openLinkCourseDialog() {
     this.linkCourseDialogRef = this.dialog.open(LinkCourseComponent);
-    this.createCourseDialogRef.afterClosed().subscribe((result: boolean) => {
+    this.linkCourseDialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.getCourses();
       }

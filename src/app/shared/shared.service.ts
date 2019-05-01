@@ -31,6 +31,23 @@ export class SharedService {
   }
 
   // Courses
+  addDummySession(course: string): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.token,
+      courseCode: course,
+      session: {
+        venue: 'FNB35',
+        repeatType: 'WEEKLY',
+        repeatGap: 1,
+        nextDate: 'tomorrow',
+        sessionType: 'LECTURE',
+        duration: 45
+      }
+    };
+    return this.http.post(`${this.apiRoot}/course/add_session`, body);
+  }
+
   getCourses(): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,

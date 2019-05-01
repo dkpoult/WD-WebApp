@@ -9,10 +9,10 @@
           Please enter a Moodle ID
         </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="alreadyExists && !form.dirty">
+      <mat-error *ngIf="alreadyExists && form.pristine">
         Course has already been linked
       </mat-error>
-      <mat-error *ngIf="missingPermissions && !form.dirty">
+      <mat-error *ngIf="missingPermissions && form.pristine">
         You do not have permission to link this course
       </mat-error>
     </mat-dialog-content>

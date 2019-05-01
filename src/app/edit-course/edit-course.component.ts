@@ -31,6 +31,28 @@ export class EditCourseComponent implements OnInit {
       });
   }
 
+  dummy() {
+    // this.sharedService.addDummySession(this.courseCode).subscribe(console.log);
+    // console.log(this.form.controls.sessions.get('0').get('repeatType').value);
+  }
+
+  addSession() {
+    const sessions = this.form.controls.sessions as FormArray;
+    const newSession = new FormGroup({
+      duration: new FormControl('', [Validators.required]),
+      venue: new FormControl('', [Validators.required]),
+      repeatType: new FormControl('', [Validators.required]),
+      repeatGap: new FormControl('', [Validators.required]),
+      sessionType: new FormControl('', [Validators.required]),
+      nextDate: new FormControl('', [Validators.required])
+    });
+    sessions.push(newSession);
+  }
+
+  removeSession(i: number) {
+    (this.form.get('sessions') as FormArray).removeAt(i);
+  }
+
   getCourse() {
     this.sharedService.getCourse(this.courseCode).subscribe((response: any) => {
       this.gotCourse = true;
@@ -38,14 +60,15 @@ export class EditCourseComponent implements OnInit {
 
       const sessions: Array<FormGroup> = [];
       this.course.sessions.forEach(session => {
-        sessions.push(new FormGroup({
-          duration: session.duration,
-          venue: session.venue,
-          repeatType: session.repeatType,
-          repeatGap: session.repeatGap,
-          nextDate: session.nextDate,
-          sessionType: session.sessionType,
-        }));
+        const newSession = new FormGroup({
+          duration: new FormControl(session.duration, [Validators.required]),
+          venue: new FormControl(session.venue, [Validators.required]),
+          repeatType: new FormControl(session.repeatType, [Validators.required]),
+          repeatGap: new FormControl(session.repeatGap, [Validators.required]),
+          sessionType: new FormControl(session.sessionType, [Validators.required]),
+          nextDate: new FormControl(session.nextDate, [Validators.required])
+        });
+        sessions.push(newSession);
       });
       this.form = new FormGroup({
         courseCode: new FormControl(this.courseCode),
@@ -55,7 +78,6 @@ export class EditCourseComponent implements OnInit {
         clearKey: new FormControl({ value: false, disabled: !this.course.hasPassword }),
         sessions: new FormArray(sessions)
       });
-      console.log(this.form);
     });
   }
 

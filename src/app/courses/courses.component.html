@@ -2,6 +2,8 @@
     <mat-spinner class="spinner"></mat-spinner>
 </div>
 <ng-template #elseTemplate>
+    <div *ngIf="courses.length === 0">There are no courses to display. Please enrol in a course or create a new one
+    </div>
     <mat-card *ngFor="let course of courses">
         <mat-card-title>{{ course.courseCode }}</mat-card-title>
         <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>

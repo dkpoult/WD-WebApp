@@ -16,7 +16,6 @@ export class ForumComponent implements OnInit {
 
   createPostDialogRef: MatDialogRef<CreatePostComponent>;
 
-  course$: Observable<string>;
   course: string;
 
   gotPosts = false;
@@ -30,14 +29,13 @@ export class ForumComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.course$ = this.route.paramMap.pipe(
+    this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         params.getAll('code')
-      ));
-    this.course$.subscribe((result: any) => {
-      this.course = result;
-      this.getPosts();
-    });
+      )).subscribe((result: any) => {
+        this.course = result;
+        this.getPosts();
+      });
   }
 
   getPosts() {
