@@ -32,24 +32,26 @@ export class EditCourseComponent implements OnInit {
   }
 
   dummy() {
-    // this.sharedService.addDummySession(this.courseCode).subscribe(console.log);
+    this.sharedService.addDummySession(this.courseCode).subscribe(console.log);
     // console.log(this.form.controls.sessions.get('0').get('repeatType').value);
   }
 
   addSession() {
     const sessions = this.form.controls.sessions as FormArray;
     const newSession = new FormGroup({
-      duration: new FormControl('', [Validators.required]),
+      duration: new FormControl('45', [Validators.required]),
       venue: new FormControl('', [Validators.required]),
-      repeatType: new FormControl('', [Validators.required]),
-      repeatGap: new FormControl('', [Validators.required]),
-      sessionType: new FormControl('', [Validators.required]),
-      nextDate: new FormControl('', [Validators.required])
+      repeatType: new FormControl('WEEKLY', [Validators.required]),
+      repeatGap: new FormControl('1', [Validators.required]),
+      sessionType: new FormControl('LECTURE', [Validators.required]),
+      date: new FormControl(new Date(), [Validators.required]),
+      time: new FormControl('', [Validators.required])
     });
     sessions.push(newSession);
   }
 
   removeSession(i: number) {
+    this.form.markAsDirty();
     (this.form.get('sessions') as FormArray).removeAt(i);
   }
 
@@ -57,16 +59,20 @@ export class EditCourseComponent implements OnInit {
     this.sharedService.getCourse(this.courseCode).subscribe((response: any) => {
       this.gotCourse = true;
       this.course = response.course;
-
       const sessions: Array<FormGroup> = [];
       this.course.sessions.forEach(session => {
+        let date: Date = new Date(session.nextDate);
+        if (date.toString() === 'Invalid Date') {
+          date = new Date();
+        }
         const newSession = new FormGroup({
           duration: new FormControl(session.duration, [Validators.required]),
           venue: new FormControl(session.venue, [Validators.required]),
           repeatType: new FormControl(session.repeatType, [Validators.required]),
           repeatGap: new FormControl(session.repeatGap, [Validators.required]),
           sessionType: new FormControl(session.sessionType, [Validators.required]),
-          nextDate: new FormControl(session.nextDate, [Validators.required])
+          date: new FormControl(date.toISOString(), [Validators.required]),
+          time: new FormControl(date.toTimeString().substr(0, 5), [Validators.required])
         });
         sessions.push(newSession);
       });
@@ -100,7 +106,11 @@ export class EditCourseComponent implements OnInit {
     const course = form.value;
     this.sharedService.updateCourse(course).subscribe((response: any) => {
       form.markAsPristine();
-      this.getCourse();
+      // this.getCourse();
+    });
+    this.sharedService.updateSessions(this.courseCode, course.sessions).subscribe((response: any) => {
+      form.get('sessions').markAsPristine();
+      // this.getCourse();
     });
   }
 

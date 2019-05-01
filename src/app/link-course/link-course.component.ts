@@ -40,7 +40,7 @@ export class LinkCourseComponent implements OnInit {
   submit(form) {
     this.logger.debug('Attempting creation');
     const course = form.value;
-    this.sharedService.linkCourse(course).subscribe((response) => {
+    this.sharedService.linkCourse(course.id).subscribe((response) => {
       switch (response.responseCode) {
         case 'successful':
           this.dialogRef.close(true);

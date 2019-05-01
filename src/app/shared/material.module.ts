@@ -17,6 +17,8 @@ import {
   MatCheckboxModule,
   MatSlideToggleModule,
   MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 /**
@@ -39,7 +41,9 @@ const MATERIAL_MODULES = [
   MatBadgeModule,
   MatCheckboxModule,
   MatSlideToggleModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({

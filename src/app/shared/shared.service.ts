@@ -1,5 +1,5 @@
-import { Injectable, ViewChild } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { NGXLogger } from 'ngx-logger';
 import { User } from './user';
@@ -40,7 +40,7 @@ export class SharedService {
         venue: 'FNB35',
         repeatType: 'WEEKLY',
         repeatGap: 1,
-        nextDate: 'tomorrow',
+        nextDate: '2019-05-01 12:30:00',
         sessionType: 'LECTURE',
         duration: 45
       }
@@ -76,11 +76,11 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/course/get_available_courses`, body);
   }
 
-  enrolInCourse(course: any, password?: string) {
+  enrolInCourse(courseCode, password?: string) {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.token,
-      courseCode: course,
+      courseCode,
       password
     };
     return this.http.post(`${this.apiRoot}/course/enrol_in_course`, body);
@@ -91,7 +91,7 @@ export class SharedService {
       courseCode: course.code,
       courseName: course.name,
       courseDescription: course.description ? course.description : '',
-      password: course.password ? course.password : undefined,
+      password: course.password ? course.password : null,
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.token,
     };
@@ -111,9 +111,37 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/course/update_course`, body);
   }
 
-  linkCourse(course: any): Observable<any> {
+  updateSessions(courseCode: string, newSessions: Array<any>) {
+    newSessions.forEach((session: any) => {
+      const date = new Date(session.date);
+      const year = date.getFullYear().toString();
+      // Month is 0 based for whatever reason
+      let month = (date.getMonth() + 1).toString();
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+      let day = date.getDate().toString();
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+      session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+      // Don't send useless info
+      delete session.date;
+      delete session.time;
+    });
     const body = {
-      courseId: course.id,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.token,
+      sessions: newSessions,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/course/update_sessions`, body);
+  }
+
+  linkCourse(courseId): Observable<any> {
+    console.log(courseId);
+    const body = {
+      courseId,
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.token
     };
@@ -136,7 +164,7 @@ export class SharedService {
       userToken: this.currentUser.token,
       postCode: post
     };
-    return this.http.post(`${this.apiRoot}/get_post`, body)
+    return this.http.post(`${this.apiRoot}/forum/get_post`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
       })); // TODO: Will give issues when the POST fails and no posts array is returned

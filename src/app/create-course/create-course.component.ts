@@ -40,7 +40,6 @@ export class CreateCourseComponent implements OnInit {
   submit(form) {
     const course = form.value;
     this.sharedService.createCourse(course).subscribe((response) => {
-      console.log(response);
       switch (response.responseCode) {
         case 'successful':
           this.dialogRef.close(true);
@@ -50,6 +49,7 @@ export class CreateCourseComponent implements OnInit {
           this.form.markAsPristine();
           break;
         default:
+          console.log(response);
           this.form.markAsPristine();
           break;
       }

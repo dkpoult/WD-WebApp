@@ -42,12 +42,11 @@ export class AnnouncementsComponent implements OnInit {
       return false;
     }
     const lecturer = this.course.lecturer;
-    return this.sharedService.currentUser.personNumber === lecturer.personNumber;
+    return this.sharedService.currentUser.personNumber === lecturer;
   }
 
   getCourse(): any {
     this.sharedService.getCourse(this.code).subscribe((response: any) => {
-      console.log(response);
       if (response.responseCode.startsWith('failed')) {
         this.logger.error(response.responseCode);
         return;
