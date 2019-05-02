@@ -1,7 +1,7 @@
+import { ChatComponent } from './chat/chat.component';
 import { ForumComponent } from './forum/forum.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
 import { PostComponent } from './post/post.component';
@@ -23,7 +23,8 @@ const routes: Routes = [
             ]
           },
           { path: 'edit', component: EditCourseComponent },
-          { path: 'announcements', component: AnnouncementsComponent }
+          { path: 'announcements', component: AnnouncementsComponent },
+          { path: 'chat', component: ChatComponent }
         ]
       }
     ]

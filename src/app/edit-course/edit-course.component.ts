@@ -13,7 +13,6 @@ export class EditCourseComponent implements OnInit {
 
   gotCourse = false;
   form: FormGroup;
-  courseCode: string;
   course: any;
 
   isHandset: boolean;
@@ -28,17 +27,11 @@ export class EditCourseComponent implements OnInit {
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
-        this.courseCode = result;
-        this.getCourse();
+        this.getCourse(result);
       });
     this.sharedService.isHandset$.subscribe(result => {
       this.isHandset = result;
     });
-  }
-
-  dummy() {
-    this.sharedService.addDummySession(this.courseCode).subscribe(console.log);
-    // console.log(this.form.controls.sessions.get('0').get('repeatType').value);
   }
 
   addSession() {
@@ -65,8 +58,8 @@ export class EditCourseComponent implements OnInit {
     return new Date(start.valueOf() + duration * 60000).toTimeString().substr(0, 5);
   }
 
-  getCourse() {
-    this.sharedService.getCourse(this.courseCode).subscribe((response: any) => {
+  getCourse(courseCode: string) {
+    this.sharedService.getCourse(courseCode).subscribe((response: any) => {
       this.gotCourse = true;
       this.course = response.course;
       const sessions: Array<FormGroup> = [];
@@ -96,7 +89,7 @@ export class EditCourseComponent implements OnInit {
         sessions.push(newSession);
       });
       this.form = new FormGroup({
-        courseCode: new FormControl(this.courseCode),
+        courseCode: new FormControl(this.course.courseCode),
         name: new FormControl(this.course.courseName, [Validators.required]),
         description: new FormControl(this.course.courseDescription),
         password: new FormControl(''),

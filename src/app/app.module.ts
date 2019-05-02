@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StompRService } from '@stomp/ng2-stompjs';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
@@ -31,6 +32,7 @@ import { MakeAnnouncementComponent } from './make-announcement/make-announcement
 import { EditCourseComponent } from './edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
 import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
+import { ChatComponent } from './chat/chat.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -60,6 +62,7 @@ export function initialiseApp(config: SharedService) {
     EditCourseComponent,
     TimetableComponent,
     EditSessionComponent,
+    ChatComponent,
   ],
   imports: [
     HttpClientModule,
@@ -78,7 +81,8 @@ export function initialiseApp(config: SharedService) {
       useFactory: initialiseApp,
       deps: [SharedService],
       multi: true
-    }
+    },
+    StompRService
   ],
   bootstrap: [AppComponent],
   // * Add dialogs here

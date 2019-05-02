@@ -15,7 +15,6 @@ export class AnnouncementsComponent implements OnInit {
   makeAnnouncementDialogRef: MatDialogRef<MakeAnnouncementComponent>;
 
   gotCourse = false;
-  code: any;
   course: any;
 
   constructor(
@@ -30,8 +29,7 @@ export class AnnouncementsComponent implements OnInit {
         params.getAll('code')
       ))
       .subscribe((result: any) => {
-        this.code = result;
-        this.getCourse();
+        this.getCourse(result);
       });
   }
 
@@ -43,8 +41,8 @@ export class AnnouncementsComponent implements OnInit {
     return this.sharedService.currentUser.personNumber === lecturer;
   }
 
-  getCourse(): any {
-    this.sharedService.getCourse(this.code).subscribe((response: any) => {
+  getCourse(courseCode: string): any {
+    this.sharedService.getCourse(courseCode).subscribe((response: any) => {
       if (response.responseCode.startsWith('failed')) {
         console.log(response.responseCode);
         return;
@@ -55,10 +53,10 @@ export class AnnouncementsComponent implements OnInit {
   }
 
   openMakeAnnouncementDialog() {
-    this.makeAnnouncementDialogRef = this.dialog.open(MakeAnnouncementComponent, { data: this.code });
+    this.makeAnnouncementDialogRef = this.dialog.open(MakeAnnouncementComponent, { data: this.course.courseCode });
     this.makeAnnouncementDialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getCourse();
+        this.getCourse(this.course.courseCode);
       }
     });
   }

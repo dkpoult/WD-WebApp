@@ -81,7 +81,7 @@ export class CoursesComponent implements OnInit {
     this.sharedService.getCourses()
       .subscribe((response: any) => {
         if (response.responseCode.startsWith('failed')) {
-          console.log(response.responseCode);
+          console.log(response);
           return;
         }
         this.courses = response.courses;

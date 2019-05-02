@@ -19,14 +19,14 @@ export class SharedService {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private http: HttpClient
+    private http: HttpClient,
   ) { }
 
   // Gets called from app.module when the system starts up
   initialise(): void {
-    this.apiRoot = 'https://wd.dimensionalapps.com'; // TODO: Hack, rather make everything wait for initialisation first
+    this.apiRoot = 'https://wd.dimensionalapps.com';
     this.currentUser = this.getLoggedInUser();
-    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; });
+    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
   }
 
   // Authentication
@@ -39,27 +39,10 @@ export class SharedService {
   }
 
   // Courses
-  addDummySession(course: string): Observable<any> {
-    const body = {
-      personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
-      courseCode: course,
-      session: {
-        venue: 'FNB35',
-        repeatType: 'WEEKLY',
-        repeatGap: 1,
-        nextDate: '2019-05-01 12:30:00',
-        sessionType: 'LECTURE',
-        duration: 45
-      }
-    };
-    return this.http.post(`${this.apiRoot}/course/add_session`, body);
-  }
-
   getCourses(): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token
+      userToken: this.currentUser.userToken
     };
     return this.http.post(`${this.apiRoot}/course/get_courses`, body);
   }
@@ -67,19 +50,19 @@ export class SharedService {
   getCourse(courseCode: string): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       courseCode
     };
     return this.http.post(`${this.apiRoot}/course/get_course`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
-      })); // TODO: Will give issues when the POST fails and no courses array is returned
+      }));
   }
 
   getAvailableCourses() {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token
+      userToken: this.currentUser.userToken
     };
     return this.http.post(`${this.apiRoot}/course/get_available_courses`, body);
   }
@@ -87,7 +70,7 @@ export class SharedService {
   enrolInCourse(courseCode, password?: string) {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       courseCode,
       password
     };
@@ -101,7 +84,7 @@ export class SharedService {
       courseDescription: course.description ? course.description : '',
       password: course.password ? course.password : null,
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
     };
     return this.http.post(`${this.apiRoot}/course/create_course`, body);
   }
@@ -130,7 +113,7 @@ export class SharedService {
       sessions: newInfo.sessions,
       password: newInfo.clearKey ? '' : newInfo.password,
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token
+      userToken: this.currentUser.userToken
     };
     return this.http.post(`${this.apiRoot}/course/update_course`, body);
   }
@@ -155,7 +138,7 @@ export class SharedService {
     });
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       sessions: newSessions,
       courseCode
     };
@@ -163,11 +146,10 @@ export class SharedService {
   }
 
   linkCourse(courseId): Observable<any> {
-    console.log(courseId);
     const body = {
       courseId,
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token
+      userToken: this.currentUser.userToken
     };
     return this.http.post(`${this.apiRoot}/course/link_course`, body);
   }
@@ -176,7 +158,7 @@ export class SharedService {
   getPosts(forum: string): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       forumCode: forum
     };
     return this.http.post(`${this.apiRoot}/forum/get_posts`, body);
@@ -185,7 +167,7 @@ export class SharedService {
   getPost(post: string): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       postCode: post
     };
     return this.http.post(`${this.apiRoot}/forum/get_post`, body)
@@ -197,7 +179,7 @@ export class SharedService {
   makePost(post: any): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       forumCode: post.forum,
       title: post.title,
       body: post.body
@@ -208,7 +190,7 @@ export class SharedService {
   makeComment(post: any, comment: string): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       postCode: post.code,
       body: comment
     };
@@ -218,7 +200,7 @@ export class SharedService {
   markAsAnswer(postCode: string, commentCode: string) {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       postCode,
       commentCode
     };
@@ -228,7 +210,7 @@ export class SharedService {
   vote(post: any, vote: number) {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       postCode: post.code,
       vote
     };
@@ -239,7 +221,7 @@ export class SharedService {
   makeAnnouncement(courseCode: string, announcement: any) {
     const body = {
       personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.token,
+      userToken: this.currentUser.userToken,
       body: announcement.body,
       title: announcement.title,
       courseCode,
@@ -256,10 +238,10 @@ export class SharedService {
     return JSON.parse(this.localStorage.getItem('user'));
   }
 
-  loginUser(personNumber: string, token: string) {
-    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, token)));
+  loginUser(personNumber: string, userToken: string) {
+    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken)));
     this.currentUser = this.getLoggedInUser();
-    console.log(`Logged in user ${personNumber} with token ${token}`);
+    console.log(`Logged in user ${personNumber} with token ${userToken}`);
   }
 
   userIsValid(): any {
