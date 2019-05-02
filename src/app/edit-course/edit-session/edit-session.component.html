@@ -1,0 +1,56 @@
+<mat-card class="session-card">
+  <mat-card-content>
+    <form [formGroup]="form">
+      <div class="session-info" id="info">
+        <mat-form-field id="sessionType">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="sessionType">
+            <mat-option *ngFor="let type of sessionTypes" value="{{ type.value }}">{{ type.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field id="venue">
+          <mat-label>Venue</mat-label>
+          <input matInput formControlName="venue">
+        </mat-form-field>
+      </div>
+      <div class="session-info" id="time">
+        <mat-form-field id="start">
+          <mat-label>Start Time</mat-label>
+          <input matInput type="time" formControlName="time">
+        </mat-form-field>
+        <span> to </span>
+        <mat-form-field id="end">
+          <mat-label>End Time</mat-label>
+          <input matInput type="time" formControlName="endTime">
+        </mat-form-field>
+      </div>
+      <div class="session-info" id="repeats">
+        <mat-form-field id="repeatType">
+          <mat-label>Repeats</mat-label>
+          <mat-select formControlName="repeatType">
+            <mat-option *ngFor="let type of repeatTypes" [value]="type.value">{{ type.text }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="form.get('repeatType').value !== 'ONCE'">
+          <mat-label>Every</mat-label>
+          <span matSuffix>{{ getPeriod(form.get('repeatType').value, form.get('repeatGap').value) }}</span>
+          <input matInput type="number" formControlName="repeatGap">
+        </mat-form-field>
+      </div>
+      <div class="session-info" id="date">
+        <span>From </span>
+        <mat-form-field id="date">
+          <mat-label>Beginning Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-icon-button type="button" (click)="removeSession()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

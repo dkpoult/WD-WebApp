@@ -1,7 +1,6 @@
 import { SharedService } from './../shared/shared.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -24,7 +23,6 @@ export class ForumComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private route: ActivatedRoute,
-    private logger: NGXLogger,
     private dialog: MatDialog
   ) { }
 
@@ -41,7 +39,7 @@ export class ForumComponent implements OnInit {
   getPosts() {
     this.sharedService.getPosts(this.course).subscribe((response: any) => {
       if (response.responseCode.startsWith('failed')) {
-        this.logger.error(response.responseCode);
+        console.log(response);
         return;
       }
       this.gotPosts = true;

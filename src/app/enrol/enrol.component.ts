@@ -1,7 +1,6 @@
 import { SharedService } from './../shared/shared.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { NGXLogger } from 'ngx-logger';
 import { ConfirmEnrolmentComponent } from '../confirm-enrolment/confirm-enrolment.component';
 
 @Component({
@@ -18,7 +17,6 @@ export class EnrolComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private dialogRef: MatDialogRef<EnrolComponent>,
     private dialog: MatDialog,
   ) { }

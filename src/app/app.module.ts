@@ -10,7 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { SharedService } from './shared/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
@@ -30,6 +29,8 @@ import { CreateCommentComponent } from './create-comment/create-comment.componen
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { MakeAnnouncementComponent } from './make-announcement/make-announcement.component';
 import { EditCourseComponent } from './edit-course/edit-course.component';
+import { TimetableComponent } from './timetable/timetable.component';
+import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -57,11 +58,12 @@ export function initialiseApp(config: SharedService) {
     AnnouncementsComponent,
     MakeAnnouncementComponent,
     EditCourseComponent,
+    TimetableComponent,
+    EditSessionComponent,
   ],
   imports: [
     HttpClientModule,
     FlexLayoutModule,
-    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

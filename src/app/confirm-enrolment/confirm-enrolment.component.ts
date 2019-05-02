@@ -1,7 +1,6 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Inject } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { NGXLogger } from 'ngx-logger';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Observable } from 'rxjs';
 
@@ -18,7 +17,6 @@ export class ConfirmEnrolmentComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private dialogRef: MatDialogRef<ConfirmEnrolmentComponent>,
   ) { }
 

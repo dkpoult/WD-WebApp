@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { SharedService } from '../shared/shared.service';
-import { NGXLogger } from 'ngx-logger';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -16,7 +15,6 @@ export class CreatePostComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private dialogRef: MatDialogRef<CreatePostComponent>,
   ) { }
 

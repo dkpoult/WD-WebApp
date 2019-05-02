@@ -21,10 +21,7 @@ export interface MenuItem {
 })
 export class NavComponent implements OnInit {
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches)
-    );
+  isHandset$: Observable<boolean> = this.sharedService.isHandset$;
 
   loginDialogRef: MatDialogRef<LoginDialogComponent>;
   signupDialogRef: MatDialogRef<SignupDialogComponent>;
@@ -34,7 +31,8 @@ export class NavComponent implements OnInit {
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedIn: Array<MenuItem> = [
-    { path: 'courses', text: 'Courses' }
+    { path: 'courses', text: 'Courses' },
+    { path: 'timetable', text: 'Timetable' }
   ];
 
   // Add menu items here for when NOT logged in
@@ -47,7 +45,6 @@ export class NavComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
     private router: Router,
     private theme: ThemeService) { }

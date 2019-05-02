@@ -1,7 +1,7 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { NGXLogger } from 'ngx-logger';
 import { User } from './user';
 import { map } from 'rxjs/operators';
 @Injectable({
@@ -12,7 +12,15 @@ export class SharedService {
   public currentUser: User;
   public localStorage: any = window.localStorage;
 
-  constructor(private http: HttpClient, private logger: NGXLogger) { }
+  public isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches)
+    );
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private http: HttpClient
+  ) { }
 
   // Gets called from app.module when the system starts up
   initialise(): void {
@@ -99,6 +107,22 @@ export class SharedService {
   }
 
   updateCourse(newInfo: any): Observable<any> {
+    newInfo.sessions.forEach((session: any) => {
+      const date = new Date(session.date);
+      const year = date.getFullYear().toString();
+      let month = (date.getMonth() + 1).toString(); // Month is 0 based for whatever reason
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+      let day = date.getDate().toString();
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+      session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+      // Don't send useless info
+      delete session.date;
+      delete session.time;
+    });
     const body = {
       courseCode: newInfo.courseCode,
       courseName: newInfo.name,
@@ -167,7 +191,7 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/forum/get_post`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
-      })); // TODO: Will give issues when the POST fails and no posts array is returned
+      }));
   }
 
   makePost(post: any): Observable<any> {
@@ -235,7 +259,7 @@ export class SharedService {
   loginUser(personNumber: string, token: string) {
     this.localStorage.setItem('user', JSON.stringify(new User(personNumber, token)));
     this.currentUser = this.getLoggedInUser();
-    this.logger.debug(`Logged in user ${personNumber} with token ${token}`);
+    console.log(`Logged in user ${personNumber} with token ${token}`);
   }
 
   userIsValid(): any {

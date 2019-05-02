@@ -16,6 +16,8 @@ export class EditCourseComponent implements OnInit {
   courseCode: string;
   course: any;
 
+  isHandset: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
@@ -29,6 +31,9 @@ export class EditCourseComponent implements OnInit {
         this.courseCode = result;
         this.getCourse();
       });
+    this.sharedService.isHandset$.subscribe(result => {
+      this.isHandset = result;
+    });
   }
 
   dummy() {
@@ -39,20 +44,25 @@ export class EditCourseComponent implements OnInit {
   addSession() {
     const sessions = this.form.controls.sessions as FormArray;
     const newSession = new FormGroup({
-      duration: new FormControl('45', [Validators.required]),
       venue: new FormControl('', [Validators.required]),
       repeatType: new FormControl('WEEKLY', [Validators.required]),
       repeatGap: new FormControl('1', [Validators.required]),
       sessionType: new FormControl('LECTURE', [Validators.required]),
       date: new FormControl(new Date(), [Validators.required]),
-      time: new FormControl('', [Validators.required])
+      time: new FormControl('', [Validators.required]),
+      endTime: new FormControl('', [Validators.required]),
     });
     sessions.push(newSession);
   }
 
   removeSession(i: number) {
     this.form.markAsDirty();
-    (this.form.get('sessions') as FormArray).removeAt(i);
+    const array = this.form.get('sessions') as FormArray;
+    array.removeAt(i);
+  }
+
+  getTimeString(start: Date, duration: number) {
+    return new Date(start.valueOf() + duration * 60000).toTimeString().substr(0, 5);
   }
 
   getCourse() {
@@ -61,18 +71,27 @@ export class EditCourseComponent implements OnInit {
       this.course = response.course;
       const sessions: Array<FormGroup> = [];
       this.course.sessions.forEach(session => {
-        let date: Date = new Date(session.nextDate);
+        const date = new Date(session.nextDate);
+        let dateStr;
+        let timeStr;
+        let endStr;
         if (date.toString() === 'Invalid Date') {
-          date = new Date();
+          dateStr = '';
+          timeStr = '';
+          endStr = '';
+        } else {
+          dateStr = date.toISOString();
+          timeStr = date.toTimeString().substr(0, 5);
+          endStr = this.getTimeString(date, session.duration);
         }
         const newSession = new FormGroup({
-          duration: new FormControl(session.duration, [Validators.required]),
           venue: new FormControl(session.venue, [Validators.required]),
           repeatType: new FormControl(session.repeatType, [Validators.required]),
           repeatGap: new FormControl(session.repeatGap, [Validators.required]),
           sessionType: new FormControl(session.sessionType, [Validators.required]),
-          date: new FormControl(date.toISOString(), [Validators.required]),
-          time: new FormControl(date.toTimeString().substr(0, 5), [Validators.required])
+          date: new FormControl(dateStr, [Validators.required]),
+          time: new FormControl(timeStr, [Validators.required]),
+          endTime: new FormControl(endStr, [Validators.required]),
         });
         sessions.push(newSession);
       });
@@ -104,14 +123,29 @@ export class EditCourseComponent implements OnInit {
 
   submit(form) {
     const course = form.value;
+    course.sessions.forEach((session: any) => {
+      session.duration = this.timeBetween(session.time, session.endTime);
+      delete session.endTime;
+    });
     this.sharedService.updateCourse(course).subscribe((response: any) => {
       form.markAsPristine();
-      // this.getCourse();
     });
-    this.sharedService.updateSessions(this.courseCode, course.sessions).subscribe((response: any) => {
-      form.get('sessions').markAsPristine();
-      // this.getCourse();
-    });
+  }
+
+  // TODO: Move this to a utils file
+  timeBetween(start: string, end: string) {
+    const startH = parseInt(start.substr(0, 2), 10);
+    const startM = parseInt(start.substr(3, 2), 10);
+    const endH = parseInt(end.substr(0, 2), 10);
+    const endM = parseInt(end.substr(3, 2), 10);
+
+    let h = endH - startH;
+    const m = endM - startM;
+    if (endH < startH) {
+      // We have crossed midnight
+      h = (24 - startH) + endH;
+    }
+    return m + 60 * h;
   }
 
 }

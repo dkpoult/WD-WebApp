@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 import { PostComponent } from './post/post.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { EditCourseComponent } from './edit-course/edit-course.component';
+import { TimetableComponent } from './timetable/timetable.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
       }
     ]
   },
+  { path: 'timetable', component: TimetableComponent },
   { path: '**', component: MainComponent, redirectTo: '' }
 ];
 

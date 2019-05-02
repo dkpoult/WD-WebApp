@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { SharedService } from '../shared/shared.service';
 import { MatDialogRef } from '@angular/material';
-import { NGXLogger } from 'ngx-logger';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +19,6 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<LoginDialogComponent>,
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private router: Router
   ) { }
 
@@ -39,7 +37,7 @@ export class LoginDialogComponent implements OnInit {
   }
 
   submit(form) {
-    this.logger.debug('Attempting log in');
+    console.log('Attempting log in');
     const user = form.value;
     this.sharedService.authenticateUser(user).subscribe((response) => {
       switch (response.responseCode) {

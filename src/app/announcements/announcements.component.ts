@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { MakeAnnouncementComponent } from '../make-announcement/make-announcement.component';
 import { switchMap } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-announcements',
@@ -23,7 +22,6 @@ export class AnnouncementsComponent implements OnInit {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -48,7 +46,7 @@ export class AnnouncementsComponent implements OnInit {
   getCourse(): any {
     this.sharedService.getCourse(this.code).subscribe((response: any) => {
       if (response.responseCode.startsWith('failed')) {
-        this.logger.error(response.responseCode);
+        console.log(response.responseCode);
         return;
       }
       this.gotCourse = true;

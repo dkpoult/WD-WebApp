@@ -5,7 +5,6 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { LinkCourseComponent } from '../link-course/link-course.component';
 import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.component';
 import { EnrolComponent } from '../enrol/enrol.component';
-import { NGXLogger } from 'ngx-logger';
 import { EditCourseComponent } from '../edit-course/edit-course.component';
 
 @Component({
@@ -45,7 +44,6 @@ export class CoursesComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog,
-    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -83,7 +81,7 @@ export class CoursesComponent implements OnInit {
     this.sharedService.getCourses()
       .subscribe((response: any) => {
         if (response.responseCode.startsWith('failed')) {
-          this.logger.error(response.responseCode);
+          console.log(response.responseCode);
           return;
         }
         this.courses = response.courses;
