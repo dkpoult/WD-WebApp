@@ -33,6 +33,7 @@ import { EditCourseComponent } from './edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
 import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -63,6 +64,7 @@ export function initialiseApp(config: SharedService) {
     TimetableComponent,
     EditSessionComponent,
     ChatComponent,
+    ChatMessageComponent,
   ],
   imports: [
     HttpClientModule,

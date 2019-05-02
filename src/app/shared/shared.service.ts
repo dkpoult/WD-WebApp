@@ -1,3 +1,4 @@
+import { SocketService } from './socket.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -19,6 +20,7 @@ export class SharedService {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
+    private socketService: SocketService,
     private http: HttpClient,
   ) { }
 
@@ -26,7 +28,14 @@ export class SharedService {
   initialise(): void {
     this.apiRoot = 'https://wd.dimensionalapps.com';
     this.currentUser = this.getLoggedInUser();
+    if (this.isLoggedIn()) {
+      this.connect();
+    }
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
+  }
+
+  connect() {
+    this.socketService.connect('wss://wd.dimensionalapps.com', this.currentUser);
   }
 
   // Authentication
@@ -241,6 +250,7 @@ export class SharedService {
   loginUser(personNumber: string, userToken: string) {
     this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken)));
     this.currentUser = this.getLoggedInUser();
+    this.connect();
     console.log(`Logged in user ${personNumber} with token ${userToken}`);
   }
 
