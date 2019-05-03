@@ -62,8 +62,8 @@ export class SocketService {
     });
   }
 
-  deleteMessage(message: any) {
-    this.stompService.publish(`/chat/${this.courseCode}/deleteMessage`, JSON.stringify({ content: message.id, messageType: 'DELETE' }), {
+  deleteMessage(id: any) {
+    this.stompService.publish(`/chat/${this.courseCode}/deleteMessage`, JSON.stringify({ content: id, messageType: 'DELETE' }), {
       personNumber: this.user.personNumber,
       userToken: this.user.userToken
     });

@@ -68,7 +68,7 @@ export class SharedService {
       }));
   }
 
-  getAvailableCourses() {
+  getAvailableCourses(): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
@@ -76,7 +76,7 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/course/get_available_courses`, body);
   }
 
-  enrolInCourse(courseCode, password?: string) {
+  enrolInCourse(courseCode, password?: string): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
@@ -127,7 +127,7 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/course/update_course`, body);
   }
 
-  updateSessions(courseCode: string, newSessions: Array<any>) {
+  updateSessions(courseCode: string, newSessions: Array<any>): Observable<any> {
     newSessions.forEach((session: any) => {
       const date = new Date(session.date);
       const year = date.getFullYear().toString();
@@ -206,7 +206,7 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/forum/make_comment`, body);
   }
 
-  markAsAnswer(postCode: string, commentCode: string) {
+  markAsAnswer(postCode: string, commentCode: string): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
@@ -216,7 +216,7 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/forum/set_answer`, body);
   }
 
-  vote(post: any, vote: number) {
+  vote(post: any, vote: number): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
@@ -227,7 +227,7 @@ export class SharedService {
   }
 
   // Push
-  makeAnnouncement(courseCode: string, announcement: any) {
+  makeAnnouncement(courseCode: string, announcement: any): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
@@ -238,6 +238,50 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/push/make_announcement`, body);
   }
 
+  // Survey
+  makeDummySurvey(courseCode: string): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      title: 'Test Question',
+      options: ['It works', 'It doesn\'t work'],
+      responseType: 'MC',
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
+  }
+
+  makeSurvey(courseCode: string, survey: any) {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      title: survey.prompt,
+      options: survey.options,
+      responseType: survey.type,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
+  }
+
+  closeSurvey(courseCode: string): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/close_survey`, body);
+  }
+
+  getSurvey(courseCode: string): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/get_survey`, body);
+  }
+
+  // util
   isLoggedIn(): boolean {
     const user = this.localStorage.getItem('user');
     return !!user;
@@ -252,10 +296,6 @@ export class SharedService {
     this.currentUser = this.getLoggedInUser();
     this.connect();
     console.log(`Logged in user ${personNumber} with token ${userToken}`);
-  }
-
-  userIsValid(): any {
-    return this.isLoggedIn();
   }
 
   signOut() {

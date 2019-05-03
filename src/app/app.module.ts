@@ -34,6 +34,8 @@ import { TimetableComponent } from './timetable/timetable.component';
 import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { ViewSurveyComponent } from './view-survey/view-survey.component';
+import { CreateSurveyComponent } from './create-survey/create-survey.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -65,6 +67,8 @@ export function initialiseApp(config: SharedService) {
     EditSessionComponent,
     ChatComponent,
     ChatMessageComponent,
+    ViewSurveyComponent,
+    CreateSurveyComponent,
   ],
   imports: [
     HttpClientModule,

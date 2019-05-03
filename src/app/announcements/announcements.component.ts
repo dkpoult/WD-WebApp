@@ -38,7 +38,7 @@ export class AnnouncementsComponent implements OnInit {
       return false;
     }
     const lecturer = this.course.lecturer;
-    return this.sharedService.currentUser.personNumber === lecturer;
+    return this.sharedService.currentUser.personNumber === lecturer.personNumber;
   }
 
   getCourse(courseCode: string): any {
