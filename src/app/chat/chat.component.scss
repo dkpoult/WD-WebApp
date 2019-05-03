@@ -6,3 +6,10 @@
         top: 20px;
     }
 }
+
+.chat-container {
+    position: fixed;
+    width: 100%;
+    height: 80%;
+    overflow: auto;
+}

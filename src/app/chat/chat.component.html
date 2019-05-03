@@ -1,9 +1,11 @@
 <!-- <button (click)="sendDummySurvey()">Open</button>
 <button (click)="closeSurvey()">Close</button> -->
-<div *ngFor="let message of messages;">
-  <app-chat-message (delete)="deleteMessage(message.id)" [message]="message" [color]="getMessageColor(message)"
-    [isModerator]="isModerator()">
-  </app-chat-message>
+<div class="chat-container">
+  <div *ngFor="let message of messages;">
+    <app-chat-message (delete)="deleteMessage(message.id)" [message]="message" [color]="getMessageColor(message)"
+      [isModerator]="isModerator()">
+    </app-chat-message>
+  </div>
 </div>
 <div class="edit-box">
   <mat-form-field fxFlex>

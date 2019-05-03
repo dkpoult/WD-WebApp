@@ -86,7 +86,7 @@ export class ChatComponent implements OnInit {
     this.createSurveyDialogRef = this.dialog.open(CreateSurveyComponent, { data: this.course });
     this.createSurveyDialogRef.afterClosed().subscribe(survey => {
       this.sharedService.makeSurvey(this.course.courseCode, survey).subscribe(console.log);
-    })
+    });
   }
 
   closeSurvey() {
