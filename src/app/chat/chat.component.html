@@ -1,6 +1,6 @@
 <!-- <button (click)="sendDummySurvey()">Open</button>
 <button (click)="closeSurvey()">Close</button> -->
-<div class="chat-container">
+<div class="chat-container" #autoScroll [scrollTop]="autoScroll.scrollHeight">
   <div *ngFor="let message of messages;">
     <app-chat-message (delete)="deleteMessage(message.id)" [message]="message" [color]="getMessageColor(message)"
       [isModerator]="isModerator()">
