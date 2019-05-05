@@ -2,9 +2,10 @@ import { SurveyService } from '../shared/survey.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, startWith } from 'rxjs/operators';
 import { SocketService } from '../shared/socket.service';
 import { isNullOrUndefined } from 'util';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +18,9 @@ export class ChatComponent implements OnInit {
   survey: any;
 
   currentTabIndex = 0;
+
+  pollingInterval = 5000;
+  pollingData: Subscription;
 
   messages: Array<any>;
   unreadMessages = 0;
@@ -64,6 +68,11 @@ export class ChatComponent implements OnInit {
 
   tabChange(event) {
     this.currentTabIndex = event.index;
+
+    if (this.pollingData) {
+      this.pollingData.unsubscribe();
+    }
+
     switch (event.index) {
       case 0:
         this.unreadMessages = 0;
@@ -101,9 +110,20 @@ export class ChatComponent implements OnInit {
   }
 
   getSurvey() {
-    this.sharedService.getSurvey(this.course.courseCode, this.isModerator()).subscribe((result: any) => {
-      this.survey = result.survey;
-    });
+    if (this.isModerator() && this.survey.responseType === 'MC') {
+      // poll
+      this.pollingData = interval(this.pollingInterval)
+        .pipe(startWith(0),
+          switchMap(() => this.sharedService.getSurvey(this.course.courseCode, true))
+        ).subscribe((result: any) => {
+          this.survey = result.survey;
+        });
+    } else {
+      // Just once off
+      this.sharedService.getSurvey(this.course.courseCode, this.isModerator()).subscribe((result: any) => {
+        this.survey = result.survey;
+      });
+    }
   }
 
   // remove it from our list of messages (incoming only)

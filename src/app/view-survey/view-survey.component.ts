@@ -5,6 +5,7 @@ import { CreateSurveyComponent } from '../create-survey/create-survey.component'
 import { SharedService } from '../shared/shared.service';
 import { isNullOrUndefined } from 'util';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-view-survey',
@@ -22,8 +23,6 @@ export class ViewSurveyComponent implements OnInit {
 
   data: number[] = [1, 0];
 
-  pollingInterval: 2000;
-
   constructor(
     private sharedService: SharedService,
     private surveyService: SurveyService,
@@ -34,10 +33,6 @@ export class ViewSurveyComponent implements OnInit {
     this.form = new FormGroup({
       answer: new FormControl('', [Validators.required])
     });
-    if (this.isLecturer) {
-      // poll
-
-    }
   }
 
   createSurvey() {
