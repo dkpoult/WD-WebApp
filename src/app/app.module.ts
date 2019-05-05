@@ -36,6 +36,7 @@ import { ChatComponent } from './chat/chat.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
+import { ChartComponent } from './chart/chart.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -69,6 +70,7 @@ export function initialiseApp(config: SharedService) {
     ChatMessageComponent,
     ViewSurveyComponent,
     CreateSurveyComponent,
+    ChartComponent,
   ],
   imports: [
     HttpClientModule,

@@ -27,6 +27,13 @@
     <div class="surveySummary">
       <h2>{{ survey.title }}</h2>
     </div>
+    <div *ngIf="survey.responseType === 'MC'">
+      <p *ngFor="let response of survey.results; let i = index">
+        {{survey.options[i]}}: {{response}}
+      </p>
+      <app-chart [labels]="survey.options" [data]="survey.results"></app-chart>
+    </div>
+    <!-- TODO: Fancy graphing/Analytics -->
     <button mat-raised-button color="primary" (click)="closeSurvey()">Close this survey</button>
   </div>
 </ng-container>

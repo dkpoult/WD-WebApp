@@ -40,7 +40,7 @@ export class ChatComponent implements OnInit {
         });
         this.sharedService.getSurvey(result).subscribe((response: any) => {
           this.survey = response.survey;
-          this.unansweredSurvey = !this.survey.answered;
+          // this.unansweredSurvey = !this.survey.answered;
         });
         this.socketService.subscribeToCourse(result).subscribe((message: any) => {
           console.log('Received', message);
@@ -69,6 +69,7 @@ export class ChatComponent implements OnInit {
         this.unreadMessages = 0;
         break;
       case 1:
+        this.getSurvey();
         this.unansweredSurvey = false; // ! For now unanswered == unread
         break;
     }
@@ -89,16 +90,20 @@ export class ChatComponent implements OnInit {
 
   handleSurvey(message: any) {
     if (message.content.endsWith('opened')) {
-      this.sharedService.getSurvey(this.course.courseCode).subscribe((result: any) => {
-        this.survey = result.survey;
-      });
-      if (this.course.lecturer.personNumber === this.sharedService.currentUser.personNumber) {
+      this.getSurvey();
+      if (!this.isModerator()) {
         this.unansweredSurvey = true;
       }
     } else {
       this.survey = null;
       this.unansweredSurvey = false;
     }
+  }
+
+  getSurvey() {
+    this.sharedService.getSurvey(this.course.courseCode, this.isModerator()).subscribe((result: any) => {
+      this.survey = result.survey;
+    });
   }
 
   // remove it from our list of messages (incoming only)

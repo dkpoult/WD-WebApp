@@ -275,13 +275,17 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/survey/close_survey`, body);
   }
 
-  getSurvey(courseCode: string): Observable<any> {
+  getSurvey(courseCode: string, getResults = false): Observable<any> {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/survey/get_survey`, body);
+    if (getResults) {
+      return this.http.post(`${this.apiRoot}/survey/get_results`, body);
+    } else {
+      return this.http.post(`${this.apiRoot}/survey/get_survey`, body);
+    }
   }
 
   answerSurvey(courseCode, answer: string | number): Observable<any> {

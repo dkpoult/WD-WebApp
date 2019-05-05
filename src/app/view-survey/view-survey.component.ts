@@ -20,6 +20,10 @@ export class ViewSurveyComponent implements OnInit {
 
   createSurveyDialogRef: MatDialogRef<CreateSurveyComponent>;
 
+  data: number[] = [1, 0];
+
+  pollingInterval: 2000;
+
   constructor(
     private sharedService: SharedService,
     private surveyService: SurveyService,
@@ -30,6 +34,10 @@ export class ViewSurveyComponent implements OnInit {
     this.form = new FormGroup({
       answer: new FormControl('', [Validators.required])
     });
+    if (this.isLecturer) {
+      // poll
+
+    }
   }
 
   createSurvey() {
@@ -37,9 +45,6 @@ export class ViewSurveyComponent implements OnInit {
       return;
     }
     this.createSurveyDialogRef = this.dialog.open(CreateSurveyComponent, { data: this.course });
-    this.createSurveyDialogRef.afterClosed().subscribe(survey => {
-      if (!survey) { return; }
-    });
   }
 
   closeSurvey() {
@@ -48,7 +53,7 @@ export class ViewSurveyComponent implements OnInit {
 
   answerSurvey() {
     const answer = this.form.get('answer').value;
-    this.sharedService.answerSurvey(this.course.courseCode, answer);
+    this.sharedService.answerSurvey(this.course.courseCode, answer).subscribe(console.log);
     this.form.markAsPristine();
   }
 
