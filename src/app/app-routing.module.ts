@@ -1,20 +1,36 @@
+import { ChatComponent } from './chat/chat.component';
 import { ForumComponent } from './forum/forum.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
 import { PostComponent } from './post/post.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
+import { EditCourseComponent } from './edit-course/edit-course.component';
+import { TimetableComponent } from './timetable/timetable.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
-  { path: 'features', component: FeaturesComponent },
-  { path: 'courses', component: CoursesComponent },
-  { path: 'courses/:code/forum', component: ForumComponent },
-  { path: 'courses/:code/announcements', component: AnnouncementsComponent },
-  { path: 'courses/:code/forum/:post', component: PostComponent }
-
+  {
+    path: 'courses', children: [
+      { path: '', component: CoursesComponent },
+      {
+        path: ':code', children: [
+          {
+            path: 'forum', children: [
+              { path: '', component: ForumComponent },
+              { path: ':post', component: PostComponent }
+            ]
+          },
+          { path: 'edit', component: EditCourseComponent },
+          { path: 'announcements', component: AnnouncementsComponent },
+          { path: 'chat', component: ChatComponent }
+        ]
+      }
+    ]
+  },
+  { path: 'timetable', component: TimetableComponent },
+  { path: '**', component: MainComponent, redirectTo: '' }
 ];
 
 @NgModule({

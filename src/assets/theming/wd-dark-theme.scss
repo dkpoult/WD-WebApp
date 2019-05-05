@@ -1,0 +1,75 @@
+@import '../../../node_modules/@angular/material/theming';
+
+$wd-primary: (
+    50 : #68c5ff,
+    100 : #1ca8ff,
+    200 : #008ce3,
+    300 : #00609b,
+    400 : #004d7d,
+    500 : #003a5e,
+    600 : #00273f,
+    700 : #001421,
+    800 : #000102,
+    900 : #000000,
+    A100 : #5ec1ff,
+    A200 : #0098f7,
+    A400 : #005991,
+    A700 : #004a77,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #ffffff,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$wd-accent: (
+    50 : #f2efe9,
+    100 : #d7ccb8,
+    200 : #c2b294,
+    300 : #a99267,
+    400 : #998357,
+    500 : #86724c,
+    600 : #726141,
+    700 : #5f5136,
+    800 : #4b402b,
+    900 : #383020,
+    A100 : #f5eddc,
+    A200 : #e0c38b,
+    A400 : #b8934d,
+    A700 : #9c824f,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$wd-theme-primary: mat-palette($wd-primary, A200, A100, A400);
+$wd-theme-accent: mat-palette($wd-accent, 500, 300, 700);
+$wd-theme-warn: mat-palette($mat-red);
+
+$wd-theme: mat-dark-theme($wd-theme-primary, $wd-theme-accent, $wd-theme-warn);
+
+@include angular-material-theme($wd-theme);

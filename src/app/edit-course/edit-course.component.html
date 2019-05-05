@@ -1,0 +1,56 @@
+<section *ngIf="gotCourse" style="padding: 15px;">
+  <h1 mat-dialog-title>Edit Course</h1>
+  <form [formGroup]="form" (ngSubmit)="submit(form)">
+    <mat-dialog-content>
+      <!-- Course -->
+      <div>
+        <mat-form-field>
+          <mat-label>Course Code</mat-label>
+          <input matInput disabled="true" value="{{ course.courseCode }}">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Course Name</mat-label>
+          <input matInput formControlName="name">
+          <mat-error>
+            Please enter a course name
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Course Description</mat-label>
+          <mat-hint>(Optional)</mat-hint>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Enrolment Key</mat-label>
+          <mat-hint>(Optional)</mat-hint>
+          <input matInput formControlName="password">
+        </mat-form-field>
+        <mat-checkbox formControlName="clearKey" [hidden]="!course.hasPassword" (change)="toggleClearKey()">
+          Clear Enrolment Key
+        </mat-checkbox>
+      </div>
+      <!-- Sessions -->
+      <div formArrayName="sessions" style="padding-top: 20px;">
+        <mat-label>
+          Sessions
+          <button class="add-btn" mat-icon-button type="button" (click)="addSession()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-label>
+        <mat-grid-list [cols]="isHandset ? 1 : 2" [rowHeight]="400">
+          <mat-grid-tile *ngFor="let session of form.controls['sessions'].controls; let i = index">
+            <app-edit-session [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
+            </app-edit-session>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <span fxFlex></span>
+      <button mat-button [disabled]="hasErrors()" type="submit">Apply</button>
+      <span fxFlex="10"></span>
+      <button mat-button type="button" routerLink="../../" color="warn">Back</button>
+      <span fxFlex></span>
+    </mat-dialog-actions>
+  </form>
+</section>

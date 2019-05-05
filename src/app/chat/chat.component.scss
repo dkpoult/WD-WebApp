@@ -1,0 +1,15 @@
+.edit-box {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    .send-btn {
+        top: 20px;
+    }
+}
+
+.chat-container {
+    position: fixed;
+    width: 100%;
+    height: 80%;
+    overflow: auto;
+}

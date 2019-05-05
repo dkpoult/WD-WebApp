@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { SharedService } from '../shared/shared.service';
-import { NGXLogger } from 'ngx-logger';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,7 +19,6 @@ export class SignupDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<SignupDialogComponent>,
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private router: Router
   ) { }
 
@@ -39,7 +37,7 @@ export class SignupDialogComponent implements OnInit {
   }
 
   submit(form) {
-    this.logger.debug('Attempting link');
+    console.log('Attempting link');
     const user = form.value;
     this.sharedService.linkUser(user).subscribe((response) => {
       switch (response.responseCode) {

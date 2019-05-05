@@ -7,10 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StompRService } from '@stomp/ng2-stompjs';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { SharedService } from './shared/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
@@ -29,6 +29,14 @@ import { PostActionButtonsComponent } from './post-action-buttons/post-action-bu
 import { CreateCommentComponent } from './create-comment/create-comment.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { MakeAnnouncementComponent } from './make-announcement/make-announcement.component';
+import { EditCourseComponent } from './edit-course/edit-course.component';
+import { TimetableComponent } from './timetable/timetable.component';
+import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
+import { ChatComponent } from './chat/chat.component';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { ViewSurveyComponent } from './view-survey/view-survey.component';
+import { CreateSurveyComponent } from './create-survey/create-survey.component';
+import { ChartComponent } from './chart/chart.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -55,11 +63,18 @@ export function initialiseApp(config: SharedService) {
     CreateCommentComponent,
     AnnouncementsComponent,
     MakeAnnouncementComponent,
+    EditCourseComponent,
+    TimetableComponent,
+    EditSessionComponent,
+    ChatComponent,
+    ChatMessageComponent,
+    ViewSurveyComponent,
+    CreateSurveyComponent,
+    ChartComponent,
   ],
   imports: [
     HttpClientModule,
     FlexLayoutModule,
-    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -74,10 +89,11 @@ export function initialiseApp(config: SharedService) {
       useFactory: initialiseApp,
       deps: [SharedService],
       multi: true
-    }
+    },
+    StompRService
   ],
   bootstrap: [AppComponent],
-  // Add dialogs here
+  // * Add dialogs here
   entryComponents: [
     LoginDialogComponent,
     SignupDialogComponent,
@@ -87,7 +103,8 @@ export function initialiseApp(config: SharedService) {
     ConfirmEnrolmentComponent,
     CreatePostComponent,
     CreateCommentComponent,
-    MakeAnnouncementComponent
+    MakeAnnouncementComponent,
+    CreateSurveyComponent
   ]
 })
 export class AppModule { }

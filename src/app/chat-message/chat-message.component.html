@@ -1,0 +1,14 @@
+<mat-card [style.background]="color" *ngIf="message.messageType === 'CHAT'">
+  <!-- <mat-card-header> -->
+  <mat-card-subtitle>
+    {{message.personNumber}} @ {{message.time}}
+    <span fxFlex></span>
+    <button *ngIf="isModerator" mat-icon-button class="delete-btn" (click)="deleteThis()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-subtitle>
+  <!-- </mat-card-header> -->
+  <mat-card-content>
+    {{message.content}}
+  </mat-card-content>
+</mat-card>

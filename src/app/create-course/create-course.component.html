@@ -21,14 +21,15 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Course Description</mat-label>
+        <mat-hint>(Optional)</mat-hint>
         <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
-      <mat-form-field required="false">
+      <mat-form-field>
         <mat-label>Enrolment Key</mat-label>
         <mat-hint>(Optional)</mat-hint>
         <input matInput formControlName="password">
       </mat-form-field>
-      <mat-error *ngIf="alreadyExists && !form.dirty">
+      <mat-error *ngIf="alreadyExists && form.pristine">
         Course already exists
       </mat-error>
     </mat-dialog-content>

@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { MakeAnnouncementComponent } from '../make-announcement/make-announcement.component';
 import { switchMap } from 'rxjs/operators';
-import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'app-announcements',
@@ -16,14 +15,12 @@ export class AnnouncementsComponent implements OnInit {
   makeAnnouncementDialogRef: MatDialogRef<MakeAnnouncementComponent>;
 
   gotCourse = false;
-  code: any;
   course: any;
 
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private logger: NGXLogger
   ) { }
 
   ngOnInit() {
@@ -32,8 +29,7 @@ export class AnnouncementsComponent implements OnInit {
         params.getAll('code')
       ))
       .subscribe((result: any) => {
-        this.code = result;
-        this.getCourse();
+        this.getCourse(result);
       });
   }
 
@@ -41,15 +37,14 @@ export class AnnouncementsComponent implements OnInit {
     if (!this.gotCourse) {
       return false;
     }
-    const user = this.sharedService.getLoggedInUser();
     const lecturer = this.course.lecturer;
-    return user.personNumber === lecturer.personNumber;
+    return this.sharedService.currentUser.personNumber === lecturer.personNumber;
   }
 
-  getCourse(): any {
-    this.sharedService.getCourse(this.code).subscribe((response: any) => {
+  getCourse(courseCode: string): any {
+    this.sharedService.getCourse(courseCode).subscribe((response: any) => {
       if (response.responseCode.startsWith('failed')) {
-        this.logger.error(response.responseCode);
+        console.log(response.responseCode);
         return;
       }
       this.gotCourse = true;
@@ -58,10 +53,10 @@ export class AnnouncementsComponent implements OnInit {
   }
 
   openMakeAnnouncementDialog() {
-    this.makeAnnouncementDialogRef = this.dialog.open(MakeAnnouncementComponent, { data: this.code });
+    this.makeAnnouncementDialogRef = this.dialog.open(MakeAnnouncementComponent, { data: this.course.courseCode });
     this.makeAnnouncementDialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.getCourse();
+        this.getCourse(this.course.courseCode);
       }
     });
   }

@@ -1,201 +1,324 @@
-import { Injectable, ViewChild } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { SocketService } from './socket.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { NGXLogger } from 'ngx-logger';
 import { User } from './user';
 import { map } from 'rxjs/operators';
+import { forEach } from '@angular/router/src/utils/collection';
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
   public apiRoot: string;
+  public wsRoot: string;
 
+  public currentUser: User;
   public localStorage: any = window.localStorage;
 
-  constructor(private http: HttpClient, private logger: NGXLogger) { }
+  public isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches)
+    );
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private socketService: SocketService,
+    private http: HttpClient,
+  ) { }
 
   // Gets called from app.module when the system starts up
   initialise(): void {
-    this.apiRoot = 'https://wd.dimensionalapps.com'; // TODO: Hack, rather make everything wait for initialisation first
-    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; });
+    this.apiRoot = 'https://wd.dimensionalapps.com';
+    this.wsRoot = 'wss://wd.dimensionalapps.com';
+    this.currentUser = this.getLoggedInUser();
+    if (this.isLoggedIn()) {
+      this.connect();
+    }
+    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
   }
 
+  connect() {
+    this.socketService.connect(this.wsRoot, this.currentUser);
+  }
+
+  // Authentication
   linkUser(user: User): Observable<any> {
-    return this.http.post(`${this.apiRoot}/register`, user);
+    return this.http.post(`${this.apiRoot}/auth/register`, user);
   }
 
   authenticateUser(user: User): Observable<any> {
-    return this.http.post(`${this.apiRoot}/login`, user);
+    return this.http.post(`${this.apiRoot}/auth/login`, user);
   }
 
+  // Courses
   getCourses(): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/get_courses`, body);
+    return this.http.post(`${this.apiRoot}/course/get_courses`, body);
   }
 
   getCourse(courseCode: string): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/get_course`, body)
+    return this.http.post(`${this.apiRoot}/course/get_course`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
-      })); // TODO: Will give issues when the POST fails and no courses array is returned
+      }));
   }
 
-  getAvailableCourses() {
-    const user = this.getLoggedInUser();
+  getAvailableCourses(): Observable<any> {
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/get_available_courses`, body);
+    return this.http.post(`${this.apiRoot}/course/get_available_courses`, body);
   }
 
-  enrolInCourse(course: any, password?: string) {
-    const user = this.getLoggedInUser();
+  enrolInCourse(courseCode, password?: string): Observable<any> {
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
-      courseCode: course,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode,
       password
     };
-    return this.http.post(`${this.apiRoot}/enrol_in_course`, body);
+    return this.http.post(`${this.apiRoot}/course/enrol_in_course`, body);
   }
 
   createCourse(course: any): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
       courseCode: course.code,
       courseName: course.name,
       courseDescription: course.description ? course.description : '',
-      password: course.password ? course.password : undefined,
-      personNumber: user.personNumber,
-      userToken: user.token,
+      password: course.password ? course.password : null,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
     };
-    return this.http.post(`${this.apiRoot}/create_course`, body);
+    return this.http.post(`${this.apiRoot}/course/create_course`, body);
   }
 
-  linkCourse(course: any): Observable<any> {
-    const user = this.getLoggedInUser();
+  updateCourse(newInfo: any): Observable<any> {
+    newInfo.sessions.forEach((session: any) => {
+      const date = new Date(session.date);
+      const year = date.getFullYear().toString();
+      let month = (date.getMonth() + 1).toString(); // Month is 0 based for whatever reason
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+      let day = date.getDate().toString();
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+      session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+      // Don't send useless info
+      delete session.date;
+      delete session.time;
+    });
     const body = {
-      courseId: course.id,
-      personNumber: user.personNumber,
-      userToken: user.token
+      courseCode: newInfo.courseCode,
+      courseName: newInfo.name,
+      courseDescription: newInfo.description,
+      sessions: newInfo.sessions,
+      password: newInfo.clearKey ? '' : newInfo.password,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/link_course`, body);
+    return this.http.post(`${this.apiRoot}/course/update_course`, body);
   }
 
+  updateSessions(courseCode: string, newSessions: Array<any>): Observable<any> {
+    newSessions.forEach((session: any) => {
+      const date = new Date(session.date);
+      const year = date.getFullYear().toString();
+      // Month is 0 based for whatever reason
+      let month = (date.getMonth() + 1).toString();
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+      let day = date.getDate().toString();
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+      session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+      // Don't send useless info
+      delete session.date;
+      delete session.time;
+    });
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      sessions: newSessions,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/course/update_sessions`, body);
+  }
+
+  linkCourse(courseId): Observable<any> {
+    const body = {
+      courseId,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
+    };
+    return this.http.post(`${this.apiRoot}/course/link_course`, body);
+  }
+
+  // Forum
   getPosts(forum: string): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       forumCode: forum
     };
-    return this.http.post(`${this.apiRoot}/get_posts`, body);
+    return this.http.post(`${this.apiRoot}/forum/get_posts`, body);
   }
 
   getPost(post: string): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       postCode: post
     };
-    return this.http.post(`${this.apiRoot}/get_post`, body)
+    return this.http.post(`${this.apiRoot}/forum/get_post`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
-      })); // TODO: Will give issues when the POST fails and no posts array is returned
+      }));
   }
 
   makePost(post: any): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       forumCode: post.forum,
       title: post.title,
       body: post.body
     };
-    return this.http.post(`${this.apiRoot}/make_post`, body);
+    return this.http.post(`${this.apiRoot}/forum/make_post`, body);
   }
 
   makeComment(post: any, comment: string): Observable<any> {
-    const user = this.getLoggedInUser();
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       postCode: post.code,
       body: comment
     };
-    return this.http.post(`${this.apiRoot}/make_comment`, body);
+    return this.http.post(`${this.apiRoot}/forum/make_comment`, body);
   }
 
-  markAsAnswer(postCode: string, commentCode: string) {
-    const user = this.getLoggedInUser();
+  markAsAnswer(postCode: string, commentCode: string): Observable<any> {
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       postCode,
       commentCode
     };
-    return this.http.post(`${this.apiRoot}/set_answer`, body);
+    return this.http.post(`${this.apiRoot}/forum/set_answer`, body);
   }
 
-  vote(post: any, vote: number) {
-    const user = this.getLoggedInUser();
+  vote(post: any, vote: number): Observable<any> {
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       postCode: post.code,
       vote
     };
-    return this.http.post(`${this.apiRoot}/make_vote`, body);
+    return this.http.post(`${this.apiRoot}/forum/make_vote`, body);
   }
 
-  makeAnnouncement(courseCode: string, announcement: any) {
-    const user = this.getLoggedInUser();
+  // Push
+  makeAnnouncement(courseCode: string, announcement: any): Observable<any> {
     const body = {
-      personNumber: user.personNumber,
-      userToken: user.token,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
       body: announcement.body,
       title: announcement.title,
       courseCode,
     };
-    return this.http.post(`${this.apiRoot}/make_announcement`, body);
+    return this.http.post(`${this.apiRoot}/push/make_announcement`, body);
   }
 
+  // Survey
+  makeDummySurvey(courseCode: string): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      title: 'Test Question',
+      options: ['It works', 'It doesn\'t work'],
+      responseType: 'MC',
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
+  }
+
+  makeSurvey(courseCode: string, survey: any) {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      title: survey.title,
+      options: survey.options,
+      responseType: survey.responseType,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
+  }
+
+  closeSurvey(courseCode: string): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode
+    };
+    return this.http.post(`${this.apiRoot}/survey/close_survey`, body);
+  }
+
+  getSurvey(courseCode: string, getResults = false): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode
+    };
+    if (getResults) {
+      return this.http.post(`${this.apiRoot}/survey/get_results`, body);
+    } else {
+      return this.http.post(`${this.apiRoot}/survey/get_survey`, body);
+    }
+  }
+
+  answerSurvey(courseCode, answer: string | number): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode,
+      answer
+    };
+    return this.http.post(`${this.apiRoot}/survey/send_answer`, body);
+  }
+
+  // util
   isLoggedIn(): boolean {
     const user = this.localStorage.getItem('user');
-    if (!user) {
-      return false;
-    }
-    return true;
+    return !!user;
   }
 
   getLoggedInUser(): User {
     return JSON.parse(this.localStorage.getItem('user'));
   }
 
-  loginUser(personNumber: string, token: string) {
-    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, token)));
-    this.logger.debug(`Logged in user ${personNumber} with token ${token}`);
-  }
-
-  userIsValid(): any {
-    return this.isLoggedIn();
+  loginUser(personNumber: string, userToken: string) {
+    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken)));
+    this.currentUser = this.getLoggedInUser();
+    this.connect();
+    console.log(`Logged in user ${personNumber} with token ${userToken}`);
   }
 
   signOut() {
     // TODO: Confirm dialog
     this.localStorage.removeItem('user');
+    this.currentUser = null;
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SharedService } from '../shared/shared.service';
-import { NGXLogger } from 'ngx-logger';
 import { MatDialogRef } from '@angular/material';
 import { CreateCourseComponent } from '../create-course/create-course.component';
 
@@ -19,7 +18,6 @@ export class LinkCourseComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private dialogRef: MatDialogRef<CreateCourseComponent>
   ) { }
 
@@ -38,9 +36,9 @@ export class LinkCourseComponent implements OnInit {
   }
 
   submit(form) {
-    this.logger.debug('Attempting creation');
+    console.log('Attempting creation');
     const course = form.value;
-    this.sharedService.linkCourse(course).subscribe((response) => {
+    this.sharedService.linkCourse(course.id).subscribe((response) => {
       switch (response.responseCode) {
         case 'successful':
           this.dialogRef.close(true);

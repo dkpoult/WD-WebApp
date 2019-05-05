@@ -1,4 +1,8 @@
 # WdWeb
+Dev:
+![Travis (.com) branch](https://img.shields.io/travis/com/dkpoult/WD-WebApp/dev.svg)&nbsp;
+Master:
+![Travis (.com) branch](https://img.shields.io/travis/com/dkpoult/WD-WebApp/master.svg)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.2.
 

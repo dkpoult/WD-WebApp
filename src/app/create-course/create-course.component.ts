@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SharedService } from '../shared/shared.service';
-import { NGXLogger } from 'ngx-logger';
 import { MatDialogRef } from '@angular/material';
 
 @Component({
@@ -17,7 +16,6 @@ export class CreateCourseComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private logger: NGXLogger,
     private dialogRef: MatDialogRef<CreateCourseComponent>
   ) { }
 
@@ -40,7 +38,6 @@ export class CreateCourseComponent implements OnInit {
   submit(form) {
     const course = form.value;
     this.sharedService.createCourse(course).subscribe((response) => {
-      console.log(response);
       switch (response.responseCode) {
         case 'successful':
           this.dialogRef.close(true);
@@ -50,6 +47,7 @@ export class CreateCourseComponent implements OnInit {
           this.form.markAsPristine();
           break;
         default:
+          console.log(response);
           this.form.markAsPristine();
           break;
       }
