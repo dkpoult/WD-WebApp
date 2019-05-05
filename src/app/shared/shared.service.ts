@@ -10,6 +10,8 @@ import { map } from 'rxjs/operators';
 })
 export class SharedService {
   public apiRoot: string;
+  public wsRoot: string;
+
   public currentUser: User;
   public localStorage: any = window.localStorage;
 
@@ -27,6 +29,7 @@ export class SharedService {
   // Gets called from app.module when the system starts up
   initialise(): void {
     this.apiRoot = 'https://wd.dimensionalapps.com';
+    this.wsRoot = 'wss://wd.dimensionalapps.com';
     this.currentUser = this.getLoggedInUser();
     if (this.isLoggedIn()) {
       this.connect();
@@ -35,7 +38,7 @@ export class SharedService {
   }
 
   connect() {
-    this.socketService.connect('wss://wd.dimensionalapps.com', this.currentUser);
+    this.socketService.connect(this.wsRoot, this.currentUser);
   }
 
   // Authentication
@@ -255,9 +258,9 @@ export class SharedService {
     const body = {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
-      title: survey.prompt,
+      title: survey.title,
       options: survey.options,
-      responseType: survey.type,
+      responseType: survey.responseType,
       courseCode
     };
     return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
@@ -279,6 +282,16 @@ export class SharedService {
       courseCode
     };
     return this.http.post(`${this.apiRoot}/survey/get_survey`, body);
+  }
+
+  answerSurvey(courseCode, answer: string | number): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      courseCode,
+      answer
+    };
+    return this.http.post(`${this.apiRoot}/survey/send_answer`, body);
   }
 
   // util

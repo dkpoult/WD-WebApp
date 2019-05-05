@@ -34,24 +34,24 @@ export class EditCourseComponent implements OnInit {
     });
   }
 
+  get sessions() { return this.form.controls.sessions as FormArray; }
+
   addSession() {
-    const sessions = this.form.controls.sessions as FormArray;
     const newSession = new FormGroup({
       venue: new FormControl('', [Validators.required]),
       repeatType: new FormControl('WEEKLY', [Validators.required]),
-      repeatGap: new FormControl('1', [Validators.required]),
+      repeatGap: new FormControl('1', [Validators.required, Validators.min(1)]),
       sessionType: new FormControl('LECTURE', [Validators.required]),
       date: new FormControl(new Date(), [Validators.required]),
       time: new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required]),
     });
-    sessions.push(newSession);
+    this.sessions.push(newSession);
   }
 
   removeSession(i: number) {
     this.form.markAsDirty();
-    const array = this.form.get('sessions') as FormArray;
-    array.removeAt(i);
+    this.sessions.removeAt(i);
   }
 
   getTimeString(start: Date, duration: number) {

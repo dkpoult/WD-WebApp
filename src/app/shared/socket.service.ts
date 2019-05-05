@@ -18,10 +18,10 @@ export class SocketService {
 
   constructor(private stompService: StompRService) { }
 
-  connect(apiRoot: string, user: User) {
+  connect(wsRoot: string, user: User) {
     this.user = user;
     const stompConfig: StompConfig = {
-      url: `${apiRoot}/chatsocket/websocket`,
+      url: `${wsRoot}/chatsocket/websocket`,
       headers: {
         personNumber: user.personNumber,
         userToken: user.userToken

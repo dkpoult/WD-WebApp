@@ -20,6 +20,8 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatGridListModule,
+  MatTabsModule,
+  MatRadioModule,
 } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 /**
@@ -45,7 +47,9 @@ const MATERIAL_MODULES = [
   MatSelectModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatGridListModule
+  MatGridListModule,
+  MatTabsModule,
+  MatRadioModule
 ];
 
 @NgModule({

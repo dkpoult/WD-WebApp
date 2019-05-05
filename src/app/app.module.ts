@@ -101,7 +101,8 @@ export function initialiseApp(config: SharedService) {
     ConfirmEnrolmentComponent,
     CreatePostComponent,
     CreateCommentComponent,
-    MakeAnnouncementComponent
+    MakeAnnouncementComponent,
+    CreateSurveyComponent
   ]
 })
 export class AppModule { }

@@ -1,13 +1,10 @@
-import { ViewSurveyComponent } from './../view-survey/view-survey.component';
-import { CreateSurveyComponent } from './../create-survey/create-survey.component';
-import { SurveyService } from './survey.service';
+import { SurveyService } from '../shared/survey.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { switchMap } from 'rxjs/operators';
 import { SocketService } from '../shared/socket.service';
 import { isNullOrUndefined } from 'util';
-import { MatDialog, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-chat',
@@ -16,18 +13,20 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 })
 export class ChatComponent implements OnInit {
 
-  viewSurveyDialogRef: MatDialogRef<ViewSurveyComponent>;
-  createSurveyDialogRef: MatDialogRef<CreateSurveyComponent>;
+  unansweredSurvey = true;
+  survey: any;
+
+  currentTabIndex = 0;
 
   messages: Array<any>;
+  unreadMessages = 0;
   course: any;
 
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
     private socketService: SocketService,
-    private surveyService: SurveyService,
-    private dialog: MatDialog
+    private surveyService: SurveyService
   ) { }
 
   ngOnInit() {
@@ -39,6 +38,10 @@ export class ChatComponent implements OnInit {
         this.sharedService.getCourse(result).subscribe((response: any) => {
           this.course = response.course;
         });
+        this.sharedService.getSurvey(result).subscribe((response: any) => {
+          this.survey = response.survey;
+          this.unansweredSurvey = !this.survey.answered;
+        });
         this.socketService.subscribeToCourse(result).subscribe((message: any) => {
           console.log('Received', message);
           switch (message.messageType) {
@@ -46,14 +49,29 @@ export class ChatComponent implements OnInit {
               this.removeMessage(parseInt(message.content, 10));
               break;
             case 'SURVEY':
-              this.addSurvey();
+              this.handleSurvey(message);
               break;
             case 'CHAT':
+              if (this.currentTabIndex !== 0) {
+                this.unreadMessages++;
+              }
               this.messages.push(message);
               break;
           }
         });
       });
+  }
+
+  tabChange(event) {
+    this.currentTabIndex = event.index;
+    switch (event.index) {
+      case 0:
+        this.unreadMessages = 0;
+        break;
+      case 1:
+        this.unansweredSurvey = false; // ! For now unanswered == unread
+        break;
+    }
   }
 
   sendMessage(input: HTMLTextAreaElement, event?) {
@@ -69,31 +87,18 @@ export class ChatComponent implements OnInit {
     input.value = '';
   }
 
-  addSurvey() {
-    if (isNullOrUndefined(this.course)) {
-      return;
+  handleSurvey(message: any) {
+    if (message.content.endsWith('opened')) {
+      this.sharedService.getSurvey(this.course.courseCode).subscribe((result: any) => {
+        this.survey = result.survey;
+      });
+      if (this.course.lecturer.personNumber === this.sharedService.currentUser.personNumber) {
+        this.unansweredSurvey = true;
+      }
+    } else {
+      this.survey = null;
+      this.unansweredSurvey = false;
     }
-    this.sharedService.getSurvey(this.course.courseCode).subscribe((result: any) => {
-      this.surveyService.surveys[this.course.courseCode] = result.survey;
-      console.log(this.surveyService.surveys);
-    });
-  }
-
-  sendDummySurvey() {
-    if (isNullOrUndefined(this.course)) {
-      return;
-    }
-    this.createSurveyDialogRef = this.dialog.open(CreateSurveyComponent, { data: this.course });
-    this.createSurveyDialogRef.afterClosed().subscribe(survey => {
-      this.sharedService.makeSurvey(this.course.courseCode, survey).subscribe(console.log);
-    });
-  }
-
-  closeSurvey() {
-    if (isNullOrUndefined(this.course) || !this.surveyService.surveyIsActive(this.course.courseCode)) {
-      return;
-    }
-    this.sharedService.closeSurvey(this.course.courseCode).subscribe(console.log);
   }
 
   // remove it from our list of messages (incoming only)
@@ -113,7 +118,7 @@ export class ChatComponent implements OnInit {
 
   getMessageColor(message: any) {
     if (message.personNumber === this.sharedService.currentUser.personNumber) {
-      return '#84b3ff';
+      return '#84b3ff'; // TODO: Make these use theme colors
     } else {
       return '#d1ba57';
     }
