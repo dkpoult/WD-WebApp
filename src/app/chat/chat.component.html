@@ -19,7 +19,11 @@
         <mat-label>Type a message</mat-label>
         <textarea matInput #messageInput (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
       </mat-form-field>
+     
     </div>
+    <button mat-icon-button (click)="sendMessage(input)">
+        <mat-icon>send</mat-icon>
+      </button>
   </mat-tab>
   <mat-tab>
     <ng-template matTabLabel>
