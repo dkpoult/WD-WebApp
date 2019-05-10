@@ -1,10 +1,6 @@
-
-
 <mat-card [style.background]="color" *ngIf="message.messageType === 'CHAT'">
-    <button mat-icon-button (click)="sendMessage(input)">
-        <mat-icon>send</mat-icon>
-      </button>
-  <!-- <mat-card-header> -->
+    <div fxLayout="row wrap"></div>
+ <!-- <mat-card-header> -->
   <mat-card-subtitle>
     {{message.personNumber}} @ {{message.time}}
     <span fxFlex></span>
