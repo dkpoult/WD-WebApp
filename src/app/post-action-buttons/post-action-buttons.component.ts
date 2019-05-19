@@ -24,7 +24,7 @@ export class PostActionButtonsComponent implements OnInit {
   reply() {
     this.CreateCommentDialogRef = this.dialog.open(CreateCommentComponent, { data: this.post });
     this.CreateCommentDialogRef.afterClosed().subscribe((result: any) => {
-      // TODO: Push the result as a comment to the post's comment array
+      console.log(result);
     });
   }
 
