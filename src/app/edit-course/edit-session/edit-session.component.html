@@ -8,10 +8,21 @@
             <mat-option *ngFor="let type of sessionTypes" value="{{ type.value }}">{{ type.text }}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field id="venue">
-          <mat-label>Venue</mat-label>
-          <input matInput formControlName="venue">
-        </mat-form-field>
+        <div formGroupName="venue">
+          <mat-form-field id="venue">
+            <mat-label>Venue</mat-label>
+            <input matInput formControlName="buildingCode" [matAutocomplete]="buildingAuto">
+          </mat-form-field>
+          <mat-autocomplete #buildingAuto="matAutocomplete">
+            <mat-option *ngFor="let building of venues" [value]="building">
+              {{building}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-form-field id="room">
+            <!-- <mat-label>Venue</mat-label> -->
+            <input matInput formControlName="subCode" autocomplete="off">
+          </mat-form-field>
+        </div>
       </div>
       <div class="session-info" id="time">
         <mat-form-field id="start">

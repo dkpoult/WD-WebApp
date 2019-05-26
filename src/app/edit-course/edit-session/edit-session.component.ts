@@ -1,3 +1,4 @@
+import { VenueService } from './../../venue.service';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
@@ -11,6 +12,7 @@ export class EditSessionComponent implements OnInit {
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
 
+  venues = this.venueService.venues;
 
   repeatTypes = [
     { value: 'ONCE', text: 'Never' },
@@ -25,7 +27,7 @@ export class EditSessionComponent implements OnInit {
     { value: 'TEST', text: 'Test' },
     { value: 'OTHER', text: 'Other' },
   ];
-  constructor() { }
+  constructor(private venueService: VenueService) { }
 
   ngOnInit() {
   }

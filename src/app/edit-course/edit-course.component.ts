@@ -1,3 +1,4 @@
+import { VenueService } from './../venue.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
@@ -20,6 +21,7 @@ export class EditCourseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
+    private venueService: VenueService
   ) { }
 
   ngOnInit() {
@@ -32,13 +34,17 @@ export class EditCourseComponent implements OnInit {
     this.sharedService.isHandset$.subscribe(result => {
       this.isHandset = result;
     });
+    this.venueService.updateVenues();
   }
 
   get sessions() { return this.form.controls.sessions as FormArray; }
 
   addSession() {
     const newSession = new FormGroup({
-      venue: new FormControl('', [Validators.required]),
+      venue: new FormGroup({
+        buildingCode: new FormControl('', [Validators.required]),
+        subCode: new FormControl('', [Validators.required]),
+      }),
       repeatType: new FormControl('WEEKLY', [Validators.required]),
       repeatGap: new FormControl('1', [Validators.required, Validators.min(1)]),
       sessionType: new FormControl('LECTURE', [Validators.required]),
@@ -61,6 +67,7 @@ export class EditCourseComponent implements OnInit {
   getCourse(courseCode: string) {
     this.sharedService.getCourse(courseCode).subscribe((response: any) => {
       this.gotCourse = true;
+      console.log(response);
       this.course = response.course;
       const sessions: Array<FormGroup> = [];
       this.course.sessions.forEach(session => {
@@ -78,7 +85,10 @@ export class EditCourseComponent implements OnInit {
           endStr = this.getTimeString(date, session.duration);
         }
         const newSession = new FormGroup({
-          venue: new FormControl(session.venue, [Validators.required]),
+          venue: new FormGroup({
+            buildingCode: new FormControl(session.venue.buildingCode, [Validators.required]),
+            subCode: new FormControl(session.venue.subCode, [Validators.required]),
+          }),
           repeatType: new FormControl(session.repeatType, [Validators.required]),
           repeatGap: new FormControl(session.repeatGap, [Validators.required]),
           sessionType: new FormControl(session.sessionType, [Validators.required]),
@@ -139,6 +149,10 @@ export class EditCourseComponent implements OnInit {
       h = (24 - startH) + endH;
     }
     return m + 60 * h;
+  }
+
+  addDummyVenue() {
+    this.sharedService.addDummyVenue().subscribe(console.log);
   }
 
 }

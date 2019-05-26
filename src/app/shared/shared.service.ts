@@ -51,6 +51,24 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/auth/login`, user);
   }
 
+  // Venues
+  getVenues(): Observable<any> {
+    return this.http.post(`${this.apiRoot}/venue/get_venues`, this.currentUser);
+  }
+
+  addDummyVenue(): Observable<any> {
+    const body = {
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken,
+      venue: {
+        buildingCode: 'FNB',
+        subCode: 'building',
+        coordinates: '0.000,0.000'
+      }
+    };
+    return this.http.post(`${this.apiRoot}/venue/add_venue`, body);
+  }
+
   // Courses
   getCourses(): Observable<any> {
     const body = {
@@ -68,7 +86,13 @@ export class SharedService {
     };
     return this.http.post(`${this.apiRoot}/course/get_course`, body)
       .pipe(map((result: any) => {
-        return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
+        switch (result.responseCode) {
+          case 'successful':
+            return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
+          default:
+            console.log(result);
+            return result;
+        }
       }));
   }
 
@@ -115,6 +139,7 @@ export class SharedService {
         day = '0' + day;
       }
       session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+
       // Don't send useless info
       delete session.date;
       delete session.time;
@@ -145,6 +170,7 @@ export class SharedService {
         day = '0' + day;
       }
       session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+
       // Don't send useless info
       delete session.date;
       delete session.time;
