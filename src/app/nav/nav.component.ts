@@ -1,8 +1,6 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MatDialog, MatDialogRef, MatSidenav } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSidenav, MatSlideToggle } from '@angular/material';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component';
 import { SharedService } from '../shared/shared.service';
@@ -27,6 +25,7 @@ export class NavComponent implements OnInit {
   signupDialogRef: MatDialogRef<SignupDialogComponent>;
 
   @ViewChild('drawer') drawer: MatSidenav;
+  @ViewChild('darkMode') lightSwitch: MatSlideToggle;
 
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
@@ -47,12 +46,15 @@ export class NavComponent implements OnInit {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private router: Router,
-    private theme: ThemeService) { }
+    private theme: ThemeService,
+  ) { }
 
   ngOnInit(): void {
     this.isDarkMode$ = this.theme.isDarkMode$;
     if (this.sharedService.isLoggedIn()) {
-      this.theme.setDarkMode(this.sharedService.currentUser.preferences.darkMode);
+      setTimeout(() => {
+        this.toggleDarkMode(this.sharedService.currentUser.preferences.darkMode);
+      }, 100);
     }
   }
 

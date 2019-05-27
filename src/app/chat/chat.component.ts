@@ -110,6 +110,9 @@ export class ChatComponent implements OnInit {
   }
 
   getSurvey() {
+    if (!this.survey) {
+      return;
+    }
     if (this.isModerator() && this.survey.responseType === 'MC') {
       // poll
       this.pollingData = interval(this.pollingInterval)

@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-edit-course',
@@ -16,12 +17,15 @@ export class EditCourseComponent implements OnInit {
   form: FormGroup;
   course: any;
 
+  lastRemoved = null;
+
   isHandset: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
-    private venueService: VenueService
+    private venueService: VenueService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -51,12 +55,19 @@ export class EditCourseComponent implements OnInit {
       date: new FormControl(new Date(), [Validators.required]),
       time: new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required]),
+      cancellations: new FormControl(''),
+      delete: new FormControl(false) // unused but still might be useful in the future
     });
     this.sessions.push(newSession);
   }
 
   removeSession(i: number) {
     this.form.markAsDirty();
+    this.lastRemoved = this.sessions.at(i);
+    const snackBarRef = this.snackBar.open('Removed session', 'Undo', { duration: 2000 });
+    snackBarRef.onAction().subscribe(() => {
+      this.sessions.insert(i, this.lastRemoved);
+    });
     this.sessions.removeAt(i);
   }
 
@@ -67,7 +78,6 @@ export class EditCourseComponent implements OnInit {
   getCourse(courseCode: string) {
     this.sharedService.getCourse(courseCode).subscribe((response: any) => {
       this.gotCourse = true;
-      console.log(response);
       this.course = response.course;
       const sessions: Array<FormGroup> = [];
       this.course.sessions.forEach(session => {
@@ -87,6 +97,12 @@ export class EditCourseComponent implements OnInit {
         if (!session.venue) {
           session.venue = { building: null, room: null };
         }
+        if (!session.cancellations) {
+          session.cancellations = [];
+        }
+        session.cancellations.forEach(cancel => {
+          cancel = new Date(cancel);
+        });
         const newSession = new FormGroup({
           venue: new FormGroup({
             buildingCode: new FormControl(session.venue.buildingCode, [Validators.required]),
@@ -98,6 +114,8 @@ export class EditCourseComponent implements OnInit {
           date: new FormControl(dateStr, [Validators.required]),
           time: new FormControl(timeStr, [Validators.required]),
           endTime: new FormControl(endStr, [Validators.required]),
+          cancellations: new FormControl(session.cancellations),
+          delete: new FormControl(false)
         });
         sessions.push(newSession);
       });

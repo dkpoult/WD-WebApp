@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TimetableService } from './timetable.service';
+import { TimetableService } from '../shared/timetable.service';
 
 describe('TimetableService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

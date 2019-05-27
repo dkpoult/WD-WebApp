@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { map } from 'rxjs/operators';
-import { forEach } from '@angular/router/src/utils/collection';
+import { isNullOrUndefined } from 'util';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +19,7 @@ export class SharedService {
     return this.getLoggedInUser();
   }
   public set currentUser(value) {
+    this.localStorage.setItem(`user`, JSON.stringify(value));
     this._currentUser = value;
   }
   public localStorage: any = window.localStorage;
@@ -38,8 +39,8 @@ export class SharedService {
   initialise(): void {
     this.apiRoot = 'https://wd.dimensionalapps.com';
     this.wsRoot = 'wss://wd.dimensionalapps.com';
-    this.currentUser = this.getLoggedInUser();
     if (this.isLoggedIn()) {
+      this.currentUser = this.getLoggedInUser();
       this.connnectToChatSocket();
     }
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
@@ -135,6 +136,10 @@ export class SharedService {
 
   updateCourse(newInfo: any): Observable<any> {
     newInfo.sessions.forEach((session: any) => {
+      if (session.delete) {
+        session = null;
+        return;
+      }
       const date = new Date(session.date);
       const year = date.getFullYear().toString();
       let month = (date.getMonth() + 1).toString(); // Month is 0 based for whatever reason
@@ -337,10 +342,9 @@ export class SharedService {
     const user = this.currentUser;
     user.preferences[field] = value;
     this.http.post(`${this.apiRoot}/auth/save_preferences`, user).subscribe((result: any) => {
-      console.log(result);
       switch (result.responseCode) {
         case 'successful':
-          this.localStorage.setItem(`user`, JSON.stringify(user));
+          this.currentUser = user;
           break;
       }
     });
@@ -356,8 +360,7 @@ export class SharedService {
   }
 
   loginUser(personNumber: string, userToken: string, preferences: any) {
-    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken, preferences)));
-    this.currentUser = this.getLoggedInUser();
+    this.currentUser = new User(personNumber, userToken, preferences);
     this.connnectToChatSocket();
     console.log(`Logged in user ${personNumber} with token ${userToken}`);
   }

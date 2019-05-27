@@ -1,20 +1,25 @@
+import { TimetableService } from './../../shared/timetable.service';
 import { VenueService } from './../../venue.service';
-import { FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MatChip } from '@angular/material';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { FormGroup, FormArray } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatChip, MatExpansionPanel } from '@angular/material';
 
 @Component({
   selector: 'app-edit-session',
   templateUrl: './edit-session.component.html',
-  styleUrls: ['./edit-session.component.scss']
+  styleUrls: ['./edit-session.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class EditSessionComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
 
+  @ViewChild('panel') panel: MatExpansionPanel;
+
   panelOpenState: boolean;
+
+  get cancellations() { return this.form.get('cancellations').value; }
 
   venues = this.venueService.venues;
 
@@ -31,7 +36,26 @@ export class EditSessionComponent implements OnInit {
     { value: 'TEST', text: 'Test' },
     { value: 'OTHER', text: 'Other' },
   ];
-  constructor(private venueService: VenueService) { }
+  constructor(private venueService: VenueService, private timetableService: TimetableService) { }
+
+  dateClass = (d: Date) => {
+    const session = this.form.value;
+    if (!session.date) {
+      session.date = session.nextDate;
+    }
+    for (const c in session.cancellations) {
+      if (c < session.cancellations.length) {
+        const cancellation = new Date(session.cancellations[c]);
+        cancellation.setHours(0);
+        if (cancellation.valueOf() === d.valueOf()) {
+          return 'cancelled';
+        }
+      }
+    }
+    if (this.timetableService.sessionFallsOn(session, d)) {
+      return 'fallsOn';
+    }
+  }
 
   ngOnInit() {
   }
@@ -70,5 +94,21 @@ export class EditSessionComponent implements OnInit {
       .split(' ')
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(' ');
+  }
+
+  toggleDisabled() {
+    const state = !this.panel.disabled;
+    if (!state) {
+      this.panel.close();
+    }
+    this.panel.disabled = state;
+    this.form.setErrors({ required: state });
+    if (state) {
+      this.form.markAsDirty();
+    }
+  }
+
+  removeCancellation(i: number) {
+    console.log(i);
   }
 }

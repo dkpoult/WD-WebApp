@@ -1,23 +1,24 @@
-<mat-expansion-panel (opened)="panelOpenState = false" (closed)="panelOpenState = true" class="panel">
-    <mat-expansion-panel-header>
-        <mat-panel-title>
-            {{ titleCase(form.get('sessionType').value) }} in
-            {{ form.get('venue').value['buildingCode']}}{{ form.get('venue').value['subCode'] }}
-        </mat-panel-title>
-    </mat-expansion-panel-header>
-    <!-- Content -->
-    <form [formGroup]="form">
+<form [formGroup]="form" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-expansion-panel #panel fxFlex (opened)="panelOpenState = false" (closed)="panelOpenState = true" class="panel">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{ titleCase(form.get('sessionType').value) }} in
+                {{ form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] + form.get('venue').value['subCode'] : "unspecified venue"}}
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row fxLayoutAlign="start center">
+            <!-- <span fxFlex></span> -->
+            <mat-chip selected color="warn" (click)="removeSession()">
+                <mat-icon>delete</mat-icon>
+            </mat-chip>
+        </mat-action-row>
+        <!-- Content -->
         <div class="chips">
-            <mat-chip-list>
-                <mat-chip selected color="warn" (click)="removeSession()">
-                    <mat-icon>delete</mat-icon>
+            <mat-chip-list formControlName="sessionType">
+                <mat-chip *ngFor="let type of sessionTypes" value="{{ type.value }}" #chip="matChip"
+                    (click)="selectChip(chip)">
+                    {{ type.text }}
                 </mat-chip>
-                <mat-chip-list formControlName="sessionType">
-                    <mat-chip *ngFor="let type of sessionTypes" value="{{ type.value }}" #chip="matChip"
-                        (click)="selectChip(chip)">
-                        {{ type.text }}
-                    </mat-chip>
-                </mat-chip-list>
             </mat-chip-list>
         </div>
         <form formGroupName="venue">
@@ -65,9 +66,16 @@
             <mat-form-field id="date">
                 <mat-label>Beginning Date</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="date">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker [dateClass]="dateClass" #picker></mat-datepicker>
             </mat-form-field>
         </div>
-    </form>
-</mat-expansion-panel>
+        <!-- <div>
+            <mat-form-field>
+                <input matInput [matDatepicker]="cancelDatePicker">
+                <mat-datepicker-toggle matPrefix [for]="cancelDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker [dateClass]="dateClass" #cancelDatePicker></mat-datepicker>
+            </mat-form-field>
+        </div> -->
+    </mat-expansion-panel>
+</form>

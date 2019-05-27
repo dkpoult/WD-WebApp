@@ -37,11 +37,14 @@
             <mat-icon>add</mat-icon>
           </button>
         </mat-label>
-        <mat-accordion [multi]="false">
-          <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
-            [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
-          </app-edit-session>
-        </mat-accordion>
+        <div class="sessions">
+          <mat-accordion [multi]="false">
+            <!-- <mat-icon>delete</mat-icon> -->
+            <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
+              [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
+            </app-edit-session>
+          </mat-accordion>
+        </div>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>

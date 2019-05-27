@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TimetableService } from '../timetable.service';
+import { TimetableService } from '../../shared/timetable.service';
 
 enum CalendarScale {
   Year = 'Year',

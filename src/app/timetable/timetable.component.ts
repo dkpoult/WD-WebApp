@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { TimetableService } from './timetable.service';
+import { TimetableService } from '../shared/timetable.service';
 
 @Component({
   selector: 'app-timetable',

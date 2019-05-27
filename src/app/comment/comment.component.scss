@@ -2,14 +2,12 @@
 
 .comment {
     margin: 15px;
+    transition: ease-in-out;
 }
 
 .answer {
-    -webkit-animation-name: rubberBand;
     animation-name: rubberBand;
     animation-duration: 300ms;
-    -webkit-transform-origin: center bottom;
-    transform-origin: center bottom;
 
     color: #37ba1d
 }

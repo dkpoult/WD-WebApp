@@ -8,3 +8,26 @@
 .chips {
     padding-bottom: 15px;
 }
+
+@import '../../../assets/theming/animations';
+
+.fallsOn {
+    background: #21978d;
+    border-radius: 100%;
+
+    [selected] {
+        animation: pulse;
+        animation-duration: 300ms;
+        animation-iteration-count: infinite;
+    }
+
+    .cancelled {
+        background: #a02b3a;
+        border-radius: 100%;
+    }
+}
+
+:not(.fallsOn).cancelled {
+    background: #a02b3b28;
+    border-radius: 100%;
+}
