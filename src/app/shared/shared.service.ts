@@ -13,7 +13,14 @@ export class SharedService {
   public apiRoot: string;
   public wsRoot: string;
 
-  public currentUser: User;
+  // tslint:disable-next-line: variable-name
+  private _currentUser: User;
+  public get currentUser() {
+    return this.getLoggedInUser();
+  }
+  public set currentUser(value) {
+    this._currentUser = value;
+  }
   public localStorage: any = window.localStorage;
 
   public isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -33,12 +40,12 @@ export class SharedService {
     this.wsRoot = 'wss://wd.dimensionalapps.com';
     this.currentUser = this.getLoggedInUser();
     if (this.isLoggedIn()) {
-      this.connect();
+      this.connnectToChatSocket();
     }
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
   }
 
-  connect() {
+  connnectToChatSocket() {
     this.socketService.connect(this.wsRoot, this.currentUser);
   }
 
@@ -326,6 +333,19 @@ export class SharedService {
   }
 
   // util
+  updatePreferences(field: string, value: any) {
+    const user = this.currentUser;
+    user.preferences[field] = value;
+    this.http.post(`${this.apiRoot}/auth/save_preferences`, user).subscribe((result: any) => {
+      console.log(result);
+      switch (result.responseCode) {
+        case 'successful':
+          this.localStorage.setItem(`user`, JSON.stringify(user));
+          break;
+      }
+    });
+  }
+
   isLoggedIn(): boolean {
     const user = this.localStorage.getItem('user');
     return !!user;
@@ -335,10 +355,10 @@ export class SharedService {
     return JSON.parse(this.localStorage.getItem('user'));
   }
 
-  loginUser(personNumber: string, userToken: string) {
-    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken)));
+  loginUser(personNumber: string, userToken: string, preferences: any) {
+    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken, preferences)));
     this.currentUser = this.getLoggedInUser();
-    this.connect();
+    this.connnectToChatSocket();
     console.log(`Logged in user ${personNumber} with token ${userToken}`);
   }
 

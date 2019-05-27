@@ -43,7 +43,7 @@ export class SignupDialogComponent implements OnInit {
       switch (response.responseCode) {
         case 'successful':
           this.noUser = false;
-          this.sharedService.loginUser(user.personNumber, response.userToken);
+          this.sharedService.loginUser(user.personNumber, response.userToken, response.preferences);
           this.router.navigateByUrl('/courses');
           this.dialogRef.close(true);
           break;

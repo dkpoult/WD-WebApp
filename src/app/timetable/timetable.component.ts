@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { TimetableService } from '../shared/timetable.service';
+import { TimetableService } from './timetable.service';
 
 @Component({
   selector: 'app-timetable',
@@ -17,16 +17,10 @@ export class TimetableComponent implements OnInit {
     hasPassword: boolean,
     questionForum: string,
     forums: Array<string>,
-    sessions: Array<{
-      venue: string,
-      repeatType: string, // [DAILY, WEEKLY, MONTHLY, ONCE]
-      repeatGap: number,
-      date: Date, // "nextDate" in the response
-      nextDate: Date, // not in the response
-      sessionType: string, // [LECTURE, LAB, TUTORIAL, TEST, OTHER]
-      duration: number
-    }>
+    sessions: Array<any>
   }>;
+
+  sessions: Array<any>;
 
   gotCourses = false;
 
@@ -53,8 +47,15 @@ export class TimetableComponent implements OnInit {
             session.nextDate = this.timetableService.getNextDate(session);
           });
         });
+        this.sessions = [];
         this.courses = response.courses;
         this.gotCourses = true;
+        this.courses.forEach(course => {
+          course.sessions.forEach(session => {
+            session.courseCode = course.courseCode;
+            this.sessions.push(session);
+          });
+        });
       });
   }
 
@@ -62,9 +63,16 @@ export class TimetableComponent implements OnInit {
     return this.timetableService.sameWeek(new Date(), session.nextDate);
   }
 
+  urgentSession(session) {
+    let urgent = session.sessionType === 'TEST';
+    // urgent = urgent && this.sameWeek(session);
+    return urgent;
+  }
+
   getEndTime(session): Date {
     const date = session.nextDate as Date;
     date.setTime(date.valueOf() + session.minutes * 1000 * 3600);
     return date;
   }
+
 }

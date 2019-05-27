@@ -5,5 +5,9 @@ mat-card {
     width: 50%;
     white-space: normal;
     word-wrap: break-word;
-}
 
+    .time {
+        float: right;
+        color: transparentize($color: #000000, $amount: 0.5)
+    }
+}

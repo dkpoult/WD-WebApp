@@ -84,6 +84,9 @@ export class EditCourseComponent implements OnInit {
           timeStr = date.toTimeString().substr(0, 5);
           endStr = this.getTimeString(date, session.duration);
         }
+        if (!session.venue) {
+          session.venue = { building: null, room: null };
+        }
         const newSession = new FormGroup({
           venue: new FormGroup({
             buildingCode: new FormControl(session.venue.buildingCode, [Validators.required]),

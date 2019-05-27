@@ -1,6 +1,8 @@
 import { VenueService } from './../../venue.service';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatChip } from '@angular/material';
+import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 
 @Component({
   selector: 'app-edit-session',
@@ -11,6 +13,8 @@ export class EditSessionComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
+
+  panelOpenState: boolean;
 
   venues = this.venueService.venues;
 
@@ -52,4 +56,19 @@ export class EditSessionComponent implements OnInit {
     return period + (num > 1 ? 's' : '');
   }
 
+  log(message) {
+    console.log(message);
+  }
+
+  selectChip(chip: MatChip) {
+    this.form.controls.sessionType.setValue(chip.value);
+    this.form.markAsDirty();
+  }
+
+  titleCase(text) {
+    return text.toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ');
+  }
 }

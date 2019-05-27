@@ -37,6 +37,8 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { ChartComponent } from './chart/chart.component';
+import { CalendarComponent } from './timetable/calendar/calendar.component';
+import { VenueInputComponent } from './edit-course/edit-session/venue-input/venue-input.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -71,6 +73,8 @@ export function initialiseApp(config: SharedService) {
     ViewSurveyComponent,
     CreateSurveyComponent,
     ChartComponent,
+    CalendarComponent,
+    VenueInputComponent,
   ],
   imports: [
     HttpClientModule,

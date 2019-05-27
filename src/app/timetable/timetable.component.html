@@ -4,8 +4,11 @@
       <mat-card-title>{{ course.courseCode }}</mat-card-title>
       <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
       <mat-card-content>
-        <mat-card class="session" *ngFor="let session of course.sessions">
-          <mat-card-title>{{ session.sessionType }} @ {{ session.venue }}</mat-card-title>
+        <mat-card [ngClass]="{'session': true, 'urgent': urgentSession(session)}"
+          *ngFor="let session of course.sessions">
+          <mat-card-title>
+            {{ session.sessionType }} @ {{ session.venue.buildingCode }}{{ session.venue.subCode }}
+          </mat-card-title>
           <mat-card-subtitle>
             {{ session.nextDate.toDateString() }} at {{ session.nextDate.toTimeString().substr(0, 5) }} for
             {{ session.duration }} minutes
@@ -15,3 +18,4 @@
     </mat-card>
   </div>
 </div>
+<!-- <app-calendar *ngIf="sessions && sessions.length > 0" [sessions]="sessions" [scale]="'Week'"></app-calendar> -->

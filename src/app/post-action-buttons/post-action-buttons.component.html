@@ -1,10 +1,12 @@
-<button mat-icon-button matTooltip="Upvote" [ngClass]="{'upvoted': post.voted===1}" (click)="vote(1)">
+<button mat-icon-button disableRipple matTooltip="Upvote" class="animated" [ngClass]="{'upvoted': post.voted===1}"
+  (click)="vote(1)">
   <mat-icon>thumb_up</mat-icon>
 </button>
 <i class="score" [ngClass]="{'downvoted': post.voted===-1, 'upvoted': post.voted===1}">
   ({{ post.upscore - post.downscore }})
 </i>
-<button mat-icon-button matTooltip="Downvote" [ngClass]="{'downvoted': post.voted===-1}" (click)="vote(-1)">
+<button mat-icon-button disableRipple matTooltip="Downvote" class="animated" [ngClass]="{'downvoted': post.voted===-1}"
+  (click)="vote(-1)">
   <mat-icon>thumb_down</mat-icon>
 </button>
 <button mat-icon-button matTooltip="Reply" (click)="reply()">

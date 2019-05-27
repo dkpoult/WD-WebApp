@@ -31,14 +31,14 @@ export class NavComponent implements OnInit {
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedIn: Array<MenuItem> = [
-    { path: 'courses', text: 'Courses' },
-    { path: 'timetable', text: 'Timetable' }
+    { path: 'courses/', text: 'Courses' },
+    { path: 'timetable/', text: 'Timetable' }
   ];
 
   // Add menu items here for when NOT logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedOut: Array<MenuItem> = [
-    { path: 'features', text: 'Features' },
+    { path: 'features/', text: 'Features' },
   ];
 
   isDarkMode$: Observable<boolean>;
@@ -51,6 +51,9 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     this.isDarkMode$ = this.theme.isDarkMode$;
+    if (this.sharedService.isLoggedIn()) {
+      this.theme.setDarkMode(this.sharedService.currentUser.preferences.darkMode);
+    }
   }
 
   openLoginDialog() {
@@ -77,5 +80,8 @@ export class NavComponent implements OnInit {
 
   toggleDarkMode(checked: boolean) {
     this.theme.setDarkMode(checked);
+    if (this.sharedService.isLoggedIn()) {
+      this.sharedService.updatePreferences('darkMode', checked);
+    }
   }
 }

@@ -1,7 +1,15 @@
+@import '../../assets/theming/animations';
+
 .comment {
     margin: 15px;
 }
 
 .answer {
+    -webkit-animation-name: rubberBand;
+    animation-name: rubberBand;
+    animation-duration: 300ms;
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+
     color: #37ba1d
 }

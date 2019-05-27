@@ -32,16 +32,17 @@
       <!-- Sessions -->
       <div formArrayName="sessions" style="padding-top: 20px;">
         <mat-label>
-          Sessions ({{form.controls['sessions'].controls.length}})
+          Sessions
           <button class="add-btn" mat-icon-button type="button" (click)="addSession()">
             <mat-icon>add</mat-icon>
           </button>
         </mat-label>
-        <mat-accordion [multi]="false">
-          <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
-            [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
-          </app-edit-session>
-        </mat-accordion>
+        <mat-grid-list [cols]="isHandset ? 1 : 2" [rowHeight]="400">
+          <mat-grid-tile *ngFor="let session of form.controls['sessions'].controls; let i = index">
+            <app-edit-session [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
+            </app-edit-session>
+          </mat-grid-tile>
+        </mat-grid-list>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
@@ -53,3 +54,4 @@
     </mat-dialog-actions>
   </form>
 </section>
+<button (click)="addDummyVenue()">Dummy</button>

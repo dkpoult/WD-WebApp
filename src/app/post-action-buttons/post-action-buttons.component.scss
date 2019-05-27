@@ -1,6 +1,29 @@
+@import '../../assets/theming/animations';
+
+$duration: 300ms;
+
 .upvoted {
     color: #f77140;
+    // -webkit-animation-name: rubberBand;
+    // animation-name: rubberBand;
+    // animation-duration: $duration;
+    // -webkit-transform-origin: center bottom;
+    // transform-origin: center bottom;
 }
+
 .downvoted {
     color: #4089f7;
+    // -webkit-animation-name: rubberBand;
+    // animation-name: rubberBand;
+    // animation-duration: $duration;
+    // -webkit-transform-origin: center bottom;
+    // transform-origin: center bottom;
+}
+
+.animated:active {
+    -webkit-animation-name: rubberBand;
+    animation-name: rubberBand;
+    animation-duration: $duration;
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
 }
