@@ -55,7 +55,7 @@ export class EditCourseComponent implements OnInit {
       date: new FormControl(new Date(), [Validators.required]),
       time: new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required]),
-      cancellations: new FormControl(''),
+      cancellations: new FormControl([]),
       delete: new FormControl(false) // unused but still might be useful in the future
     });
     this.sessions.push(newSession);
@@ -171,9 +171,4 @@ export class EditCourseComponent implements OnInit {
     }
     return m + 60 * h;
   }
-
-  addDummyVenue() {
-    this.sharedService.addDummyVenue().subscribe(console.log);
-  }
-
 }

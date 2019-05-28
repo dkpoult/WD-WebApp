@@ -45,7 +45,7 @@ export class TimetableService {
     }
   }
 
-  sessionFallsOn(session, date: Date): boolean {
+  inPast(session, date: Date): boolean {
     const startDate: Date = new Date(session.date);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -63,9 +63,24 @@ export class TimetableService {
     date.setMinutes(0);
     date.setMilliseconds(0);
 
-    if (date.valueOf() <= yesterday.valueOf()) {
+    if (date.valueOf() >= yesterday.valueOf()) {
       return false;
     }
+    return true;
+  }
+
+  sessionFallsOn(session, date: Date): boolean {
+    const startDate: Date = new Date(session.date);
+
+    // Don't include times
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setMilliseconds(0);
+
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setMilliseconds(0);
+
     if (date.valueOf() === startDate.valueOf()) {
       return true;
     }

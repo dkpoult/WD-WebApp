@@ -9,25 +9,37 @@
     padding-bottom: 15px;
 }
 
-@import '../../../assets/theming/animations';
+.add-btn {
+    bottom: 2px;
+}
+
+.hiddenInPlace {
+    width: 0;
+    height: 0;
+}
+
+$fallsOnColor: #21978d;
+$cancelledColor: #a02b3a;
 
 .fallsOn {
-    background: #21978d;
+    background: $fallsOnColor;
     border-radius: 100%;
 
-    [selected] {
-        animation: pulse;
-        animation-duration: 300ms;
-        animation-iteration-count: infinite;
+    &.cancelled {
+        background: $cancelledColor;
+        border-radius: 100%;
+
+        &.inPast {
+            background: transparentize($color: $cancelledColor, $amount: 0.7);
+        }
     }
 
-    .cancelled {
-        background: #a02b3a;
-        border-radius: 100%;
+    &:not(.cancelled).inPast {
+        background: transparentize($color: $fallsOnColor, $amount: 0.7)
     }
 }
 
 :not(.fallsOn).cancelled {
-    background: #a02b3b28;
+    background: transparentize($color: $cancelledColor, $amount: 0.6);
     border-radius: 100%;
 }

@@ -1,8 +1,8 @@
 import { TimetableService } from './../../shared/timetable.service';
 import { VenueService } from './../../venue.service';
-import { FormGroup, FormArray } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatChip, MatExpansionPanel } from '@angular/material';
+import { FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation, ElementRef } from '@angular/core';
+import { MatChip, MatExpansionPanel, MatDatepicker } from '@angular/material';
 
 @Component({
   selector: 'app-edit-session',
@@ -15,11 +15,16 @@ export class EditSessionComponent implements OnInit {
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
 
+  @ViewChild('cancelDatePicker') cancelDatePicker;
   @ViewChild('panel') panel: MatExpansionPanel;
 
   panelOpenState: boolean;
 
-  get cancellations() { return this.form.get('cancellations').value; }
+  get cancellations(): Array<string> { return this.form.get('cancellations').value; }
+  set cancellations(v: Array<string>) { this.form.get('cancellations').setValue(v); }
+
+  get startDate() { return this.form.get('date').value; }
+  set startDate(v) { this.form.get('date').setValue(v); }
 
   venues = this.venueService.venues;
 
@@ -43,18 +48,27 @@ export class EditSessionComponent implements OnInit {
     if (!session.date) {
       session.date = session.nextDate;
     }
+    const classStrings = [];
+
     for (const c in session.cancellations) {
       if (c < session.cancellations.length) {
         const cancellation = new Date(session.cancellations[c]);
         cancellation.setHours(0);
         if (cancellation.valueOf() === d.valueOf()) {
-          return 'cancelled';
+          classStrings.push('cancelled');
         }
       }
     }
+
     if (this.timetableService.sessionFallsOn(session, d)) {
-      return 'fallsOn';
+      classStrings.push('fallsOn');
     }
+
+    if (this.timetableService.inPast(session, d)) {
+      classStrings.push('inPast');
+    }
+
+    return classStrings.join(' ');
   }
 
   ngOnInit() {
@@ -108,7 +122,29 @@ export class EditSessionComponent implements OnInit {
     }
   }
 
-  removeCancellation(i: number) {
-    console.log(i);
+  removeCancellation(index: number) {
+    this.cancellations = this.cancellations.filter((v, i) => {
+      return i !== index;
+    });
+    this.form.markAsDirty();
+  }
+
+  addCancellation(date) {
+    this.cancelDatePicker._selected = null;
+    const year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString(); // Month is 0 based for whatever reason
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+    let day = date.getDate().toString();
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+    const cancellation = `${year}-${month}-${day}`;
+    if (this.cancellations.includes(cancellation)) {
+      return;
+    }
+    this.cancellations.push(cancellation);
+    this.form.markAsDirty();
   }
 }
