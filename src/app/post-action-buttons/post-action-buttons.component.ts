@@ -11,7 +11,7 @@ import { CreateCommentComponent } from '../create-comment/create-comment.compone
 export class PostActionButtonsComponent implements OnInit {
   @Input() post: any;
 
-  CreateCommentDialogRef: MatDialogRef<CreateCommentComponent>;
+  createCommentDialogRef: MatDialogRef<CreateCommentComponent>;
 
   constructor(
     private sharedService: SharedService,
@@ -22,8 +22,8 @@ export class PostActionButtonsComponent implements OnInit {
   }
 
   reply() {
-    this.CreateCommentDialogRef = this.dialog.open(CreateCommentComponent, { data: this.post });
-    this.CreateCommentDialogRef.afterClosed().subscribe((result: any) => {
+    this.createCommentDialogRef = this.dialog.open(CreateCommentComponent, { data: this.post });
+    this.createCommentDialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.post.comments.push(result);
       }
