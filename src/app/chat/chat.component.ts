@@ -47,7 +47,6 @@ export class ChatComponent implements OnInit {
           // this.unansweredSurvey = !this.survey.answered;
         });
         this.socketService.subscribeToCourse(result).subscribe((message: any) => {
-          console.log('Received', message);
           switch (message.messageType) {
             case 'DELETE':
               this.removeMessage(parseInt(message.content, 10));

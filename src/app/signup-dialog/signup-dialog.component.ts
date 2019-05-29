@@ -37,7 +37,6 @@ export class SignupDialogComponent implements OnInit {
   }
 
   submit(form) {
-    console.log('Attempting link');
     const user = form.value;
     this.sharedService.linkUser(user).subscribe((response) => {
       switch (response.responseCode) {

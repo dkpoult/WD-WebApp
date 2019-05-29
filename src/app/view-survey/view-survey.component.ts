@@ -5,7 +5,6 @@ import { CreateSurveyComponent } from '../create-survey/create-survey.component'
 import { SharedService } from '../shared/shared.service';
 import { isNullOrUndefined } from 'util';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-view-survey',
@@ -43,12 +42,12 @@ export class ViewSurveyComponent implements OnInit {
   }
 
   closeSurvey() {
-    this.sharedService.closeSurvey(this.course.courseCode).subscribe(console.log);
+    this.sharedService.closeSurvey(this.course.courseCode).subscribe();
   }
 
   answerSurvey() {
     const answer = this.form.get('answer').value;
-    this.sharedService.answerSurvey(this.course.courseCode, answer).subscribe(console.log);
+    this.sharedService.answerSurvey(this.course.courseCode, answer).subscribe();
     this.form.markAsPristine();
   }
 

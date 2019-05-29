@@ -85,7 +85,6 @@ export class VenueInputComponent implements OnDestroy, MatFormFieldControl<Venue
     this._placeholder = plh;
     this.stateChanges.next();
   }
-  // tslint:disable-next-line: variable-name
   private _placeholder: string;
 
   ngControl = null;
@@ -110,7 +109,6 @@ export class VenueInputComponent implements OnDestroy, MatFormFieldControl<Venue
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
   }
-  // tslint:disable-next-line: variable-name
   private _required = false;
 
   @Input()
@@ -120,7 +118,6 @@ export class VenueInputComponent implements OnDestroy, MatFormFieldControl<Venue
     this._disabled ? this.form.disable() : this.form.enable();
     this.stateChanges.next();
   }
-  // tslint:disable-next-line: variable-name
   private _disabled = false;
 
   errorState = false;

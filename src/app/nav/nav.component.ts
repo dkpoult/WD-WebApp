@@ -6,6 +6,7 @@ import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component'
 import { SharedService } from '../shared/shared.service';
 import { Router } from '@angular/router';
 import { ThemeService } from '../shared/theme.service';
+import { isNullOrUndefined } from 'util';
 
 export interface MenuItem {
   path: string;
@@ -53,7 +54,12 @@ export class NavComponent implements OnInit {
     this.isDarkMode$ = this.theme.isDarkMode$;
     if (this.sharedService.isLoggedIn()) {
       setTimeout(() => {
-        this.toggleDarkMode(this.sharedService.currentUser.preferences.darkMode);
+        let darkMode = this.sharedService.currentUser.preferences.darkMode;
+        if (isNullOrUndefined(darkMode)) {
+          darkMode = false;
+          this.sharedService.updatePreferences('darkMode', darkMode);
+        }
+        this.toggleDarkMode(darkMode);
       }, 100);
     }
   }

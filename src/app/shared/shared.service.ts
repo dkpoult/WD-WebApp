@@ -1,11 +1,12 @@
+import { ThemeService } from './theme.service';
 import { SocketService } from './socket.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { map } from 'rxjs/operators';
-import { isNullOrUndefined } from 'util';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,6 @@ export class SharedService {
   public apiRoot: string;
   public wsRoot: string;
 
-  // tslint:disable-next-line: variable-name
   private _currentUser: User;
   public get currentUser() {
     return this.getLoggedInUser();
@@ -29,9 +29,16 @@ export class SharedService {
       map(result => result.matches)
     );
 
+  private logInSubject = new Subject<boolean>();
+  public loggedIn$ = this.logInSubject.asObservable(); // Emits when the user logs in or out
+  private _loggedIn: boolean;
+  set loggedIn(value) { this.logInSubject.next(value); }
+  get loggedIn() { return this._loggedIn; }
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private socketService: SocketService,
+    private themeService: ThemeService,
     private http: HttpClient,
   ) { }
 
@@ -39,11 +46,22 @@ export class SharedService {
   initialise(): void {
     this.apiRoot = 'https://wd.dimensionalapps.com';
     this.wsRoot = 'wss://wd.dimensionalapps.com';
+    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
+    this.loggedIn$.subscribe((value) => {
+      this._loggedIn = value;
+      if (value) {
+        const darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
+        console.log('Prefers ' + (darkMode ? 'dark' : 'light'));
+        setTimeout(() => {
+          this.themeService.setDarkMode(darkMode);
+        }, 100);
+      }
+    });
     if (this.isLoggedIn()) {
       this.currentUser = this.getLoggedInUser();
+      this.logInSubject.next(true);
       this.connnectToChatSocket();
     }
-    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
   }
 
   connnectToChatSocket() {
@@ -362,12 +380,13 @@ export class SharedService {
   loginUser(personNumber: string, userToken: string, preferences: any) {
     this.currentUser = new User(personNumber, userToken, preferences);
     this.connnectToChatSocket();
-    console.log(`Logged in user ${personNumber} with token ${userToken}`);
+    this.logInSubject.next(true);
   }
 
   signOut() {
     // TODO: Confirm dialog
-    this.localStorage.removeItem('user');
     this.currentUser = null;
+    this.localStorage.removeItem('user');
+    this.logInSubject.next(false);
   }
 }
