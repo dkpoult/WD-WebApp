@@ -6,6 +6,7 @@
         Chat
       </span>
     </ng-template>
+
     <div class="chat-container" #autoScroll>
       <div *ngFor="let message of messages;">
         <app-chat-message (delete)="deleteMessage(message.id)" [message]="message" [color]="getMessageColor(message)"

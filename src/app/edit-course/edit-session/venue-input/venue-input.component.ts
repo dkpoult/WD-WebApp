@@ -43,7 +43,7 @@ export class VenueInputComponent implements OnDestroy, MatFormFieldControl<Venue
   @HostBinding('attr.aria-describedby') describedBy = '';
 
   form: FormGroup;
-  venues = this.venueService.venues;
+  venues = this.venueService.venues.map(e => e.buildingCode);
 
   constructor(
     fb: FormBuilder,

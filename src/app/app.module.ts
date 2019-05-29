@@ -8,6 +8,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StompRService } from '@stomp/ng2-stompjs';
+import { AgmCoreModule } from '@agm/core';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
@@ -39,6 +40,7 @@ import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { ChartComponent } from './chart/chart.component';
 import { CalendarComponent } from './timetable/calendar/calendar.component';
 import { VenueInputComponent } from './edit-course/edit-session/venue-input/venue-input.component';
+import { MapComponent } from './map/map.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -75,6 +77,7 @@ export function initialiseApp(config: SharedService) {
     ChartComponent,
     CalendarComponent,
     VenueInputComponent,
+    MapComponent,
   ],
   imports: [
     HttpClientModule,
@@ -85,7 +88,10 @@ export function initialiseApp(config: SharedService) {
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCygSmaQH2Ms5ja7cyF2gGfSMA93l5bnPs'
+    })
   ],
   providers: [
     {

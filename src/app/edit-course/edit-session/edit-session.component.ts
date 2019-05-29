@@ -26,7 +26,7 @@ export class EditSessionComponent implements OnInit {
   get startDate() { return this.form.get('date').value; }
   set startDate(v) { this.form.get('date').setValue(v); }
 
-  venues = this.venueService.venues;
+  venues = this.venueService.venues.map(e => e.buildingCode);
 
   repeatTypes = [
     { value: 'ONCE', text: 'Never' },
