@@ -6,8 +6,12 @@
       <mat-card-content>
         <mat-card [ngClass]="{'session': true, 'urgent': urgentSession(session)}"
           *ngFor="let session of course.sessions">
-          <mat-card-title>
+          <mat-card-title fxLayout="row">
             {{ session.sessionType }} @ {{ session.venue.buildingCode }}{{ session.venue.subCode }}
+            <span fxFlex></span>
+            <button mat-icon-button (click)="showInMap(session.venue)">
+              <mat-icon>place</mat-icon>
+            </button>
           </mat-card-title>
           <mat-card-subtitle>
             {{ session.nextDate.toDateString() }} at {{ session.nextDate.toTimeString().substr(0, 5) }} for

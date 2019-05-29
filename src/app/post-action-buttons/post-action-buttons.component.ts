@@ -19,6 +19,7 @@ export class PostActionButtonsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
   }
 
   reply() {

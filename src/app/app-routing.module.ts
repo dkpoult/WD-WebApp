@@ -31,7 +31,12 @@ const routes: Routes = [
     ]
   },
   { path: 'timetable', component: TimetableComponent },
-  { path: 'map', component: MapComponent },
+  {
+    path: 'map', children: [
+      { path: '', component: MapComponent },
+      { path: ':building', component: MapComponent }
+    ]
+  },
   { path: '**', component: MainComponent, redirectTo: '' }
 ];
 

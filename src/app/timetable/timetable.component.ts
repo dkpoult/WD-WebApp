@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { TimetableService } from '../shared/timetable.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-timetable',
@@ -26,7 +27,8 @@ export class TimetableComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private timetableService: TimetableService
+    private timetableService: TimetableService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -73,6 +75,10 @@ export class TimetableComponent implements OnInit {
     const date = session.nextDate as Date;
     date.setTime(date.valueOf() + session.minutes * 1000 * 3600);
     return date;
+  }
+
+  showInMap(venue) {
+    this.router.navigate(['map', venue.buildingCode]);
   }
 
 }

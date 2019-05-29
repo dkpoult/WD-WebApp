@@ -34,7 +34,7 @@ import { EditCourseComponent } from './edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
 import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
-import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { ChartComponent } from './chart/chart.component';
