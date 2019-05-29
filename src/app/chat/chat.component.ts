@@ -1,11 +1,11 @@
 import { SurveyService } from '../shared/survey.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { switchMap, startWith } from 'rxjs/operators';
 import { SocketService } from '../shared/socket.service';
 import { isNullOrUndefined } from 'util';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -14,8 +14,14 @@ import { interval, Subscription } from 'rxjs';
 })
 export class ChatComponent implements OnInit {
 
-  unansweredSurvey = true;
-  survey: any;
+  @ViewChild('autoScroll') autoScroll: HTMLElement;
+
+  unansweredSurvey = false;
+  private _survey;
+  get survey() { return this._survey; }
+  set survey(value) { this.surveySubject.next(value); this._survey = value; }
+  private surveySubject = new Subject<any>();
+  survey$ = this.surveySubject.asObservable();
 
   currentTabIndex = 0;
 
@@ -29,8 +35,7 @@ export class ChatComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
-    private socketService: SocketService,
-    private surveyService: SurveyService
+    private socketService: SocketService
   ) { }
 
   ngOnInit() {
@@ -58,6 +63,7 @@ export class ChatComponent implements OnInit {
               if (this.currentTabIndex !== 0) {
                 this.unreadMessages++;
               }
+              this.autoScroll.scrollTop = this.autoScroll.scrollHeight;
               this.messages.push(message);
               break;
           }
@@ -109,10 +115,7 @@ export class ChatComponent implements OnInit {
   }
 
   getSurvey() {
-    if (!this.survey) {
-      return;
-    }
-    if (this.isModerator() && this.survey.responseType === 'MC') {
+    if (!isNullOrUndefined(this.survey) && this.isModerator() && this.survey.responseType === 'MC') {
       // poll
       this.pollingData = interval(this.pollingInterval)
         .pipe(startWith(0),
@@ -134,7 +137,6 @@ export class ChatComponent implements OnInit {
     const i = this.messages.findIndex((value) => value.id === id);
     // remove it
     this.messages = this.messages.filter((value, index) => index !== i);
-    // flick it
     // bop it
   }
 

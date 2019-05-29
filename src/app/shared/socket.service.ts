@@ -33,11 +33,6 @@ export class SocketService {
       debug: false
     };
     this.stompService.config = stompConfig;
-    this.stompService.state.pipe(
-      map((state: number) => StompState[state]))
-      .subscribe((status: string) => {
-        console.log(`Stomp connection status: ${status}`);
-      });
     this.stompService.initAndConnect();
   }
 

@@ -82,19 +82,6 @@ export class SharedService {
     return this.http.post(`${this.apiRoot}/venue/get_venues`, this.currentUser);
   }
 
-  addDummyVenue(): Observable<any> {
-    const body = {
-      personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.userToken,
-      venue: {
-        buildingCode: 'FNB',
-        subCode: 'building',
-        coordinates: '0.000,0.000'
-      }
-    };
-    return this.http.post(`${this.apiRoot}/venue/add_venue`, body);
-  }
-
   // Courses
   getCourses(): Observable<any> {
     const body = {
