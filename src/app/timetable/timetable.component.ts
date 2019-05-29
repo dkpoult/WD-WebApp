@@ -64,9 +64,9 @@ export class TimetableComponent implements OnInit {
   }
 
   urgentSession(session) {
-    let urgent = session.sessionType === 'TEST';
+    // let urgent = session.sessionType === 'TEST';
     // urgent = urgent && this.sameWeek(session);
-    return urgent;
+    return session.sessionType === 'TEST';
   }
 
   getEndTime(session): Date {

@@ -11,7 +11,7 @@ class Venue {
 }
 
 @Component({
-  selector: 'venue-input',
+  selector: 'app-venue-input',
   template: `
     <mat-autocomplete #buildingAuto="matAutocomplete">
       <mat-option *ngFor="let building of venues" [value]="building">
