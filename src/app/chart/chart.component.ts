@@ -16,13 +16,6 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   borderWidth = 3;
 
   @Input() labels: string[];
-  // private _DATA = new BehaviorSubject<number[]>([]);
-  // @Input() set data(value: number[]) {
-  //   this._DATA.next(value);
-  // }
-  // get data() {
-  //   return this._DATA.getValue();
-  // }
   @Input() data: number[];
 
   constructor() { }
@@ -38,6 +31,9 @@ export class ChartComponent implements AfterViewInit, OnChanges {
   }
 
   draw() {
+    if (!this.ctx) {
+      return;
+    }
     this.ctx.clearRect(0, 0, (this.radius + this.borderWidth) * 2, (this.radius + this.borderWidth) * 2);
     let total = 0;
     for (const d of this.data) {

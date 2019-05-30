@@ -8,6 +8,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StompRService } from '@stomp/ng2-stompjs';
+import { AgmCoreModule } from '@agm/core';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
@@ -33,10 +34,14 @@ import { EditCourseComponent } from './edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
 import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
-import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { ChartComponent } from './chart/chart.component';
+import { CalendarComponent } from './timetable/calendar/calendar.component';
+import { VenueInputComponent } from './edit-course/edit-session/venue-input/venue-input.component';
+import { MapComponent } from './map/map.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -71,6 +76,10 @@ export function initialiseApp(config: SharedService) {
     ViewSurveyComponent,
     CreateSurveyComponent,
     ChartComponent,
+    CalendarComponent,
+    VenueInputComponent,
+    MapComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     HttpClientModule,
@@ -81,7 +90,10 @@ export function initialiseApp(config: SharedService) {
     LayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCygSmaQH2Ms5ja7cyF2gGfSMA93l5bnPs'
+    })
   ],
   providers: [
     {
@@ -104,7 +116,8 @@ export function initialiseApp(config: SharedService) {
     CreatePostComponent,
     CreateCommentComponent,
     MakeAnnouncementComponent,
-    CreateSurveyComponent
+    CreateSurveyComponent,
+    ConfirmDialogComponent,
   ]
 })
 export class AppModule { }

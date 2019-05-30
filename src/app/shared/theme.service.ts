@@ -10,7 +10,7 @@ export class ThemeService {
   isDarkMode$ = this.darkMode.asObservable();
 
   constructor() {
-    this.darkMode.next(true);
+    this.darkMode.next(false);
   }
 
   setDarkMode(isDarkMode: boolean) {

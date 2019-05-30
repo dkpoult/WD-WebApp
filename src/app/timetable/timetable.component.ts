@@ -1,6 +1,9 @@
+import { VenueService } from './../venue.service';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { TimetableService } from '../shared/timetable.service';
+import { Router } from '@angular/router';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-timetable',
@@ -17,26 +20,23 @@ export class TimetableComponent implements OnInit {
     hasPassword: boolean,
     questionForum: string,
     forums: Array<string>,
-    sessions: Array<{
-      venue: string,
-      repeatType: string, // [DAILY, WEEKLY, MONTHLY, ONCE]
-      repeatGap: number,
-      date: Date, // "nextDate" in the response
-      nextDate: Date, // not in the response
-      sessionType: string, // [LECTURE, LAB, TUTORIAL, TEST, OTHER]
-      duration: number
-    }>
+    sessions: Array<any>
   }>;
+
+  sessions: Array<any>;
 
   gotCourses = false;
 
   constructor(
     private sharedService: SharedService,
-    private timetableService: TimetableService
+    private timetableService: TimetableService,
+    private venueService: VenueService,
+    private router: Router
   ) { }
 
   ngOnInit() {
     this.getCourses();
+    this.venueService.updateVenues();
   }
 
   getCourses() {
@@ -53,8 +53,15 @@ export class TimetableComponent implements OnInit {
             session.nextDate = this.timetableService.getNextDate(session);
           });
         });
+        this.sessions = [];
         this.courses = response.courses;
         this.gotCourses = true;
+        this.courses.forEach(course => {
+          course.sessions.forEach(session => {
+            session.courseCode = course.courseCode;
+            this.sessions.push(session);
+          });
+        });
       });
   }
 
@@ -62,9 +69,25 @@ export class TimetableComponent implements OnInit {
     return this.timetableService.sameWeek(new Date(), session.nextDate);
   }
 
+  urgentSession(session) {
+    // let urgent = session.sessionType === 'TEST';
+    // urgent = urgent && this.sameWeek(session);
+    return session.sessionType === 'TEST';
+  }
+
   getEndTime(session): Date {
     const date = session.nextDate as Date;
     date.setTime(date.valueOf() + session.minutes * 1000 * 3600);
     return date;
   }
+
+  venueHasCoords(venue) {
+    // TODO: Find out why venueService.venues is always null
+    return true;
+  }
+
+  showInMap(venue) {
+    this.router.navigate(['map', venue.buildingCode]);
+  }
+
 }

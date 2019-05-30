@@ -1,13 +1,12 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MatDialog, MatDialogRef, MatSidenav } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSidenav, MatSlideToggle } from '@angular/material';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component';
 import { SharedService } from '../shared/shared.service';
 import { Router } from '@angular/router';
 import { ThemeService } from '../shared/theme.service';
+import { isNullOrUndefined } from 'util';
 
 export interface MenuItem {
   path: string;
@@ -27,18 +26,21 @@ export class NavComponent implements OnInit {
   signupDialogRef: MatDialogRef<SignupDialogComponent>;
 
   @ViewChild('drawer') drawer: MatSidenav;
+  @ViewChild('darkMode') lightSwitch: MatSlideToggle;
 
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedIn: Array<MenuItem> = [
-    { path: 'courses', text: 'Courses' },
-    { path: 'timetable', text: 'Timetable' }
+    { path: 'courses/', text: 'Courses' },
+    { path: 'timetable/', text: 'Timetable' },
+    { path: 'map/', text: 'Map' }
   ];
 
   // Add menu items here for when NOT logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedOut: Array<MenuItem> = [
-    { path: 'features', text: 'Features' },
+    { path: 'features/', text: 'Features' },
+    { path: 'map/', text: 'Map' }
   ];
 
   isDarkMode$: Observable<boolean>;
@@ -47,7 +49,8 @@ export class NavComponent implements OnInit {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private router: Router,
-    private theme: ThemeService) { }
+    private theme: ThemeService,
+  ) { }
 
   ngOnInit(): void {
     this.isDarkMode$ = this.theme.isDarkMode$;
@@ -77,5 +80,8 @@ export class NavComponent implements OnInit {
 
   toggleDarkMode(checked: boolean) {
     this.theme.setDarkMode(checked);
+    if (this.sharedService.isLoggedIn()) {
+      this.sharedService.updatePreferences('darkMode', checked);
+    }
   }
 }

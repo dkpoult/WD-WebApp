@@ -33,6 +33,74 @@ export class TimetableService {
     return new Date(year, month + 1, 0).getDate();
   }
 
+  msToRepeatType(type) {
+    const msToDay = 86400000;
+    switch (type) {
+      case 'DAILY':
+        return msToDay;
+      case 'WEEKLY':
+        return msToDay * 7;
+      default:
+        throw new Error('Only DAILY and WEEKLY are fixed length');
+    }
+  }
+
+  inPast(session, date: Date): boolean {
+    const startDate: Date = new Date(session.date);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Don't include times
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setMilliseconds(0);
+
+    yesterday.setHours(0);
+    yesterday.setMinutes(0);
+    yesterday.setMilliseconds(0);
+
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setMilliseconds(0);
+
+    if (date.valueOf() >= yesterday.valueOf()) {
+      return false;
+    }
+    return true;
+  }
+
+  sessionFallsOn(session, date: Date): boolean {
+    const startDate: Date = new Date(session.date);
+
+    // Don't include times
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setMilliseconds(0);
+
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setMilliseconds(0);
+
+    if (date.valueOf() === startDate.valueOf()) {
+      return true;
+    }
+    if (session.repeatType === 'ONCE') {
+      return false;
+    }
+    if (session.repeatType === 'MONTHLY') {
+      const currentDate = startDate;
+      while (currentDate.valueOf() < date.valueOf()) {
+        currentDate.setMonth(currentDate.getMonth() + session.repeatGap);
+      }
+      return currentDate.valueOf() === date.valueOf();
+    }
+    let ms = startDate.valueOf();
+    while (ms < date.valueOf()) {
+      ms += session.repeatGap * this.msToRepeatType(session.repeatType);
+    }
+    return ms === date.valueOf();
+  }
+
   getNextDate(session) {
     const year = session.date.getFullYear();
     const month = session.date.getMonth();

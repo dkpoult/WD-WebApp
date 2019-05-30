@@ -56,7 +56,6 @@ export class CreateSurveyComponent implements OnInit {
     if (survey.responseType !== 'MC') {
       survey.options = [];
     }
-    console.log(survey);
     this.sharedService.makeSurvey(this.data.courseCode, survey).subscribe((response: any) => {
       switch (response.responseCode) {
         case 'successful':

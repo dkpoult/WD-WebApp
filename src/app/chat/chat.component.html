@@ -6,8 +6,8 @@
         Chat
       </span>
     </ng-template>
+
     <div class="chat-container" #autoScroll>
-      <!--[scrollTop]="autoScroll.scrollHeight"-->
       <div *ngFor="let message of messages;">
         <app-chat-message (delete)="deleteMessage(message.id)" [message]="message" [color]="getMessageColor(message)"
           [isModerator]="isModerator()">
@@ -19,6 +19,9 @@
         <mat-label>Type a message</mat-label>
         <textarea matInput #messageInput (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
       </mat-form-field>
+      <button mat-icon-button (click)="sendMessage(messageInput, $event)">
+        <mat-icon>send</mat-icon>
+      </button>
     </div>
   </mat-tab>
   <mat-tab>
@@ -27,7 +30,7 @@
         Survey</span>
     </ng-template>
     <ng-template matTabContent>
-      <app-view-survey [course]="course" [survey]="survey"></app-view-survey>
+      <app-view-survey [course]="course" [survey]="survey$ | async"></app-view-survey>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

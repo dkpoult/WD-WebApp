@@ -36,7 +36,6 @@ export class LinkCourseComponent implements OnInit {
   }
 
   submit(form) {
-    console.log('Attempting creation');
     const course = form.value;
     this.sharedService.linkCourse(course.id).subscribe((response) => {
       switch (response.responseCode) {

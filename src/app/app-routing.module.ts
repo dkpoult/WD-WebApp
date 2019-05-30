@@ -1,3 +1,4 @@
+import { MapComponent } from './map/map.component';
 import { ChatComponent } from './chat/chat.component';
 import { ForumComponent } from './forum/forum.component';
 import { NgModule } from '@angular/core';
@@ -30,6 +31,12 @@ const routes: Routes = [
     ]
   },
   { path: 'timetable', component: TimetableComponent },
+  {
+    path: 'map', children: [
+      { path: '', component: MapComponent },
+      { path: ':building', component: MapComponent }
+    ]
+  },
   { path: '**', component: MainComponent, redirectTo: '' }
 ];
 

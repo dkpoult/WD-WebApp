@@ -39,5 +39,5 @@
 </ng-container>
 <ng-template #elseTemplate>
   <mat-error>There are no currently open surveys</mat-error>
-  <button mat-raised-button color="primary" (click)="createSurvey()">Open a survey</button>
+  <button mat-raised-button *ngIf="isLecturer()" color="primary" (click)="createSurvey()">Open a survey</button>
 </ng-template>

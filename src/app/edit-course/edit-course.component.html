@@ -32,24 +32,26 @@
       <!-- Sessions -->
       <div formArrayName="sessions" style="padding-top: 20px;">
         <mat-label>
-          Sessions
+          Sessions ({{form.controls['sessions'].controls.length}})
           <button class="add-btn" mat-icon-button type="button" (click)="addSession()">
             <mat-icon>add</mat-icon>
           </button>
         </mat-label>
-        <mat-grid-list [cols]="isHandset ? 1 : 2" [rowHeight]="400">
-          <mat-grid-tile *ngFor="let session of form.controls['sessions'].controls; let i = index">
-            <app-edit-session [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
+        <div class="sessions">
+          <mat-accordion [multi]="false">
+            <!-- <mat-icon>delete</mat-icon> -->
+            <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
+              [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
             </app-edit-session>
-          </mat-grid-tile>
-        </mat-grid-list>
+          </mat-accordion>
+        </div>
       </div>
     </mat-dialog-content>
     <mat-dialog-actions>
       <span fxFlex></span>
       <button mat-button [disabled]="hasErrors()" type="submit">Apply</button>
       <span fxFlex="10"></span>
-      <button mat-button type="button" routerLink="../../" color="warn">Back</button>
+      <button mat-button type="button" (click)="confirmAndQuit()" color="warn">Back</button>
       <span fxFlex></span>
     </mat-dialog-actions>
   </form>

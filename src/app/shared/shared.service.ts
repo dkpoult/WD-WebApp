@@ -1,11 +1,12 @@
+import { ThemeService } from './theme.service';
 import { SocketService } from './socket.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { map } from 'rxjs/operators';
-import { forEach } from '@angular/router/src/utils/collection';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,14 @@ export class SharedService {
   public apiRoot: string;
   public wsRoot: string;
 
-  public currentUser: User;
+  private _currentUser: User;
+  public get currentUser() {
+    return this.getLoggedInUser();
+  }
+  public set currentUser(value) {
+    this.localStorage.setItem(`user`, JSON.stringify(value));
+    this._currentUser = value;
+  }
   public localStorage: any = window.localStorage;
 
   public isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -21,9 +29,16 @@ export class SharedService {
       map(result => result.matches)
     );
 
+  private logInSubject = new Subject<boolean>();
+  public loggedIn$ = this.logInSubject.asObservable(); // Emits when the user logs in or out
+  private _loggedIn: boolean;
+  set loggedIn(value) { this.logInSubject.next(value); }
+  get loggedIn() { return this._loggedIn; }
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private socketService: SocketService,
+    private themeService: ThemeService,
     private http: HttpClient,
   ) { }
 
@@ -31,14 +46,25 @@ export class SharedService {
   initialise(): void {
     this.apiRoot = 'https://wd.dimensionalapps.com';
     this.wsRoot = 'wss://wd.dimensionalapps.com';
-    this.currentUser = this.getLoggedInUser();
-    if (this.isLoggedIn()) {
-      this.connect();
-    }
     this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
+    this.loggedIn$.subscribe((value) => {
+      this._loggedIn = value;
+      if (value) {
+        const darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
+        console.log('Prefers ' + (darkMode ? 'dark' : 'light'));
+        setTimeout(() => {
+          this.themeService.setDarkMode(darkMode);
+        }, 100);
+      }
+    });
+    if (this.isLoggedIn()) {
+      this.currentUser = this.getLoggedInUser();
+      this.logInSubject.next(true);
+      this.connnectToChatSocket();
+    }
   }
 
-  connect() {
+  connnectToChatSocket() {
     this.socketService.connect(this.wsRoot, this.currentUser);
   }
 
@@ -49,6 +75,11 @@ export class SharedService {
 
   authenticateUser(user: User): Observable<any> {
     return this.http.post(`${this.apiRoot}/auth/login`, user);
+  }
+
+  // Venues
+  getVenues(): Observable<any> {
+    return this.http.post(`${this.apiRoot}/venue/get_venues`, this.currentUser);
   }
 
   // Courses
@@ -68,7 +99,13 @@ export class SharedService {
     };
     return this.http.post(`${this.apiRoot}/course/get_course`, body)
       .pipe(map((result: any) => {
-        return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
+        switch (result.responseCode) {
+          case 'successful':
+            return { responseCode: result.responseCode, course: result.courses[0] }; // POST responds with array of single course
+          default:
+            console.log(result);
+            return result;
+        }
       }));
   }
 
@@ -104,6 +141,10 @@ export class SharedService {
 
   updateCourse(newInfo: any): Observable<any> {
     newInfo.sessions.forEach((session: any) => {
+      if (session.delete) {
+        session = null;
+        return;
+      }
       const date = new Date(session.date);
       const year = date.getFullYear().toString();
       let month = (date.getMonth() + 1).toString(); // Month is 0 based for whatever reason
@@ -115,6 +156,7 @@ export class SharedService {
         day = '0' + day;
       }
       session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+
       // Don't send useless info
       delete session.date;
       delete session.time;
@@ -145,6 +187,7 @@ export class SharedService {
         day = '0' + day;
       }
       session.nextDate = `${year}-${month}-${day} ${session.time}:00`;
+
       // Don't send useless info
       delete session.date;
       delete session.time;
@@ -300,6 +343,18 @@ export class SharedService {
   }
 
   // util
+  updatePreferences(field: string, value: any) {
+    const user = this.currentUser;
+    user.preferences[field] = value;
+    this.http.post(`${this.apiRoot}/auth/save_preferences`, user).subscribe((result: any) => {
+      switch (result.responseCode) {
+        case 'successful':
+          this.currentUser = user;
+          break;
+      }
+    });
+  }
+
   isLoggedIn(): boolean {
     const user = this.localStorage.getItem('user');
     return !!user;
@@ -309,16 +364,16 @@ export class SharedService {
     return JSON.parse(this.localStorage.getItem('user'));
   }
 
-  loginUser(personNumber: string, userToken: string) {
-    this.localStorage.setItem('user', JSON.stringify(new User(personNumber, userToken)));
-    this.currentUser = this.getLoggedInUser();
-    this.connect();
-    console.log(`Logged in user ${personNumber} with token ${userToken}`);
+  loginUser(personNumber: string, userToken: string, preferences: any) {
+    this.currentUser = new User(personNumber, userToken, preferences);
+    this.connnectToChatSocket();
+    this.logInSubject.next(true);
   }
 
   signOut() {
     // TODO: Confirm dialog
-    this.localStorage.removeItem('user');
     this.currentUser = null;
+    this.localStorage.removeItem('user');
+    this.logInSubject.next(false);
   }
 }

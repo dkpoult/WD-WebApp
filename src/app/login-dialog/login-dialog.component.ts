@@ -37,19 +37,19 @@ export class LoginDialogComponent implements OnInit {
   }
 
   submit(form) {
-    console.log('Attempting log in');
     const user = form.value;
     this.sharedService.authenticateUser(user).subscribe((response) => {
       switch (response.responseCode) {
         case 'successful':
           this.loginFailed = false;
-          this.sharedService.loginUser(user.personNumber, response.userToken);
+          this.sharedService.loginUser(user.personNumber, response.userToken, response.preferences);
           this.router.navigateByUrl('/courses');
           this.dialogRef.close(true);
           break;
         default:
           this.loginFailed = true;
           this.form.markAsPristine();
+          console.log(response);
           break;
       }
     });

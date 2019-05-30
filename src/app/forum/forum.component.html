@@ -1,4 +1,7 @@
-<div *ngIf="gotPosts">
+<div *ngIf="!gotPosts; else elseTemplate">
+  <mat-spinner class="spinner"></mat-spinner>
+</div>
+<ng-template #elseTemplate>
   <div *ngIf="posts.length === 0">There are no posts for {{ course }}</div>
   <mat-card *ngFor="let post of posts" routerLink="{{ post.code }}">
     <mat-card-title>{{ post.title }}</mat-card-title>
@@ -8,7 +11,7 @@
       <app-post-action-buttons [post]="post"></app-post-action-buttons>
     </mat-card-actions>
   </mat-card>
-</div>
+</ng-template>
 <button #fab mat-fab class="fab" matTooltip="Create A Post" (click)="openCreatePostDialog()">
   <mat-icon>add</mat-icon>
 </button>

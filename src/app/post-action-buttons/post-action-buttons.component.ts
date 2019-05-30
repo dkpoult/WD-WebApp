@@ -1,5 +1,5 @@
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { CreateCommentComponent } from '../create-comment/create-comment.component';
 
@@ -11,7 +11,9 @@ import { CreateCommentComponent } from '../create-comment/create-comment.compone
 export class PostActionButtonsComponent implements OnInit {
   @Input() post: any;
 
-  CreateCommentDialogRef: MatDialogRef<CreateCommentComponent>;
+  createCommentDialogRef: MatDialogRef<CreateCommentComponent>;
+
+  skipAnimation: boolean;
 
   constructor(
     private sharedService: SharedService,
@@ -19,12 +21,18 @@ export class PostActionButtonsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.skipAnimation = true;
+    setTimeout(() => {
+      this.skipAnimation = false;
+    }, 500);
   }
 
   reply() {
-    this.CreateCommentDialogRef = this.dialog.open(CreateCommentComponent, { data: this.post });
-    this.CreateCommentDialogRef.afterClosed().subscribe((result: any) => {
-      // TODO: Push the result as a comment to the post's comment array
+    this.createCommentDialogRef = this.dialog.open(CreateCommentComponent, { data: this.post });
+    this.createCommentDialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.post.comments.push(result);
+      }
     });
   }
 

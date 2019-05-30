@@ -1,7 +1,18 @@
+@import '../../assets/theming/animations';
+
 .comment {
     margin: 15px;
+    transition: ease-in-out;
 }
 
 .answer {
-    color: #37ba1d
+    animation-name: rubberBand;
+    animation-duration: 300ms;
+
+    color: #37ba1d;
+}
+
+
+.skip-animation {
+    animation-duration: 0s !important;
 }
