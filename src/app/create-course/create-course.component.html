@@ -4,7 +4,7 @@
     <mat-dialog-content>
       <mat-form-field>
         <mat-label>Course Code</mat-label>
-        <input matInput formControlName="code">
+        <input matInput formControlName="code" autocomplete="off">
         <mat-error *ngIf="form.controls['code'].hasError('required')">
           Please enter a course code
         </mat-error>
@@ -14,7 +14,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Course Name</mat-label>
-        <input matInput formControlName="name">
+        <input matInput formControlName="name" autocomplete="off">
         <mat-error>
           Please enter a course name
         </mat-error>
@@ -27,7 +27,7 @@
       <mat-form-field>
         <mat-label>Enrolment Key</mat-label>
         <mat-hint>(Optional)</mat-hint>
-        <input matInput formControlName="password">
+        <input matInput formControlName="password" autocomplete="off">
       </mat-form-field>
       <mat-error *ngIf="alreadyExists && form.pristine">
         Course already exists

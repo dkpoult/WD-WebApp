@@ -9,8 +9,7 @@ export class ChatMessageComponent implements OnInit {
 
   @Input() message;
   @Input() isModerator = false;
-  @Input() color = '';
-
+  @Input() outgoing = true;
   @Output() delete = new EventEmitter<void>();
 
   constructor() { }

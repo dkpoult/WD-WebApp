@@ -6,11 +6,11 @@
       <div>
         <mat-form-field>
           <mat-label>Course Code</mat-label>
-          <input matInput disabled="true" value="{{ course.courseCode }}">
+          <input matInput disabled="true" value="{{ course.courseCode }}" autocomplete="off">
         </mat-form-field>
         <mat-form-field>
           <mat-label>Course Name</mat-label>
-          <input matInput formControlName="name">
+          <input matInput formControlName="name" autocomplete="off">
           <mat-error>
             Please enter a course name
           </mat-error>
@@ -23,7 +23,7 @@
         <mat-form-field>
           <mat-label>Enrolment Key</mat-label>
           <mat-hint>(Optional)</mat-hint>
-          <input matInput formControlName="password">
+          <input matInput formControlName="password" autocomplete="off">
         </mat-form-field>
         <mat-checkbox formControlName="clearKey" [hidden]="!course.hasPassword" (change)="toggleClearKey()">
           Clear Enrolment Key
@@ -39,7 +39,6 @@
         </mat-label>
         <div class="sessions">
           <mat-accordion [multi]="false">
-            <!-- <mat-icon>delete</mat-icon> -->
             <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
               [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
             </app-edit-session>

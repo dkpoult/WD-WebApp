@@ -1,7 +1,7 @@
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
-import { SharedService } from '../shared/shared.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { CreateCommentComponent } from '../create-comment/create-comment.component';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-post-action-buttons',
@@ -40,7 +40,7 @@ export class PostActionButtonsComponent implements OnInit {
     if (this.post.voted === vote) {
       vote = 0;
     }
-    this.sharedService.vote(this.post, vote).subscribe((response: any) => {
+    this.sharedService.vote(this.post, vote).subscribe(() => {
       switch (vote) {
         case -1:
           if (this.post.voted === 1) {

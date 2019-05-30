@@ -1,8 +1,8 @@
-import { TimetableService } from './../../shared/timetable.service';
-import { VenueService } from './../../venue.service';
 import { FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation, ElementRef } from '@angular/core';
-import { MatChip, MatExpansionPanel, MatDatepicker } from '@angular/material';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatChip, MatExpansionPanel } from '@angular/material';
+import { VenueService } from 'src/app/venue.service';
+import { TimetableService } from 'src/app/shared/timetable.service';
 
 @Component({
   selector: 'app-edit-session',

@@ -1,6 +1,5 @@
-<mat-card [style.background]="color" *ngIf="message.messageType === 'CHAT'">
-  <div fxLayout="row wrap"></div>
-  <!-- <mat-card-header> -->
+<mat-card [ngClass]="{'out': outgoing, 'in': !outgoing}" [style.background]="color"
+  *ngIf="message.messageType === 'CHAT'">
   <mat-card-subtitle>
     {{message.personNumber}}
     <span fxFlex></span>
@@ -8,9 +7,8 @@
       <mat-icon>delete</mat-icon>
     </button>
   </mat-card-subtitle>
-  <!-- </mat-card-header> -->
   <mat-card-content>
-    {{message.content}}
+    <div>{{message.content}}</div>
     <div class="time">{{ message.time }}</div>
   </mat-card-content>
 </mat-card>
