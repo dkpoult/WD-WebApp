@@ -51,7 +51,7 @@
       <span fxFlex></span>
       <button mat-button [disabled]="hasErrors()" type="submit">Apply</button>
       <span fxFlex="10"></span>
-      <button mat-button type="button" routerLink="../../" color="warn">Back</button>
+      <button mat-button type="button" (click)="confirmAndQuit()" color="warn">Back</button>
       <span fxFlex></span>
     </mat-dialog-actions>
   </form>

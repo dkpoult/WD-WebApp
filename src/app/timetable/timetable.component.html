@@ -9,7 +9,7 @@
           <mat-card-title fxLayout="row">
             {{ session.sessionType }} @ {{ session.venue.buildingCode }}{{ session.venue.subCode }}
             <span fxFlex></span>
-            <button mat-icon-button (click)="showInMap(session.venue)">
+            <button mat-icon-button *ngIf="venueHasCoords(session.venue)" (click)="showInMap(session.venue)">
               <mat-icon>place</mat-icon>
             </button>
           </mat-card-title>

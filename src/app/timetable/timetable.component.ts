@@ -1,7 +1,9 @@
+import { VenueService } from './../venue.service';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { TimetableService } from '../shared/timetable.service';
 import { Router } from '@angular/router';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-timetable',
@@ -28,11 +30,13 @@ export class TimetableComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private timetableService: TimetableService,
+    private venueService: VenueService,
     private router: Router
   ) { }
 
   ngOnInit() {
     this.getCourses();
+    this.venueService.updateVenues();
   }
 
   getCourses() {
@@ -75,6 +79,11 @@ export class TimetableComponent implements OnInit {
     const date = session.nextDate as Date;
     date.setTime(date.valueOf() + session.minutes * 1000 * 3600);
     return date;
+  }
+
+  venueHasCoords(venue) {
+    // TODO: Find out why venueService.venues is always null
+    return true;
   }
 
   showInMap(venue) {

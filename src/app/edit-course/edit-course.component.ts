@@ -2,9 +2,11 @@ import { VenueService } from './../venue.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 
 @Component({
   selector: 'app-edit-course',
@@ -21,11 +23,15 @@ export class EditCourseComponent implements OnInit {
 
   isHandset: boolean;
 
+  confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private sharedService: SharedService,
     private venueService: VenueService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -170,5 +176,20 @@ export class EditCourseComponent implements OnInit {
       h = (24 - startH) + endH;
     }
     return m + 60 * h;
+  }
+
+  confirmAndQuit() {
+    if (this.form.pristine) {
+      this.router.navigate(['courses']);
+      return;
+    }
+    this.confirmDialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: 'There are unsaved changes. Are you sure you want to discard them?'
+    });
+    this.confirmDialogRef.afterClosed().subscribe((response: boolean) => {
+      if (response) {
+        this.router.navigate(['courses']);
+      }
+    });
   }
 }
