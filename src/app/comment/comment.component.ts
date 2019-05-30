@@ -12,11 +12,17 @@ export class CommentComponent implements OnInit {
   @Input() isAnswer = false; // ! Remove when this is built into comment
   @Output() newAnswer = new EventEmitter<any>();
 
+  skipAnimation: boolean;
+
   constructor(
     private sharedService: SharedService,
   ) { }
 
   ngOnInit() {
+    this.skipAnimation = true;
+    setTimeout(() => {
+      this.skipAnimation = false;
+    }, 500);
   }
 
   markAsAnswer() {

@@ -1,5 +1,5 @@
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, AfterViewInit, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { CreateCommentComponent } from '../create-comment/create-comment.component';
 
@@ -13,13 +13,18 @@ export class PostActionButtonsComponent implements OnInit {
 
   createCommentDialogRef: MatDialogRef<CreateCommentComponent>;
 
+  skipAnimation: boolean;
+
   constructor(
     private sharedService: SharedService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-
+    this.skipAnimation = true;
+    setTimeout(() => {
+      this.skipAnimation = false;
+    }, 500);
   }
 
   reply() {
