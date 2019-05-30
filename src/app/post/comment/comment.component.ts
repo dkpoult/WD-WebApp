@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SharedService } from '../shared/shared.service';
+import { SharedService } from 'src/app/shared/shared.service';
+
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -10,9 +11,12 @@ export class CommentComponent implements OnInit {
   @Input() level = 0;
   @Input() postCode: string; // ! I don't like this, needs to be built into comment or something
   @Input() isAnswer = false; // ! Remove when this is built into comment
+  @Input() isLecturer = true; // ! There is no easy way to actually tell if the user is the lecturer of the course a post is made in
   @Output() newAnswer = new EventEmitter<any>();
 
   skipAnimation: boolean;
+
+  get isOwnPost() { return this.comment.poster === this.sharedService.currentUser.personNumber; }
 
   constructor(
     private sharedService: SharedService,
@@ -31,7 +35,7 @@ export class CommentComponent implements OnInit {
         switch (response.responseCode) {
           case 'successful':
             this.isAnswer = true;
-            this.newAnswer.emit(this.comment); // Only level 0 comment can be answer, so we don't worry about bubbling for now
+            this.newAnswer.emit(this.comment);
             break;
           default:
             console.log(response);

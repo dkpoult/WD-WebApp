@@ -1,9 +1,10 @@
-@import '../../assets/theming/animations';
+@import 'src/assets/theming/animations.scss';
 
 $duration: 300ms;
 
 .upvoted {
-    color: orangered;
+    color: #FF4500; // orangered
+
     &.animated {
         animation-name: rubberBand;
         animation-duration: $duration;
@@ -12,7 +13,8 @@ $duration: 300ms;
 }
 
 .downvoted {
-    color: blue;
+    color: #7193FF;
+
     &.animated {
         animation-name: rubberBand;
         animation-duration: $duration;

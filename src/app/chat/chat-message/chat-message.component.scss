@@ -1,12 +1,11 @@
-@import '../../../assets/theming/animations';
+@import 'src/assets/theming/animations';
 
 mat-card {
     margin: 15px;
     animation-name: bounceInUp;
     animation-duration: 500ms;
     transform-origin: center bottom;
-    right: 0%;
-    width: 50%;
+    max-width: 80%;
     white-space: normal;
     word-wrap: break-word;
 
@@ -14,4 +13,14 @@ mat-card {
         float: right;
         color: transparentize($color: #000000, $amount: 0.5)
     }
+}
+
+// Someone else sent it
+.in {
+    background: #d1ba57
+}
+
+// I sent it
+.out {
+    background: #84b3ff;
 }

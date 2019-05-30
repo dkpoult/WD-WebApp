@@ -9,15 +9,15 @@
 
     <div class="chat-container" #autoScroll>
       <div *ngFor="let message of messages;">
-        <app-chat-message (delete)="deleteMessage(message.id)" [message]="message" [color]="getMessageColor(message)"
-          [isModerator]="isModerator()">
+        <app-chat-message (delete)="deleteMessage(message.id)" [message]="message"
+          [outgoing]="message.personNumber === currentUser.personNumber" [isModerator]="isModerator()">
         </app-chat-message>
       </div>
     </div>
     <div class="edit-box">
       <mat-form-field fxFlex>
         <mat-label>Type a message</mat-label>
-        <textarea matInput #messageInput (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
+        <textarea matInput #messageInput autofocus (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
       </mat-form-field>
       <button mat-icon-button (click)="sendMessage(messageInput, $event)">
         <mat-icon>send</mat-icon>
@@ -27,7 +27,8 @@
   <mat-tab>
     <ng-template matTabLabel>
       <span matBadge="★" matBadgeHidden="{{ !unansweredSurvey }}" matBadgeOverlap="false" matBadgeColor="warn">
-        Survey</span>
+        Survey
+      </span>
     </ng-template>
     <ng-template matTabContent>
       <app-view-survey [course]="course" [survey]="survey$ | async"></app-view-survey>

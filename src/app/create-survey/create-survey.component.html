@@ -4,7 +4,7 @@
     <mat-dialog-content>
       <mat-form-field>
         <mat-label>Prompt</mat-label>
-        <input matInput formControlName="title">
+        <input matInput formControlName="title" autocomplete="off">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Type</mat-label>
@@ -28,7 +28,7 @@
           <button matSuffix mat-icon-button (click)="removeOption(i)">
             <mat-icon>delete</mat-icon>
           </button>
-          <input matInput formControlName="{{i}}">
+          <input matInput formControlName="{{i}}" autocomplete="off">
         </mat-form-field>
       </div>
     </mat-dialog-content>

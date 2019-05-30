@@ -23,6 +23,8 @@ export class ChatComponent implements OnInit {
   private surveySubject = new Subject<any>();
   survey$ = this.surveySubject.asObservable();
 
+  get currentUser() { return this.sharedService.currentUser; }
+
   currentTabIndex = 0;
 
   pollingInterval = 5000;
@@ -143,14 +145,6 @@ export class ChatComponent implements OnInit {
   // send delete message to everyone
   deleteMessage(id: number) {
     this.socketService.deleteMessage(id); // delete it (outgoing only)
-  }
-
-  getMessageColor(message: any) {
-    if (message.personNumber === this.sharedService.currentUser.personNumber) {
-      return '#84b3ff'; // TODO: Make these use theme colors
-    } else {
-      return '#d1ba57';
-    }
   }
 
   isModerator(): boolean {
