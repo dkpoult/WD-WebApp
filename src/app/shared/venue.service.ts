@@ -1,5 +1,5 @@
-import { TimetableService } from './shared/timetable.service';
-import { SharedService } from './shared/shared.service';
+import { TimetableService } from './timetable.service';
+import { SharedService } from './shared.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({

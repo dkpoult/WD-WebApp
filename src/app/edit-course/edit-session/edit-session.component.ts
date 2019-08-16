@@ -1,7 +1,7 @@
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatChip, MatExpansionPanel } from '@angular/material';
-import { VenueService } from 'src/app/venue.service';
+import { VenueService } from 'src/app/shared/venue.service';
 import { TimetableService } from 'src/app/shared/timetable.service';
 
 @Component({

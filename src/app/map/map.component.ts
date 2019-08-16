@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from 'util';
 import { TimetableService } from './../shared/timetable.service';
-import { VenueService } from './../venue.service';
+import { VenueService } from '../shared/venue.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';

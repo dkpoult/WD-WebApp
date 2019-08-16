@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { VenueService } from 'src/app/venue.service';
+import { VenueService } from 'src/app/shared/venue.service';
 
 class Venue {
   constructor(public building: string, public room: string) { }
