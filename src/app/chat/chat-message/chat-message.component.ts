@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ChatMessageComponent implements OnInit {
 
   @Input() message;
-  @Input() isModerator = false;
+  @Input() canDelete = false;
   @Input() outgoing = true;
   @Output() delete = new EventEmitter<void>();
 

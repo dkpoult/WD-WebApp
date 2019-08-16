@@ -42,6 +42,7 @@ import { CalendarComponent } from './timetable/calendar/calendar.component';
 import { VenueInputComponent } from './edit-course/edit-session/venue-input/venue-input.component';
 import { MapComponent } from './map/map.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -80,6 +81,7 @@ export function initialiseApp(config: SharedService) {
     VenueInputComponent,
     MapComponent,
     ConfirmDialogComponent,
+    LiveQuestionsComponent,
   ],
   imports: [
     HttpClientModule,

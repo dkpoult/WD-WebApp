@@ -1,6 +1,5 @@
-import { SurveyService } from '../shared/survey.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { switchMap, startWith } from 'rxjs/operators';
 import { SocketService } from '../shared/socket.service';
@@ -14,7 +13,8 @@ import { interval, Subscription, Subject } from 'rxjs';
 })
 export class ChatComponent implements OnInit {
 
-  @ViewChild('autoScroll') autoScroll: HTMLElement;
+  @ViewChild('autoScroll') autoScroll: any;
+  @ViewChild('switchButton') switchButton: any;
 
   unansweredSurvey = false;
   private _survey;
@@ -27,8 +27,10 @@ export class ChatComponent implements OnInit {
 
   currentTabIndex = 0;
 
-  pollingInterval = 5000;
+  pollingInterval = 2000;
   pollingData: Subscription;
+
+  tutorMode = false;
 
   messages: Array<any>;
   unreadMessages = 0;
@@ -41,6 +43,7 @@ export class ChatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // TODO: Fetch previous messages
     this.messages = [];
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
@@ -65,11 +68,20 @@ export class ChatComponent implements OnInit {
               if (this.currentTabIndex !== 0) {
                 this.unreadMessages++;
               }
-              this.autoScroll.scrollTop = this.autoScroll.scrollHeight;
+              this.autoScroll._elementRef.nativeElement.scrollTop = this.autoScroll._elementRef.nativeElement.scrollHeight;
               this.messages.push(message);
+              break;
+            case 'LIVE_QUESTION':
+              break;
+            case 'LIVE_QUESTION_VOTE':
               break;
           }
         });
+        if (this.isModerator()) {
+          this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
+            console.log(message);
+          });
+        }
       });
   }
 
@@ -100,7 +112,7 @@ export class ChatComponent implements OnInit {
     if (message.length === 0) {
       return;
     }
-    this.socketService.sendMessage(message);
+    this.socketService.sendMessage(message, this.tutorMode);
     input.value = '';
   }
 
@@ -153,6 +165,12 @@ export class ChatComponent implements OnInit {
     }
     // ? More logic
     return false;
+  }
+
+  switchMode() {
+    this.tutorMode = !this.tutorMode;
+    this.switchButton._elementRef.nativeElement.classList.remove('animate');
+    this.switchButton._elementRef.nativeElement.classList.add('animate');
   }
 
 }

@@ -1,21 +1,43 @@
-.edit-box {
+.input {
     position: fixed;
     bottom: 0;
-    width: 95%;
-    .send-btn {
-        top: 20px;
+    padding: 15px;
+    width: 100%;
+    background: #EFEFEF;
+    align-content: flex-start center;
+
+    .send {
+        color: black !important;
     }
 }
 
-button{
-    position: fixed;
-    bottom: 2%;
-    right: 0;
+.messageInput {
+    height: 1cm;
+    max-height: 5em;
+    border: none;
+    background: white !important;
+    border-radius: 2em;
+    padding: 10px 5px;
+    background: transparent;
+    outline: 0;
+    resize: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.chat-container {
-    position: fixed;
-    width: 100%;
-    height: 80%;
-    overflow: auto;
+.toggle {
+    cursor: pointer;
+}
+
+.animate mat-icon {
+    animation: rotate 0.3s ease-in-out 0s;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(180deg);
+    }
 }

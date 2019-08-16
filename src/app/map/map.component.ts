@@ -42,7 +42,6 @@ export class MapComponent implements OnInit {
             v.coordinates = v.coordinates.split(',');
           });
           const venue = this.venues.find((v) => v.buildingCode === building);
-          console.log(venue);
           if (!isNullOrUndefined(venue)) {
             this.zoom = 20;
             this.lat = coerceNumberProperty(venue.coordinates[0]);

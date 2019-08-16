@@ -36,12 +36,12 @@ export class SocketService {
     this.stompService.initAndConnect();
   }
 
-  subscribeToCourse(courseCode: string): Observable<any> {
+  subscribeToCourse(courseCode: string, tutor: boolean = false): Observable<any> {
     if (this.stompSubscription && !this.stompSubscription.closed) {
       this.stompSubscription.unsubscribe();
     }
     this.courseCode = courseCode;
-    this.stomp$ = this.stompService.subscribe(`/topic/${courseCode}`, {
+    this.stomp$ = this.stompService.subscribe(`/topic/${courseCode}:${tutor ? 'tutor' : 'normal'}`, {
       personNumber: this.user.personNumber,
       userToken: this.user.userToken
     });
@@ -50,17 +50,19 @@ export class SocketService {
     }));
   }
 
-  sendMessage(message: string) {
-    this.stompService.publish(`/chat/${this.courseCode}/sendMessage`, JSON.stringify({ content: message, messageType: 'CHAT' }), {
-      personNumber: this.user.personNumber,
-      userToken: this.user.userToken
-    });
+  sendMessage(message: string, tutor: boolean = false) {
+    this.stompService.publish(`/chat/${this.courseCode}:${tutor ? 'tutor' : 'normal'}/sendMessage`,
+      JSON.stringify({ content: message, messageType: 'CHAT' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
   }
 
-  deleteMessage(id: any) {
-    this.stompService.publish(`/chat/${this.courseCode}/deleteMessage`, JSON.stringify({ content: id, messageType: 'DELETE' }), {
-      personNumber: this.user.personNumber,
-      userToken: this.user.userToken
-    });
+  deleteMessage(id: any, tutor: boolean = false) {
+    this.stompService.publish(`/chat/${this.courseCode}:${tutor ? 'tutor' : 'normal'}/deleteMessage`,
+      JSON.stringify({ content: id, messageType: 'DELETE' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
   }
 }

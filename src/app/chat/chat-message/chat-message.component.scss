@@ -1,26 +1,55 @@
-@import 'src/assets/theming/animations';
+$inColor: rgb(187, 169, 92);
+$outColor: rgb(126, 174, 236);
+$indent: 70px;
 
-mat-card {
-    margin: 15px;
-    animation-name: bounceInUp;
-    animation-duration: 500ms;
-    transform-origin: center bottom;
-    max-width: 80%;
-    white-space: normal;
-    word-wrap: break-word;
+.container {
+    width: 100vw;
+    overflow: auto;
+}
 
-    .time {
-        float: right;
-        color: transparentize($color: #000000, $amount: 0.5)
+.bubble {
+    max-width: 60%;
+    margin: 15px auto;
+    border-radius: 15px;
+    padding: 20px;
+    line-height: 100%;
+    display: block;
+    position: relative;
+
+    clear: both;
+    text-align: left;
+
+    &:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        border: 15px solid transparent;
     }
-}
 
-// Someone else sent it
-.in {
-    background: #d1ba57
-}
+    &.out {
+        margin-right: $indent;
+        background: $outColor;
+        float: right;
 
-// I sent it
-.out {
-    background: #84b3ff;
+        &:after {
+            border-left: 15px solid $outColor;
+            border-top: 15px solid $outColor;
+            right: -16px;
+            top: 0px;
+        }
+    }
+
+    &.in {
+        margin-left: $indent;
+        background: $inColor;
+        float: left;
+
+        &:after {
+            border-right: 15px solid $inColor;
+            border-top: 15px solid $inColor;
+            left: -16px;
+            top: 0px;
+        }
+    }
 }

@@ -1,14 +1,7 @@
-<mat-card [ngClass]="{'out': outgoing, 'in': !outgoing}" [style.background]="color"
-  *ngIf="message.messageType === 'CHAT'">
-  <mat-card-subtitle>
-    {{message.personNumber}}
-    <span fxFlex></span>
-    <button *ngIf="isModerator" mat-icon-button class="delete-btn" (click)="deleteThis()">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </mat-card-subtitle>
-  <mat-card-content>
-    <div>{{message.content}}</div>
-    <div class="time">{{ message.time }}</div>
-  </mat-card-content>
-</mat-card>
+<div class="container">
+    <div class="message bubble" [ngClass]="{'out': outgoing, 'in': !outgoing}" *ngIf="message.messageType === 'CHAT'">
+        <div>
+            {{message.content}}
+        </div>
+    </div>
+</div>
