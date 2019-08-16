@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { map } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { isNullOrUndefined } from 'util';
 @Injectable({
   providedIn: 'root'
 })
@@ -50,7 +51,10 @@ export class SharedService {
     this.loggedIn$.subscribe((value) => {
       this._loggedIn = value;
       if (value) {
-        const darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
+        let darkMode = false;
+        if (!isNullOrUndefined(this.currentUser.preferences.darkMode)) {
+          darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
+        }
         console.log('Prefers ' + (darkMode ? 'dark' : 'light'));
         setTimeout(() => {
           this.themeService.setDarkMode(darkMode);
