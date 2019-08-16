@@ -14,7 +14,6 @@ import { coerceNumberProperty } from '@angular/cdk/coercion';
 export class MapComponent implements OnInit {
   lat = -26.190359;
   lng = 28.026833;
-  // -26.190359, 28.026833
   zoom = 15;
 
   venues = this.venueService.venues;
@@ -50,10 +49,5 @@ export class MapComponent implements OnInit {
           break;
       }
     });
-  }
-
-  randomLocation() {
-    this.lat = Math.random() * 180 - 90;
-    this.lng = Math.random() * 360 - 180;
   }
 }
