@@ -68,7 +68,7 @@ export class ChatComponent implements OnInit {
               if (this.currentTabIndex !== 0) {
                 this.unreadMessages++;
               }
-              this.autoScroll._elementRef.nativeElement.scrollTop = this.autoScroll._elementRef.nativeElement.scrollHeight;
+              this.autoScroll.nativeElement.scrollTop = this.autoScroll.nativeElement.scrollHeight;
               this.messages.push(message);
               break;
             case 'LIVE_QUESTION':
