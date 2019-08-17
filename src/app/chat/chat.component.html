@@ -1,48 +1,47 @@
-<mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChange($event)">
+<mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChange($event)" mat-stretch-tabs dynamicHeight>
     <mat-tab>
         <ng-template matTabLabel>
             <span matBadge="{{ unreadMessages }}" matBadgeHidden="{{ unreadMessages === 0 }}" matBadgeOverlap="false"
                 matBadgeColor="warn">
                 Chat
+                <button mat-icon-button #switchButton *ngIf="isModerator()" (click)="switchMode()"
+                    color="{{ tutorMode ? 'warn' : 'primary' }}"
+                    matTooltip="Switch to {{tutorMode ? 'student' : 'tutor'}} mode">
+                    <mat-icon>autorenew</mat-icon>
+                </button>
             </span>
         </ng-template>
         <ng-template matTabContent>
-            <div class="container" fxLayout="row">
-                <div fxFlex="70" fxLayout="column" class="chat-container">
-                    <!-- TODO Maybe make this a virtual scroll -->
-                    <div class="message-container" #autoscroll [scrollTop]='autoscroll.scrollHeight'>
-                        <app-chat-message *ngFor="let message of messages;" (delete)="deleteMessage(message.id)"
-                            [message]="message" [outgoing]="message.personNumber === currentUser.personNumber"
-                            [canDelete]="isModerator()">
-                        </app-chat-message>
-                    </div>
-                    <span fxFlex></span>
-                    <div class="input" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
-                        <textarea class="messageInput" fxFlex #messageInput placeholder="Type a message" autofocus
-                            (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
-                        <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
-                            <mat-icon>send</mat-icon>
-                        </button>
-                    </div>
+            <div fxLayout="column" class="chat-container">
+                <!-- TODO Make this a virtual scroll -->
+                <!-- TODO Make autoscroll work properly, without errors -->
+                <div class="message-container" #autoscroll [scrollTop]="autoscroll.scrollHeight">
+                    <app-chat-message *ngFor="let message of tutorMode ? messagesTutor : messagesStudent;"
+                        (delete)="deleteMessage(message.id)" [message]="message"
+                        [outgoing]="message.personNumber === currentUser.personNumber" [canDelete]="isModerator()">
+                    </app-chat-message>
                 </div>
-                <div fxFlex="30" class="questions-container">
-                    <app-live-questions></app-live-questions>
+                <div class="input" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
+                    <textarea class="messageInput" fxFlex #messageInput placeholder="Type a message" autofocus
+                        (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
+                    <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
+                        <mat-icon>send</mat-icon>
+                    </button>
                 </div>
             </div>
-            <!-- <button mat-icon-button #switchButton (click)="switchMode()"
-                matTooltip="Switch to {{tutorMode ? 'student' : 'tutor'}} mode">
-                <mat-icon>autorenew</mat-icon>
-            </button> -->
         </ng-template>
     </mat-tab>
     <mat-tab>
         <ng-template matTabLabel>
-            <span matBadge="*" matBadgeHidden="{{ !unansweredSurvey }}" matBadgeOverlap="false" matBadgeColor="warn">
+            <span matBadge="★" matBadgeHidden="{{ !unansweredSurvey }}" matBadgeOverlap="false" matBadgeColor="warn">
                 Survey
             </span>
         </ng-template>
-        <ng-template>
-            <app-view-survey [course]="course" [survey]="survey"></app-view-survey>
+        <ng-template matTabContent>
+            <app-view-survey [course]="course" [survey]="survey$ | async"></app-view-survey>
         </ng-template>
     </mat-tab>
 </mat-tab-group>
+<!-- <div fxFlex="30" class="questions-container">
+    <app-live-questions></app-live-questions>
+</div> -->

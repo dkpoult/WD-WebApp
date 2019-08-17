@@ -4,6 +4,7 @@ import { User } from './user';
 import { Observable, Subscription } from 'rxjs';
 import { Message, StompHeaders } from '@stomp/stompjs';
 import { map } from 'rxjs/operators';
+import { API } from './api';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ export class SocketService {
   user: User;
 
   stomp$: Observable<Message>;
-  stompSubscription: Subscription;
+  // stompSubscription: Subscription;
 
   constructor(private stompService: StompRService) { }
 
-  connect(wsRoot: string, user: User) {
+  connect(user: User) {
     this.user = user;
     const stompConfig: StompConfig = {
-      url: `${wsRoot}/chatsocket/websocket`,
+      url: `${API.wsRoot}/chatsocket/websocket`,
       headers: {
         personNumber: user.personNumber,
         userToken: user.userToken
@@ -37,9 +38,9 @@ export class SocketService {
   }
 
   subscribeToCourse(courseCode: string, tutor: boolean = false): Observable<any> {
-    if (this.stompSubscription && !this.stompSubscription.closed) {
-      this.stompSubscription.unsubscribe();
-    }
+    // if (this.stompSubscription && !this.stompSubscription.closed) {
+    // this.stompSubscription.unsubscribe(); // ! what is this
+    // }
     this.courseCode = courseCode;
     this.stomp$ = this.stompService.subscribe(`/topic/${courseCode}:${tutor ? 'tutor' : 'normal'}`, {
       personNumber: this.user.personNumber,

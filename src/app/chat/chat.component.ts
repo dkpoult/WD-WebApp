@@ -1,3 +1,4 @@
+import { PermissionService } from './../shared/permission.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
@@ -32,58 +33,86 @@ export class ChatComponent implements OnInit {
 
   tutorMode = false;
 
-  messages: Array<any>;
+  messagesTutor: Array<any>;
+  messagesStudent: Array<any>;
   unreadMessages = 0;
   course: any;
 
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private permissionService: PermissionService
   ) { }
 
   ngOnInit() {
     // TODO: Fetch previous messages
-    this.messages = [];
+    this.messagesStudent = [];
+    this.messagesTutor = [];
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
         this.sharedService.getCourse(result).subscribe((response: any) => {
           this.course = response.course;
+          // Can only do this after we have course
+          if (this.isModerator()) {
+            this.sharedService.getMessages(result, true).subscribe((res: any) => {
+              switch (res.responseCode) {
+                case 'successful':
+                  const temp = res.messages.reverse();
+                  temp.forEach(message => {
+                    this.handleMessage(message, this.messagesTutor);
+                  });
+                  break;
+              }
+            });
+            this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
+              this.handleMessage(message, this.messagesTutor);
+            });
+          }
         });
         this.sharedService.getSurvey(result).subscribe((response: any) => {
           this.survey = response.survey;
-          // this.unansweredSurvey = !this.survey.answered;
+          // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
         });
-        this.socketService.subscribeToCourse(result).subscribe((message: any) => {
-          switch (message.messageType) {
-            case 'DELETE':
-              this.removeMessage(parseInt(message.content, 10));
-              break;
-            case 'SURVEY':
-              this.handleSurvey(message);
-              break;
-            case 'CHAT':
-              if (this.currentTabIndex !== 0) {
-                this.unreadMessages++;
-              }
-              // console.log(this.autoscroll);
-              // this.autoscroll.nativeElement.scrollIntoView(false);
-              this.messages.push(message);
-              break;
-            case 'LIVE_QUESTION':
-              break;
-            case 'LIVE_QUESTION_VOTE':
+        // Get previous messages
+        this.sharedService.getMessages(result, false).subscribe((res: any) => {
+          switch (res.responseCode) {
+            case 'successful':
+              const temp = res.messages.reverse();
+              temp.forEach(message => {
+                this.handleMessage(message, this.messagesStudent);
+              });
               break;
           }
         });
-        if (this.isModerator()) {
-          this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
-            console.log(message);
-          });
-        }
+        this.socketService.subscribeToCourse(result).subscribe((message: any) => {
+          this.handleMessage(message, this.messagesStudent);
+        });
       });
+  }
+
+  handleMessage(message: any, array: Array<any>) {
+    this.autoscroll.nativeElement.scrollTop = this.autoscroll.nativeElement.scrollHeight;
+    switch (message.messageType) {
+      case 'DELETE':
+        this.removeMessage(parseInt(message.content, 10), array);
+        break;
+      case 'SURVEY':
+        this.handleSurvey(message);
+        break;
+      case 'CHAT':
+        if (this.currentTabIndex !== 0) {
+          this.unreadMessages++;
+        }
+        array.push(message);
+        break;
+      case 'LIVE_QUESTION':
+        break;
+      case 'LIVE_QUESTION_VOTE':
+        break;
+    }
   }
 
   tabChange(event) {
@@ -146,12 +175,12 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  // remove it from our list of messages (incoming only)
-  removeMessage(id: number) {
+  // remove it from our local list of messages
+  removeMessage(id: number, array: Array<any>) {
     // find it
-    const i = this.messages.findIndex((value) => value.id === id);
+    const i = array.findIndex((value) => value.id === id);
     // remove it
-    this.messages = this.messages.filter((value, index) => index !== i);
+    array = array.filter((value, index) => index !== i);
     // bop it
   }
 
@@ -161,10 +190,9 @@ export class ChatComponent implements OnInit {
   }
 
   isModerator(): boolean {
-    if (!isNullOrUndefined(this.course) && this.course.lecturer.personNumber === this.sharedService.currentUser.personNumber) {
-      return true;
+    if (!isNullOrUndefined(this.course)) {
+      return this.permissionService.hasPermission('MODERATE', this.course.permissions);
     }
-    // ? More logic
     return false;
   }
 

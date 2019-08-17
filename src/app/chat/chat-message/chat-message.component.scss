@@ -14,8 +14,9 @@ $indent: 8%;
 }
 
 .bubble {
-    max-width: 60%;
-    margin: 15px auto;  
+    min-width: 150px;
+    max-width: 45%;
+    margin: 15px auto;
     border-radius: 15px;
     padding: 20px;
     line-height: 100%;
