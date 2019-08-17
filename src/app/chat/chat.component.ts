@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
 
   currentTabIndex = 0;
 
-  pollingInterval = 2000;
+  pollingInterval = 500;
   pollingData: Subscription;
 
   tutorMode = false;

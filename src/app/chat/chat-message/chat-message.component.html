@@ -1,10 +1,20 @@
 <div class="container">
-    <div class="message bubble" [ngClass]="{'out': outgoing, 'in': !outgoing}" *ngIf="message.messageType === 'CHAT'">
-        <div class="name">{{message.personNumber}}</div>
+    <div class="message bubble" [ngClass]="{
+        'out': outgoing, 
+        'in': !outgoing, 
+        'lecturer': message.tag === 'lecturer',
+        'tutor': message.tag === 'tutor'
+    }" *ngIf="message.messageType === 'CHAT'">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="name">
+                {{message.personNumber}}
+            </div>
+            <span class="spacer" fxFlex></span>
+            <div class="time">{{message.time}}</div>
+        </div>
         <mat-divider></mat-divider>
         <p>
             {{message.content}}
         </p>
-        <div class="time">{{ message.time }}</div>
     </div>
 </div>

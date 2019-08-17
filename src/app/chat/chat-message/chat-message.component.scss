@@ -1,16 +1,21 @@
 $inColor: rgb(187, 169, 92);
 $outColor: rgb(126, 174, 236);
+$lecturerColor: rgb(123, 205, 207);
+$tutorColor: rgb(230, 99, 169);
 $indent: 8%;
 
+.spacer {
+    min-width: 20px;
+}
+
 .name {
+    font-weight: bold;
     font-size: 0.8em;
-    font-weight: 1;
 }
 
 .time {
-    font-size: 0.6em;
+    font-size: 0.7em;
     text-align: right;
-    display: none;
 }
 
 .bubble {
@@ -51,6 +56,24 @@ $indent: 8%;
         margin-left: $indent;
         background: $inColor;
         float: left;
+
+        &.lecturer {
+            background: $lecturerColor;
+
+            &:after {
+                border-right: 15px solid $lecturerColor;
+                border-top: 15px solid $lecturerColor;
+            }
+        }
+
+        &.tutor {
+            background: $tutorColor;
+
+            &:after {
+                border-right: 15px solid $tutorColor;
+                border-top: 15px solid $tutorColor;
+            }
+        }
 
         &:after {
             border-right: 15px solid $inColor;

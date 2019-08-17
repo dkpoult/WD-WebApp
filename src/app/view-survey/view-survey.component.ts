@@ -20,8 +20,6 @@ export class ViewSurveyComponent implements OnInit {
 
   createSurveyDialogRef: MatDialogRef<CreateSurveyComponent>;
 
-  data: number[] = [1, 0];
-
   constructor(
     private sharedService: SharedService,
     private surveyService: SurveyService,
