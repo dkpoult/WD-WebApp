@@ -1,7 +1,8 @@
 $inColor: rgb(187, 169, 92);
-$outColor: rgb(126, 174, 236);
-$lecturerColor: rgb(123, 205, 207);
-$tutorColor: rgb(230, 99, 169);
+$outColor: rgb(164, 212, 167);
+$lecturerColor: rgb(211, 83, 100);
+$tutorColor: rgb(33, 129, 189);
+
 $indent: 8%;
 
 .spacer {
@@ -82,4 +83,12 @@ $indent: 8%;
             top: 0px;
         }
     }
+
+    // Ignore dark mode theming
+    color: black;
+
+    mat-divider {
+        background: black;
+    }
+
 }
