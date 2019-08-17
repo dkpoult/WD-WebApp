@@ -1,7 +1,10 @@
 <div class="container">
     <div class="message bubble" [ngClass]="{'out': outgoing, 'in': !outgoing}" *ngIf="message.messageType === 'CHAT'">
-        <div>
+        <div class="name">{{message.personNumber}}</div>
+        <mat-divider></mat-divider>
+        <p>
             {{message.content}}
-        </div>
+        </p>
+        <div class="time">{{ message.time }}</div>
     </div>
 </div>

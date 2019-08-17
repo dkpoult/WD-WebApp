@@ -13,7 +13,7 @@ import { interval, Subscription, Subject } from 'rxjs';
 })
 export class ChatComponent implements OnInit {
 
-  @ViewChild('autoScroll') autoScroll: any;
+  @ViewChild('autoscroll') autoscroll: any;
   @ViewChild('switchButton') switchButton: any;
 
   unansweredSurvey = false;
@@ -68,7 +68,8 @@ export class ChatComponent implements OnInit {
               if (this.currentTabIndex !== 0) {
                 this.unreadMessages++;
               }
-              this.autoScroll.nativeElement.scrollTop = this.autoScroll.nativeElement.scrollHeight;
+              // console.log(this.autoscroll);
+              // this.autoscroll.nativeElement.scrollIntoView(false);
               this.messages.push(message);
               break;
             case 'LIVE_QUESTION':
@@ -107,8 +108,8 @@ export class ChatComponent implements OnInit {
     if (event) {
       event.preventDefault();
     }
-    const message = input.value;
-    message.replace(/$(\s)*/, '');
+    let message = input.value;
+    message = message.trim();
     if (message.length === 0) {
       return;
     }
@@ -169,8 +170,11 @@ export class ChatComponent implements OnInit {
 
   switchMode() {
     this.tutorMode = !this.tutorMode;
-    this.switchButton._elementRef.nativeElement.classList.remove('animate');
+    // Animate the button
     this.switchButton._elementRef.nativeElement.classList.add('animate');
+    setTimeout(() => {
+      this.switchButton._elementRef.nativeElement.classList.remove('animate');
+    }, 300);
   }
 
 }

@@ -1,15 +1,21 @@
 $inColor: rgb(187, 169, 92);
 $outColor: rgb(126, 174, 236);
-$indent: 70px;
+$indent: 8%;
 
-.container {
-    width: 100vw;
-    overflow: auto;
+.name {
+    font-size: 0.8em;
+    font-weight: 1;
+}
+
+.time {
+    font-size: 0.6em;
+    text-align: right;
+    display: none;
 }
 
 .bubble {
     max-width: 60%;
-    margin: 15px auto;
+    margin: 15px auto;  
     border-radius: 15px;
     padding: 20px;
     line-height: 100%;

@@ -7,24 +7,42 @@
             </span>
         </ng-template>
         <ng-template matTabContent>
-            <button mat-icon-button #switchButton (click)="switchMode()">
-                <mat-icon>autorenew</mat-icon>
-            </button>
-            <!-- <div fxFlex="70" fxLayout="row" fxLayoutAlign="start start"> -->
-            <div #autoScroll class="container">
-                <app-chat-message *ngFor="let message of messages;" (delete)="deleteMessage(message.id)"
-                    [message]="message" [outgoing]="message.personNumber === currentUser.personNumber"
-                    [canDelete]="isModerator()">
-                </app-chat-message>
+            <div class="container" fxLayout="row">
+                <div fxFlex="70" fxLayout="column" class="chat-container">
+                    <!-- TODO Maybe make this a virtual scroll -->
+                    <div class="message-container" #autoscroll [scrollTop]='autoscroll.scrollHeight'>
+                        <app-chat-message *ngFor="let message of messages;" (delete)="deleteMessage(message.id)"
+                            [message]="message" [outgoing]="message.personNumber === currentUser.personNumber"
+                            [canDelete]="isModerator()">
+                        </app-chat-message>
+                    </div>
+                    <span fxFlex></span>
+                    <div class="input" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
+                        <textarea class="messageInput" fxFlex #messageInput placeholder="Type a message" autofocus
+                            (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
+                        <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
+                            <mat-icon>send</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div fxFlex="30" class="questions-container">
+                    <app-live-questions></app-live-questions>
+                </div>
             </div>
-            <!-- </div> -->
-            <footer class="input" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
-                <textarea class="messageInput" fxFlex #messageInput placeholder="Type a message" autofocus
-                    (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
-                <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
-                    <mat-icon>send</mat-icon>
-                </button>
-            </footer>
+            <!-- <button mat-icon-button #switchButton (click)="switchMode()"
+                matTooltip="Switch to {{tutorMode ? 'student' : 'tutor'}} mode">
+                <mat-icon>autorenew</mat-icon>
+            </button> -->
+        </ng-template>
+    </mat-tab>
+    <mat-tab>
+        <ng-template matTabLabel>
+            <span matBadge="*" matBadgeHidden="{{ !unansweredSurvey }}" matBadgeOverlap="false" matBadgeColor="warn">
+                Survey
+            </span>
+        </ng-template>
+        <ng-template>
+            <app-view-survey [course]="course" [survey]="survey"></app-view-survey>
         </ng-template>
     </mat-tab>
 </mat-tab-group>

@@ -1,10 +1,36 @@
+.questions-container {
+    position: relative;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.message-container {
+    overflow-y: auto;
+
+    height: 70.5vh; // !!! MAGIC NUMBER ALERT !!!
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+      
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: transparent; 
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+        &:hover {
+            background: #555; 
+        }
+    }   
+}
+
 .input {
-    position: fixed;
     bottom: 0;
     padding: 15px;
-    width: 100%;
-    background: #EFEFEF;
-    align-content: flex-start center;
+    background: #bfbfbf;
+    // background: mat-color($wd-accent);
 
     .send {
         color: black !important;
@@ -22,10 +48,6 @@
     outline: 0;
     resize: none;
     font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.toggle {
-    cursor: pointer;
 }
 
 .animate mat-icon {
