@@ -1,3 +1,4 @@
+<mat-error *ngIf="questions.length === 0" style="margin: 15px">There are no questions</mat-error>
 <div class="container" fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="15px">
     <mat-card class="question" *ngFor="let question of sortedQuestions">
         <mat-card-title>{{question.content}}</mat-card-title>

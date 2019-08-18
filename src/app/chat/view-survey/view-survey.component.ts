@@ -5,6 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { isNullOrUndefined } from 'util';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { PermissionService } from 'src/app/shared/permission.service';
 
 @Component({
   selector: 'app-view-survey',
@@ -22,7 +23,7 @@ export class ViewSurveyComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private surveyService: SurveyService,
+    private permissionService: PermissionService,
     private dialog: MatDialog
   ) { }
 
@@ -50,7 +51,7 @@ export class ViewSurveyComponent implements OnInit {
   }
 
   isLecturer() {
-    return this.course.lecturer.personNumber === this.sharedService.currentUser.personNumber;
+    return this.permissionService.isLecturer(this.course);
   }
 
 }

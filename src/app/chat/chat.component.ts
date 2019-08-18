@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
 
   currentTabIndex = 0;
 
-  pollingInterval = 500;
+  pollingInterval = 5000;
   pollingData: Subscription;
 
   tutorMode = false;
@@ -47,7 +47,6 @@ export class ChatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // TODO: Fetch previous messages
     this.messagesStudent = [];
     this.messagesTutor = [];
     this.liveQuestions = [];
@@ -120,6 +119,7 @@ export class ChatComponent implements OnInit {
         this.removeMessage(parseInt(message.content, 10), array);
         break;
       case 'SURVEY':
+        console.log('Received survey:', message);
         this.handleSurvey(message);
         break;
       case 'CHAT':
@@ -187,6 +187,7 @@ export class ChatComponent implements OnInit {
     } else {
       // Just once off
       this.sharedService.getSurvey(this.course.courseCode, this.isModerator()).subscribe((result: any) => {
+        console.log(result);
         this.survey = result.survey;
       });
     }

@@ -1,3 +1,4 @@
+import { PermissionService } from './../shared/permission.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { CreateCourseComponent } from './create-course/create-course.component';
@@ -6,11 +7,35 @@ import { LinkCourseComponent } from './link-course/link-course.component';
 import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.component';
 import { EnrolComponent } from '../courses/enrol/enrol.component';
 import { EditCourseComponent } from '../courses/edit-course/edit-course.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss']
+  styleUrls: ['./courses.component.scss'],
+  animations: [
+    trigger(
+      'inOutAnimation',
+      [
+        transition(
+          ':enter',
+          [
+            style({ height: 0, opacity: 0 }),
+            animate('.3s ease-out',
+              style({ height: 300, opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ height: 300, opacity: 1 }),
+            animate('.3s ease-in',
+              style({ height: 0, opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class CoursesComponent implements OnInit {
 
@@ -19,30 +44,40 @@ export class CoursesComponent implements OnInit {
   enrolDialogRef: MatDialogRef<EnrolComponent>;
   editDialogRef: MatDialogRef<EditCourseComponent>;
 
+  lectureOnly = false;
+  tutorOnly = false;
+  searchTerm = '';
+
   courses: Array<any>;
+  get filteredCourses() {
+    return this.courses.filter((value) =>
+      this.filter(value, this.lectureOnly, this.tutorOnly, this.searchTerm));
+  }
   gotCourses = false;
+
 
   @ViewChild('fab') fab: SpeedDialFabComponent;
   fabActions = [
     {
       icon: 'class',
       text: 'Enrol In A Course',
-      event: 'enrolDialog'
+      event: 'enrol'
     },
     {
       icon: 'insert_link',
       text: 'Link Moodle Course',
-      event: 'linkCourseDialog'
+      event: 'link'
     },
     {
       icon: 'add',
       text: 'Create New Course',
-      event: 'createCourseDialog'
+      event: 'create'
     }
   ];
 
   constructor(
     private sharedService: SharedService,
+    private permissionService: PermissionService,
     private dialog: MatDialog,
   ) { }
 
@@ -90,22 +125,43 @@ export class CoursesComponent implements OnInit {
   }
 
   isLecturer(course) {
-    return this.sharedService.currentUser.personNumber === course.lecturer.personNumber;
+    return this.permissionService.isLecturer(course);
+  }
+
+  isTutor(course) {
+    return this.permissionService.isTutor(course) && !this.isLecturer(course);
   }
 
   doAction(action: string) {
     switch (action) {
-      case 'createCourseDialog':
+      case 'create':
         this.openCreateCourseDialog();
         break;
-      case 'linkCourseDialog':
+      case 'link':
         this.openLinkCourseDialog();
         break;
-      case 'enrolDialog':
+      case 'enrol':
         this.openEnrolDialog();
         break;
       default:
         break;
     }
+  }
+
+  filter(value: any, lectureOnly?: boolean, tutorOnly?: boolean, searchTerm?: string) {
+    searchTerm = searchTerm.toLowerCase();
+
+    const name = value.courseName.toLowerCase();
+    const code = value.courseCode.toLowerCase();
+    const lecturer = this.isLecturer(value);
+    const tutor = this.isTutor(value);
+
+    const searchMatch = (name.startsWith(searchTerm) || code.startsWith(searchTerm));
+
+    let pass = searchMatch;
+    if (lectureOnly) { pass = pass && lecturer; }
+    if (tutorOnly) { pass = pass && tutor; }
+
+    return pass;
   }
 }

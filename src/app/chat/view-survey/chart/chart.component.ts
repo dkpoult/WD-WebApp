@@ -54,6 +54,11 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     this.ctx.stroke();
 
     this.ctx.lineWidth = this.radius * this.arcMult;
+    this.ctx.beginPath();
+    this.ctx.arc(0, 0, this.radius * (1 - this.arcMult / 2), 0, Math.PI * 2);
+    this.ctx.stroke();
+    this.ctx.closePath();
+
     let alpha = 0;
     for (let i = 0; i < this.data.length; i++) {
       const d = this.data[i];

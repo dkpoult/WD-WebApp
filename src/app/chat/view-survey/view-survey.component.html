@@ -4,12 +4,17 @@
     <div [ngSwitch]="survey.responseType">
       <mat-form-field *ngSwitchCase="'MC'">
         <mat-label>Choose an answer</mat-label>
-        <mat-select formControlName="answer">
-          <!-- TODO: this should be radio button -->
-          <mat-option *ngFor="let option of survey.options; let i = index" value="{{i}}">
+        <!-- TODO: this should be radio button -->
+        <!-- <mat-select formControlName="answer">
+          <mat-option *ngFor="let option of survey.options; let i = index" value="i">
             {{ option }}
           </mat-option>
-        </mat-select>
+        </mat-select> -->
+        <mat-radio-group formControlName="answer">
+          <mat-radio-button *ngFor="let option of survey.options; let i = index" value="i">
+            {{ option }}
+          </mat-radio-button>
+        </mat-radio-group>
       </mat-form-field>
       <mat-form-field *ngSwitchCase="'TEXT'">
         <mat-label>Type an answer</mat-label>

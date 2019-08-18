@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SharedService } from 'src/app/shared/shared.service';
+import { PermissionService } from 'src/app/shared/permission.service';
 
 @Component({
   selector: 'app-comment',
@@ -11,7 +12,8 @@ export class CommentComponent implements OnInit {
   @Input() level = 0;
   @Input() postCode: string; // ! I don't like this, needs to be built into comment or something
   @Input() isAnswer = false; // ! Remove when this is built into comment
-  @Input() isLecturer = true; // ! There is no easy way to actually tell if the user is the lecturer of the course a post is made in
+  @Input() permissions = 0;
+  get isLecturer() { return this.permissionService.isLecturer(this.permissions); }
   @Output() newAnswer = new EventEmitter<any>();
 
   skipAnimation: boolean;
@@ -20,6 +22,7 @@ export class CommentComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
+    private permissionService: PermissionService,
   ) { }
 
   ngOnInit() {

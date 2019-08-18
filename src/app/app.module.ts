@@ -22,7 +22,7 @@ import { MaterialModule } from './shared/material.module';
 import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component';
 import { EnrolComponent } from './courses/enrol/enrol.component';
 import { ForumComponent } from './forum/forum.component';
-import { ConfirmEnrolmentComponent } from './courses/enrol/confirm-enrolment/confirm-enrolment.component'
+import { ConfirmEnrolmentComponent } from './courses/enrol/confirm-enrolment/confirm-enrolment.component';
 import { CreatePostComponent } from './post/create-post/create-post.component';
 import { PostComponent } from './post/post.component';
 import { CommentComponent } from './post/comment/comment.component';

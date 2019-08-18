@@ -23,6 +23,7 @@ export class PermissionService {
     this.http.post(`${API.apiRoot}/permission/get_permission_codes `, {}).subscribe((response: any) => {
       switch (response.responseCode) {
         case 'successful':
+          console.log(response.permissions);
           this.permissions = response.permissions;
           break;
       }
@@ -38,5 +39,19 @@ export class PermissionService {
       }
     });
     return ((permissions & value) > 0);
+  }
+
+  isLecturer(value: any): boolean {
+    if (typeof (value) === 'number') {
+      return this.hasPermission('EDIT_PERMISSIONS', value);
+    }
+    return this.hasPermission('EDIT_PERMISSIONS', value.permissions);
+  }
+
+  isTutor(value: any): boolean {
+    if (typeof (value) === 'number') {
+      return this.hasPermission('MODERATE', value);
+    }
+    return this.hasPermission('MODERATE', value.permissions);
   }
 }

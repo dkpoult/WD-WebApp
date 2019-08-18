@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { MakeAnnouncementComponent } from '../announcements/make-announcement/make-announcement.component';
 import { switchMap } from 'rxjs/operators';
+import { PermissionService } from '../shared/permission.service';
 
 @Component({
   selector: 'app-announcements',
@@ -19,6 +20,7 @@ export class AnnouncementsComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
+    private permissionService: PermissionService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
   ) { }
@@ -37,8 +39,7 @@ export class AnnouncementsComponent implements OnInit {
     if (!this.gotCourse) {
       return false;
     }
-    const lecturer = this.course.lecturer;
-    return this.sharedService.currentUser.personNumber === lecturer.personNumber;
+    return this.permissionService.isLecturer(this.course);
   }
 
   getCourse(courseCode: string): any {
