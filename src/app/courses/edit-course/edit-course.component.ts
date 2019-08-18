@@ -202,7 +202,13 @@ export class EditCourseComponent implements OnInit {
       form.markAsPristine();
     });
     form.value.permissions.forEach(user => {
-      this.permissionService.setPermissions(user.personNumber, user.permissions, this.course.courseCode).subscribe(console.log);
+      this.permissionService.setPermissions(user.personNumber, user.permissions, this.course.courseCode).subscribe((response: any) => {
+        switch (response.responseCode) {
+          case 'successful':
+            form.controls.permissions.markAsPristine();
+            break;
+        }
+      });
     });
   }
 

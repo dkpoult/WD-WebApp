@@ -8,6 +8,7 @@ import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.componen
 import { EnrolComponent } from '../courses/enrol/enrol.component';
 import { EditCourseComponent } from '../courses/edit-course/edit-course.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-courses',
@@ -146,6 +147,21 @@ export class CoursesComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  syncWithMoodle(courseCode: any, course: any, spinButton?) {
+    this.sharedService.syncWithMoodle(courseCode).subscribe((response: any) => {
+      course = response.course;
+    });
+    // Animate the button
+    spinButton._elementRef.nativeElement.classList.add('animate');
+    setTimeout(() => {
+      spinButton._elementRef.nativeElement.classList.remove('animate');
+    }, 600);
+  }
+
+  isMoodleCourse(course: any): boolean {
+    return (!isNullOrUndefined(course.moodleId));
   }
 
   filter(value: any, lectureOnly?: boolean, tutorOnly?: boolean, searchTerm?: string) {

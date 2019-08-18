@@ -30,8 +30,7 @@
         <!-- ! Course List ! -->
         <div *ngIf="filteredCourses.length === 0" class="course">No courses match your search</div>
         <mat-card *ngFor="let course of filteredCourses" class="course"
-            [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" [@inOutAnimation]
-            routerLink="{{ course.courseCode }}/chat">
+            [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" [@inOutAnimation]>
             <mat-card-title>{{ course.courseCode }}</mat-card-title>
             <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content>{{ course.courseDescription }}</mat-card-content>
@@ -50,6 +49,10 @@
                 <button *ngIf="isLecturer(course)" mat-icon-button matTooltip="Edit"
                     routerLink="{{ course.courseCode }}/edit">
                     <mat-icon>edit</mat-icon>
+                </button>
+                <button *ngIf="isLecturer(course)" [disabled]="!isMoodleCourse(course)" mat-icon-button #spinButton
+                    matTooltip="Fetch Moodle Data" (click)="syncWithMoodle(course.courseCode, course, spinButton)">
+                    <mat-icon>cached</mat-icon>
                 </button>
                 <!--! For when muting courses is a thing-->
                 <!-- <button mat-icon-button>

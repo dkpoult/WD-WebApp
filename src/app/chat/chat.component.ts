@@ -187,7 +187,6 @@ export class ChatComponent implements OnInit {
     } else {
       // Just once off
       this.sharedService.getSurvey(this.course.courseCode, this.isModerator()).subscribe((result: any) => {
-        console.log(result);
         this.survey = result.survey;
       });
     }
