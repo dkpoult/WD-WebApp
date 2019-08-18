@@ -51,6 +51,22 @@ export class SocketService {
     }));
   }
 
+  submitQuestion(question: string) {
+    this.stompService.publish(`/chat/${this.courseCode}:normal/sendMessage`,
+      JSON.stringify({ content: `${question}`, messageType: 'LIVE_QUESTION' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
+  }
+
+  voteQuestion(vote: any) {
+    this.stompService.publish(`/chat/${this.courseCode}:normal/sendMessage`,
+      JSON.stringify({ content: `${vote.id} ${vote.vote}`, messageType: 'LIVE_QUESTION_VOTE' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
+  }
+
   sendMessage(message: string, tutor: boolean = false) {
     this.stompService.publish(`/chat/${this.courseCode}:${tutor ? 'tutor' : 'normal'}/sendMessage`,
       JSON.stringify({ content: message, messageType: 'CHAT' }), {

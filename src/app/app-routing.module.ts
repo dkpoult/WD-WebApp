@@ -7,7 +7,7 @@ import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
 import { PostComponent } from './post/post.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
-import { EditCourseComponent } from './edit-course/edit-course.component';
+import { EditCourseComponent } from './courses/edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
 
 const routes: Routes = [

@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { CreateCourseComponent } from '../create-course/create-course.component';
+import { CreateCourseComponent } from './create-course/create-course.component';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { LinkCourseComponent } from '../link-course/link-course.component';
+import { LinkCourseComponent } from './link-course/link-course.component';
 import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.component';
-import { EnrolComponent } from '../enrol/enrol.component';
-import { EditCourseComponent } from '../edit-course/edit-course.component';
+import { EnrolComponent } from '../courses/enrol/enrol.component';
+import { EditCourseComponent } from '../courses/edit-course/edit-course.component';
 
 @Component({
   selector: 'app-courses',

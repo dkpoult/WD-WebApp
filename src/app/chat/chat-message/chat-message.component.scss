@@ -1,12 +1,12 @@
-$inColor: rgb(187, 169, 92);
-$outColor: rgb(164, 212, 167);
-$lecturerColor: rgb(211, 83, 100);
-$tutorColor: rgb(33, 129, 189);
+$inColor: rgb(243, 231, 180);
+$outColor: rgb(220, 248, 198);
+$lecturerColor: rgb(245, 172, 172);
+$tutorColor: rgb(181, 218, 240);
 
 $indent: 8%;
 
 .spacer {
-    min-width: 20px;
+    min-width: 50px;
 }
 
 .name {
@@ -39,6 +39,8 @@ $indent: 8%;
         position: absolute;
         border: 15px solid transparent;
     }
+
+    box-shadow: 4px 5px 5px transparentize($color: #000000, $amount: 0.5);
 
     &.out {
         margin-right: $indent;

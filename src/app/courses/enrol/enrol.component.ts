@@ -1,7 +1,7 @@
-import { SharedService } from './../shared/shared.service';
+import { SharedService } from '../../shared/shared.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { ConfirmEnrolmentComponent } from '../confirm-enrolment/confirm-enrolment.component';
+import { ConfirmEnrolmentComponent } from './confirm-enrolment/confirm-enrolment.component';
 
 @Component({
   selector: 'app-enrol',

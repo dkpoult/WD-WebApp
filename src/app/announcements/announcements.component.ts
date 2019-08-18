@@ -2,7 +2,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
-import { MakeAnnouncementComponent } from '../make-announcement/make-announcement.component';
+import { MakeAnnouncementComponent } from '../announcements/make-announcement/make-announcement.component';
 import { switchMap } from 'rxjs/operators';
 
 @Component({

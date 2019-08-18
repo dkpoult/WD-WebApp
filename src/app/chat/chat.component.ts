@@ -1,6 +1,6 @@
 import { PermissionService } from './../shared/permission.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { switchMap, startWith } from 'rxjs/operators';
 import { SocketService } from '../shared/socket.service';
@@ -33,6 +33,7 @@ export class ChatComponent implements OnInit {
 
   tutorMode = false;
 
+  liveQuestions: Array<any>;
   messagesTutor: Array<any>;
   messagesStudent: Array<any>;
   unreadMessages = 0;
@@ -49,6 +50,7 @@ export class ChatComponent implements OnInit {
     // TODO: Fetch previous messages
     this.messagesStudent = [];
     this.messagesTutor = [];
+    this.liveQuestions = [];
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         params.getAll('code')
@@ -93,28 +95,6 @@ export class ChatComponent implements OnInit {
       });
   }
 
-  handleMessage(message: any, array: Array<any>) {
-    this.autoscroll.nativeElement.scrollTop = this.autoscroll.nativeElement.scrollHeight;
-    switch (message.messageType) {
-      case 'DELETE':
-        this.removeMessage(parseInt(message.content, 10), array);
-        break;
-      case 'SURVEY':
-        this.handleSurvey(message);
-        break;
-      case 'CHAT':
-        if (this.currentTabIndex !== 0) {
-          this.unreadMessages++;
-        }
-        array.push(message);
-        break;
-      case 'LIVE_QUESTION':
-        break;
-      case 'LIVE_QUESTION_VOTE':
-        break;
-    }
-  }
-
   tabChange(event) {
     this.currentTabIndex = event.index;
 
@@ -131,6 +111,43 @@ export class ChatComponent implements OnInit {
         this.unansweredSurvey = false; // ! For now unanswered == unread
         break;
     }
+  }
+
+  handleMessage(message: any, array: Array<any>) {
+    // this.autoscroll.nativeElement.scrollTop = this.autoscroll.nativeElement.scrollHeight;
+    switch (message.messageType) {
+      case 'DELETE':
+        this.removeMessage(parseInt(message.content, 10), array);
+        break;
+      case 'SURVEY':
+        this.handleSurvey(message);
+        break;
+      case 'CHAT':
+        if (this.currentTabIndex !== 0) {
+          this.unreadMessages++;
+        }
+        array.push(message);
+        break;
+      case 'LIVE_QUESTION':
+        this.liveQuestions.push(message);
+        break;
+      case 'LIVE_QUESTION_VOTE':
+        const data = message.content.split(' ');
+        this.liveQuestions.find((value) => value.id === parseInt(data[0], 10)).score = parseInt(data[1], 10);
+        break;
+    }
+  }
+
+  askQuestion(question: string) {
+    this.socketService.submitQuestion(question);
+  }
+
+  voteQuestion(id: number) {
+    const question = this.liveQuestions.find((value) => value.id === id);
+    const vote = (question.voted === 1) ? 0 : 1; // 0 if it was 1, 1 if it was 0
+    question.voted = vote;
+    const content = { id, vote };
+    this.socketService.voteQuestion(content);
   }
 
   sendMessage(input: HTMLTextAreaElement, event?) {
@@ -176,17 +193,21 @@ export class ChatComponent implements OnInit {
   }
 
   // remove it from our local list of messages
-  removeMessage(id: number, array: Array<any>) {
-    // find it
-    const i = array.findIndex((value) => value.id === id);
-    // remove it
-    array = array.filter((value, index) => index !== i);
-    // bop it
+  removeMessage(id: number, array?: Array<any>) {
+    if (!isNullOrUndefined(array)) {
+      array = array.filter((value) => value.id !== id); // Will remove messages
+    }
+    this.liveQuestions = this.liveQuestions.filter((value) => value.id !== id); // Will remove questions
   }
 
   // send delete message to everyone
   deleteMessage(id: number) {
     this.socketService.deleteMessage(id); // delete it (outgoing only)
+  }
+
+  deleteQuestion(id: number) {
+    this.removeMessage(id); // local  side
+    this.deleteMessage(id); // server side
   }
 
   isModerator(): boolean {
