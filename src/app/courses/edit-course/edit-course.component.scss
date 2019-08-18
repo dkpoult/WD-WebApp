@@ -1,3 +1,38 @@
 .add-btn {
     bottom: 2px;
 }
+
+.details-container {
+    margin-top: 15px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table,
+mat-paginator {
+    width: 100%;
+    min-width: 650px;
+}
+
+td,
+th {
+    &:not(.mat-column-personNumber) {
+        &.dark {
+            // ! It doesn't get dark for some reason
+            border-left: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        &:not(.dark) {
+            border-left: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        width: 10%;
+        text-align: center;
+    }
+}
+
+.perm-header {
+    text-transform: capitalize;
+}

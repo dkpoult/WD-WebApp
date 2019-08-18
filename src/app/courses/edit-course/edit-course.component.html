@@ -2,49 +2,86 @@
   <h1 mat-dialog-title>Edit Course</h1>
   <form [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
-      <!-- Course -->
-      <div>
-        <mat-form-field>
-          <mat-label>Course Code</mat-label>
-          <input matInput disabled="true" value="{{ course.courseCode }}" autocomplete="off">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Course Name</mat-label>
-          <input matInput formControlName="name" autocomplete="off">
-          <mat-error>
-            Please enter a course name
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Course Description</mat-label>
-          <mat-hint>(Optional)</mat-hint>
-          <textarea matInput formControlName="description"></textarea>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Enrolment Key</mat-label>
-          <mat-hint>(Optional)</mat-hint>
-          <input matInput formControlName="password" autocomplete="off">
-        </mat-form-field>
-        <mat-checkbox formControlName="clearKey" [hidden]="!course.hasPassword" (change)="toggleClearKey()">
-          Clear Enrolment Key
-        </mat-checkbox>
-      </div>
-      <!-- Sessions -->
-      <div formArrayName="sessions" style="padding-top: 20px;">
-        <mat-label>
-          Sessions ({{form.controls['sessions'].controls.length}})
-          <button class="add-btn" mat-icon-button type="button" (click)="addSession()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </mat-label>
-        <div class="sessions">
-          <mat-accordion [multi]="false">
-            <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
-              [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
-            </app-edit-session>
-          </mat-accordion>
-        </div>
-      </div>
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs dynamicHeight>
+        <mat-tab label="Details">
+          <!-- Course -->
+          <div class="details-container">
+            <mat-form-field>
+              <mat-label>Course Code</mat-label>
+              <input matInput disabled="true" value="{{ course.courseCode }}" autocomplete="off">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Course Name</mat-label>
+              <input matInput formControlName="name" autocomplete="off">
+              <mat-error>
+                Please enter a course name
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Course Description</mat-label>
+              <mat-hint>(Optional)</mat-hint>
+              <textarea matInput formControlName="description"></textarea>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Enrolment Key</mat-label>
+              <mat-hint>(Optional)</mat-hint>
+              <input matInput formControlName="password" autocomplete="off">
+            </mat-form-field>
+            <mat-checkbox formControlName="clearKey" [hidden]="!course.hasPassword" (change)="toggleClearKey()">
+              Clear Enrolment Key
+            </mat-checkbox>
+          </div>
+        </mat-tab>
+        <!-- Sessions -->
+        <mat-tab>
+          <ng-template matTabLabel>
+            Sessions ({{form.controls['sessions'].controls.length}})
+            <button mat-icon-button class="add-btn" selected color="primary" (click)="addSession()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </ng-template>
+          <div formArrayName="sessions" style="padding-top: 20px;">
+            <div class="sessions">
+              <mat-accordion [multi]="false">
+                <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
+                  [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
+                </app-edit-session>
+              </mat-accordion>
+            </div>
+          </div>
+        </mat-tab>
+        <!-- Permissions -->
+        <mat-tab label="Permissions">
+          <div class="table-container" *ngIf="gotPermissions">
+            <table formArrayName="permissions" mat-table [dataSource]="users">
+              <ng-container matColumnDef="personNumber">
+                <th mat-header-cell *matHeaderCellDef> Person </th>
+                <td mat-cell *matCellDef="let user"> {{user.personNumber}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef> Code </th>
+                <td mat-cell *matCellDef="let user; let i = index" form="permissions.controls[i].permissions">
+                  {{user.permissions}}
+                </td>
+              </ng-container>
+
+              <ng-container *ngFor="let permission of permissions" matColumnDef="{{permission.identifier}}">
+                <th mat-header-cell *matHeaderCellDef class="perm-header"> {{ getDisplayString(permission.identifier) }}
+                </th>
+                <td mat-cell *matCellDef="let user">
+                  <mat-checkbox [checked]="hasPermission(permission.identifier, user.permissions)"
+                    (change)="togglePermission(user, permission.identifier)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-dialog-content>
     <mat-dialog-actions>
       <span fxFlex></span>
