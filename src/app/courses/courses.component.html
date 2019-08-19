@@ -2,8 +2,8 @@
     <mat-spinner class="spinner"></mat-spinner>
 </div>
 <ng-template #elseTemplate>
-    <div *ngIf="courses.length === 0; else coursesTemplate">There are no courses to display. Please enrol in a course or
-        create a new one
+    <div *ngIf="courses.length === 0; else coursesTemplate" class="no-course" [@fade]>
+        There are no courses to display. Please enrol in a course or create a new one
     </div>
     <ng-template #coursesTemplate>
         <!-- ! Search Bar ! -->
@@ -28,7 +28,9 @@
             </div>
         </div>
         <!-- ! Course List ! -->
-        <div *ngIf="filteredCourses.length === 0" class="course">No courses match your search</div>
+        <div *ngIf="filteredCourses.length === 0" class="course no-courses" [@fade]>
+            No courses match your search
+        </div>
         <mat-card *ngFor="let course of filteredCourses" class="course"
             [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" [@inOutAnimation]>
             <mat-card-title>{{ course.courseCode }}</mat-card-title>

@@ -21,17 +21,38 @@ import { isNullOrUndefined } from 'util';
         transition(
           ':enter',
           [
-            style({ height: 0, opacity: 0 }),
+            style({ transform: 'translateX(-1000px)', opacity: 0 }),
             animate('.3s ease-out',
-              style({ height: 300, opacity: 1 }))
+              style({ transform: 'translateX(0px)', opacity: 1 }))
           ]
         ),
         transition(
           ':leave',
           [
-            style({ height: 300, opacity: 1 }),
+            style({ transform: 'translateX(0)', opacity: 1 }),
             animate('.3s ease-in',
-              style({ height: 0, opacity: 0 }))
+              style({ transform: 'translateX(-1000px)', opacity: 0 }))
+          ]
+        )
+      ]
+    ),
+    trigger(
+      'fade',
+      [
+        transition(
+          ':enter',
+          [
+            style({ opacity: 0 }),
+            animate('.3s ease-out',
+              style({ opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ opacity: 1 }),
+            animate('.3s ease-in',
+              style({ opacity: 0 }))
           ]
         )
       ]

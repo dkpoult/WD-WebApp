@@ -60,11 +60,11 @@
                   <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
                     {{user.personNumber}}
                     <div class="privelages">
-                      <mat-icon [ngClass]="{'shown': hasPermission('EDIT_PERMISSIONS', user.permissions)}"
+                      <mat-icon [@fade] *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)"
                         matTooltip="Will be marked as a lecturer">
                         school
                       </mat-icon>
-                      <mat-icon [ngClass]="{'shown': hasPermission('MODERATE', user.permissions)}"
+                      <mat-icon [@fade] *ngIf="hasPermission('MODERATE', user.permissions)"
                         matTooltip="Will be marked as a tutor">
                         person
                       </mat-icon>
