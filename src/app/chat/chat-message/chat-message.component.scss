@@ -1,17 +1,93 @@
-@import '../../../assets/theming/animations';
+@import '../../../assets/theming/colors';
 
-mat-card {
-    margin: 15px;
-    animation-name: bounceInUp;
-    animation-duration: 500ms;
-    transform-origin: center bottom;
-    right: 0%;
-    width: 50%;
-    white-space: normal;
-    word-wrap: break-word;
+$indent: 8%;
 
-    .time {
-        float: right;
-        color: transparentize($color: #000000, $amount: 0.5)
+.spacer {
+    min-width: 50px;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.time {
+    font-size: 0.7em;
+    text-align: right;
+}
+
+.bubble {
+    min-width: 150px;
+    max-width: 45%;
+    margin: 15px auto;
+    border-radius: 15px;
+    padding: 20px;
+    line-height: 100%;
+    display: block;
+    position: relative;
+
+    clear: both;
+    text-align: left;
+
+    &:after {
+        content: "";
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        border: 15px solid transparent;
     }
+
+    box-shadow: 4px 5px 5px transparentize($color: #000000, $amount: 0.5);
+
+    &.out {
+        margin-right: $indent;
+        background: $outColor;
+        float: right;
+
+        &:after {
+            border-left: 15px solid $outColor;
+            border-top: 15px solid $outColor;
+            right: -16px;
+            top: 0px;
+        }
+    }
+
+    &.in {
+        margin-left: $indent;
+        background: $inColor;
+        float: left;
+
+        &.lecturer {
+            background: $lecturerColor;
+
+            &:after {
+                border-right: 15px solid $lecturerColor;
+                border-top: 15px solid $lecturerColor;
+            }
+        }
+
+        &.tutor {
+            background: $tutorColor;
+
+            &:after {
+                border-right: 15px solid $tutorColor;
+                border-top: 15px solid $tutorColor;
+            }
+        }
+
+        &:after {
+            border-right: 15px solid $inColor;
+            border-top: 15px solid $inColor;
+            left: -16px;
+            top: 0px;
+        }
+    }
+
+    // Ignore dark mode theming
+    color: black;
+
+    mat-divider {
+        background: black;
+    }
+
 }

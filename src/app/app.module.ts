@@ -16,32 +16,34 @@ import { SharedService } from './shared/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
-import { CreateCourseComponent } from './create-course/create-course.component';
-import { LinkCourseComponent } from './link-course/link-course.component';
+import { CreateCourseComponent } from './courses/create-course/create-course.component';
+import { LinkCourseComponent } from './courses/link-course/link-course.component';
 import { MaterialModule } from './shared/material.module';
 import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component';
-import { EnrolComponent } from './enrol/enrol.component';
+import { EnrolComponent } from './courses/enrol/enrol.component';
 import { ForumComponent } from './forum/forum.component';
-import { ConfirmEnrolmentComponent } from './confirm-enrolment/confirm-enrolment.component';
-import { CreatePostComponent } from './create-post/create-post.component';
+import { ConfirmEnrolmentComponent } from './courses/enrol/confirm-enrolment/confirm-enrolment.component';
+import { CreatePostComponent } from './post/create-post/create-post.component';
 import { PostComponent } from './post/post.component';
-import { CommentComponent } from './comment/comment.component';
-import { PostActionButtonsComponent } from './post-action-buttons/post-action-buttons.component';
-import { CreateCommentComponent } from './create-comment/create-comment.component';
+import { CommentComponent } from './post/comment/comment.component';
+import { PostActionButtonsComponent } from './post/post-action-buttons/post-action-buttons.component';
+import { CreateCommentComponent } from './post/create-comment/create-comment.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
-import { MakeAnnouncementComponent } from './make-announcement/make-announcement.component';
-import { EditCourseComponent } from './edit-course/edit-course.component';
+import { MakeAnnouncementComponent } from './announcements/make-announcement/make-announcement.component';
+import { EditCourseComponent } from './courses/edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
-import { EditSessionComponent } from './edit-course/edit-session/edit-session.component';
+import { EditSessionComponent } from './courses/edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
-import { ViewSurveyComponent } from './view-survey/view-survey.component';
-import { CreateSurveyComponent } from './create-survey/create-survey.component';
-import { ChartComponent } from './chart/chart.component';
+import { ViewSurveyComponent } from './chat/view-survey/view-survey.component';
+import { CreateSurveyComponent } from './chat/view-survey/create-survey/create-survey.component';
+import { ChartComponent } from './chat/view-survey/chart/chart.component';
 import { CalendarComponent } from './timetable/calendar/calendar.component';
-import { VenueInputComponent } from './edit-course/edit-session/venue-input/venue-input.component';
+import { VenueInputComponent } from './courses/edit-course/edit-session/venue-input/venue-input.component';
 import { MapComponent } from './map/map.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
+import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-question.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -80,6 +82,8 @@ export function initialiseApp(config: SharedService) {
     VenueInputComponent,
     MapComponent,
     ConfirmDialogComponent,
+    LiveQuestionsComponent,
+    AskQuestionComponent,
   ],
   imports: [
     HttpClientModule,
@@ -118,6 +122,7 @@ export function initialiseApp(config: SharedService) {
     MakeAnnouncementComponent,
     CreateSurveyComponent,
     ConfirmDialogComponent,
+    AskQuestionComponent,
   ]
 })
 export class AppModule { }

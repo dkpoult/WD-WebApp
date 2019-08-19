@@ -16,25 +16,12 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod --aot=false --build-optimiser=false` flags for a production build.
 
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-##signing in
-If you are a first time user you will link the account with moodle.If uyou have an account you will just login in with credentials
-
-##Cousres
-If you are lecturer you will be able to create and as a student you will be able to join the courses.
-
-## Extra
-You can send messages,receive anoucement and post on the the forum

@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from 'util';
 import { TimetableService } from './../shared/timetable.service';
-import { VenueService } from './../venue.service';
+import { VenueService } from '../shared/venue.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
@@ -14,7 +14,6 @@ import { coerceNumberProperty } from '@angular/cdk/coercion';
 export class MapComponent implements OnInit {
   lat = -26.190359;
   lng = 28.026833;
-  // -26.190359, 28.026833
   zoom = 15;
 
   venues = this.venueService.venues;
@@ -42,7 +41,6 @@ export class MapComponent implements OnInit {
             v.coordinates = v.coordinates.split(',');
           });
           const venue = this.venues.find((v) => v.buildingCode === building);
-          console.log(venue);
           if (!isNullOrUndefined(venue)) {
             this.zoom = 20;
             this.lat = coerceNumberProperty(venue.coordinates[0]);
@@ -51,10 +49,5 @@ export class MapComponent implements OnInit {
           break;
       }
     });
-  }
-
-  randomLocation() {
-    this.lat = Math.random() * 180 - 90;
-    this.lng = Math.random() * 360 - 180;
   }
 }

@@ -1,0 +1,42 @@
+@import 'src/assets/theming/animations.scss';
+
+$duration: 300ms;
+
+.upvoted {
+    color: #FF4500; // orangered
+
+    &.animated {
+        animation-name: rubberBand;
+        animation-duration: $duration;
+        transform-origin: center bottom;
+    }
+}
+
+.downvoted {
+    color: #7193FF;
+
+    &.animated {
+        animation-name: rubberBand;
+        animation-duration: $duration;
+        transform-origin: center bottom;
+    }
+}
+
+.unvoted {
+    &.animated {
+        animation-name: rubberBand;
+        animation-duration: $duration;
+        transform-origin: center bottom;
+    }
+}
+
+.skip-animation {
+    animation-duration: 0s !important;
+}
+
+.score {
+    display: inline-block;
+    width: 25px;
+    text-overflow: clip;
+    text-align: center;
+}

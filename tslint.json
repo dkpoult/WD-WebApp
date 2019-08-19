@@ -45,6 +45,7 @@
       true,
       "ignore-params"
     ],
+    "no-bitwise": false,
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,

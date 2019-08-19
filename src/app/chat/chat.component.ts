@@ -1,4 +1,4 @@
-import { SurveyService } from '../shared/survey.service';
+import { PermissionService } from './../shared/permission.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
@@ -14,7 +14,8 @@ import { interval, Subscription, Subject } from 'rxjs';
 })
 export class ChatComponent implements OnInit {
 
-  @ViewChild('autoScroll') autoScroll: HTMLElement;
+  @ViewChild('autoscroll') autoscroll: any;
+  @ViewChild('switchButton') switchButton: any;
 
   unansweredSurvey = false;
   private _survey;
@@ -23,50 +24,72 @@ export class ChatComponent implements OnInit {
   private surveySubject = new Subject<any>();
   survey$ = this.surveySubject.asObservable();
 
+  get currentUser() { return this.sharedService.currentUser; }
+
   currentTabIndex = 0;
 
   pollingInterval = 5000;
   pollingData: Subscription;
 
-  messages: Array<any>;
+  tutorMode = false;
+
+  liveQuestions: Array<any>;
+  messagesTutor: Array<any>;
+  messagesStudent: Array<any>;
   unreadMessages = 0;
   course: any;
 
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private permissionService: PermissionService
   ) { }
 
   ngOnInit() {
-    this.messages = [];
+    this.messagesStudent = [];
+    this.messagesTutor = [];
+    this.liveQuestions = [];
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
         this.sharedService.getCourse(result).subscribe((response: any) => {
           this.course = response.course;
+          // Can only do this after we have course
+          if (this.isModerator()) {
+            this.sharedService.getMessages(result, true).subscribe((res: any) => {
+              switch (res.responseCode) {
+                case 'successful':
+                  const temp = res.messages.reverse();
+                  temp.forEach(message => {
+                    this.handleMessage(message, this.messagesTutor);
+                  });
+                  break;
+              }
+            });
+            this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
+              this.handleMessage(message, this.messagesTutor);
+            });
+          }
         });
         this.sharedService.getSurvey(result).subscribe((response: any) => {
           this.survey = response.survey;
-          // this.unansweredSurvey = !this.survey.answered;
+          // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
         });
-        this.socketService.subscribeToCourse(result).subscribe((message: any) => {
-          switch (message.messageType) {
-            case 'DELETE':
-              this.removeMessage(parseInt(message.content, 10));
-              break;
-            case 'SURVEY':
-              this.handleSurvey(message);
-              break;
-            case 'CHAT':
-              if (this.currentTabIndex !== 0) {
-                this.unreadMessages++;
-              }
-              this.autoScroll.scrollTop = this.autoScroll.scrollHeight;
-              this.messages.push(message);
+        // Get previous messages
+        this.sharedService.getMessages(result, false).subscribe((res: any) => {
+          switch (res.responseCode) {
+            case 'successful':
+              const temp = res.messages.reverse();
+              temp.forEach(message => {
+                this.handleMessage(message, this.messagesStudent);
+              });
               break;
           }
+        });
+        this.socketService.subscribeToCourse(result).subscribe((message: any) => {
+          this.handleMessage(message, this.messagesStudent);
         });
       });
   }
@@ -89,16 +112,54 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  handleMessage(message: any, array: Array<any>) {
+    // this.autoscroll.nativeElement.scrollTop = this.autoscroll.nativeElement.scrollHeight;
+    switch (message.messageType) {
+      case 'DELETE':
+        this.removeMessage(parseInt(message.content, 10), array);
+        break;
+      case 'SURVEY':
+        console.log('Received survey:', message);
+        this.handleSurvey(message);
+        break;
+      case 'CHAT':
+        if (this.currentTabIndex !== 0) {
+          this.unreadMessages++;
+        }
+        array.push(message);
+        break;
+      case 'LIVE_QUESTION':
+        this.liveQuestions.push(message);
+        break;
+      case 'LIVE_QUESTION_VOTE':
+        const data = message.content.split(' ');
+        this.liveQuestions.find((value) => value.id === parseInt(data[0], 10)).score = parseInt(data[1], 10);
+        break;
+    }
+  }
+
+  askQuestion(question: string) {
+    this.socketService.submitQuestion(question);
+  }
+
+  voteQuestion(id: number) {
+    const question = this.liveQuestions.find((value) => value.id === id);
+    const vote = (question.voted === 1) ? 0 : 1; // 0 if it was 1, 1 if it was 0
+    question.voted = vote;
+    const content = { id, vote };
+    this.socketService.voteQuestion(content);
+  }
+
   sendMessage(input: HTMLTextAreaElement, event?) {
     if (event) {
       event.preventDefault();
     }
-    const message = input.value;
-    message.replace(/$(\s)*/, '');
+    let message = input.value;
+    message = message.trim();
     if (message.length === 0) {
       return;
     }
-    this.socketService.sendMessage(message);
+    this.socketService.sendMessage(message, this.tutorMode);
     input.value = '';
   }
 
@@ -131,13 +192,12 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  // remove it from our list of messages (incoming only)
-  removeMessage(id: number) {
-    // find it
-    const i = this.messages.findIndex((value) => value.id === id);
-    // remove it
-    this.messages = this.messages.filter((value, index) => index !== i);
-    // bop it
+  // remove it from our local list of messages
+  removeMessage(id: number, array?: Array<any>) {
+    if (!isNullOrUndefined(array)) {
+      array = array.filter((value) => value.id !== id); // Will remove messages
+    }
+    this.liveQuestions = this.liveQuestions.filter((value) => value.id !== id); // Will remove questions
   }
 
   // send delete message to everyone
@@ -145,20 +205,25 @@ export class ChatComponent implements OnInit {
     this.socketService.deleteMessage(id); // delete it (outgoing only)
   }
 
-  getMessageColor(message: any) {
-    if (message.personNumber === this.sharedService.currentUser.personNumber) {
-      return '#84b3ff'; // TODO: Make these use theme colors
-    } else {
-      return '#d1ba57';
-    }
+  deleteQuestion(id: number) {
+    this.removeMessage(id); // local  side
+    this.deleteMessage(id); // server side
   }
 
   isModerator(): boolean {
-    if (!isNullOrUndefined(this.course) && this.course.lecturer.personNumber === this.sharedService.currentUser.personNumber) {
-      return true;
+    if (!isNullOrUndefined(this.course)) {
+      return this.permissionService.hasPermission('MODERATE', this.course.permissions);
     }
-    // ? More logic
     return false;
+  }
+
+  switchMode() {
+    this.tutorMode = !this.tutorMode;
+    // Animate the button
+    this.switchButton._elementRef.nativeElement.classList.add('animate');
+    setTimeout(() => {
+      this.switchButton._elementRef.nativeElement.classList.remove('animate');
+    }, 300);
   }
 
 }

@@ -1,3 +1,5 @@
+import { API } from './api';
+import { PermissionService } from './permission.service';
 import { ThemeService } from './theme.service';
 import { SocketService } from './socket.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -7,12 +9,11 @@ import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { map } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { isNullOrUndefined } from 'util';
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  public apiRoot: string;
-  public wsRoot: string;
 
   private _currentUser: User;
   public get currentUser() {
@@ -38,48 +39,45 @@ export class SharedService {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private socketService: SocketService,
+    private permissionService: PermissionService,
     private themeService: ThemeService,
     private http: HttpClient,
   ) { }
 
   // Gets called from app.module when the system starts up
   initialise(): void {
-    this.apiRoot = 'https://wd.dimensionalapps.com';
-    this.wsRoot = 'wss://wd.dimensionalapps.com';
-    this.http.get<any>(`./assets/apiUrl.json`).subscribe((response) => { this.apiRoot = response.api; }); // ! Should use this but who cares
     this.loggedIn$.subscribe((value) => {
       this._loggedIn = value;
       if (value) {
-        const darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
+        let darkMode = false;
+        if (!isNullOrUndefined(this.currentUser.preferences.darkMode)) {
+          darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
+        }
         console.log('Prefers ' + (darkMode ? 'dark' : 'light'));
         setTimeout(() => {
           this.themeService.setDarkMode(darkMode);
         }, 100);
       }
     });
+    this.permissionService.updateLookups();
     if (this.isLoggedIn()) {
       this.currentUser = this.getLoggedInUser();
       this.logInSubject.next(true);
-      this.connnectToChatSocket();
+      this.socketService.connect(this.currentUser);
     }
   }
-
-  connnectToChatSocket() {
-    this.socketService.connect(this.wsRoot, this.currentUser);
-  }
-
   // Authentication
   linkUser(user: User): Observable<any> {
-    return this.http.post(`${this.apiRoot}/auth/register`, user);
+    return this.http.post(`${API.apiRoot}/auth/register`, user);
   }
 
   authenticateUser(user: User): Observable<any> {
-    return this.http.post(`${this.apiRoot}/auth/login`, user);
+    return this.http.post(`${API.apiRoot}/auth/login`, user);
   }
 
   // Venues
   getVenues(): Observable<any> {
-    return this.http.post(`${this.apiRoot}/venue/get_venues`, this.currentUser);
+    return this.http.post(`${API.apiRoot}/venue/get_venues`, this.currentUser);
   }
 
   // Courses
@@ -88,7 +86,7 @@ export class SharedService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/course/get_courses`, body);
+    return this.http.post(`${API.apiRoot}/course/get_courses`, body);
   }
 
   getCourse(courseCode: string): Observable<any> {
@@ -97,7 +95,7 @@ export class SharedService {
       userToken: this.currentUser.userToken,
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/course/get_course`, body)
+    return this.http.post(`${API.apiRoot}/course/get_course`, body)
       .pipe(map((result: any) => {
         switch (result.responseCode) {
           case 'successful':
@@ -114,7 +112,7 @@ export class SharedService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/course/get_available_courses`, body);
+    return this.http.post(`${API.apiRoot}/course/get_available_courses`, body);
   }
 
   enrolInCourse(courseCode, password?: string): Observable<any> {
@@ -124,7 +122,7 @@ export class SharedService {
       courseCode,
       password
     };
-    return this.http.post(`${this.apiRoot}/course/enrol_in_course`, body);
+    return this.http.post(`${API.apiRoot}/course/enrol_in_course`, body);
   }
 
   createCourse(course: any): Observable<any> {
@@ -136,7 +134,7 @@ export class SharedService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken,
     };
-    return this.http.post(`${this.apiRoot}/course/create_course`, body);
+    return this.http.post(`${API.apiRoot}/course/create_course`, body);
   }
 
   updateCourse(newInfo: any): Observable<any> {
@@ -170,7 +168,7 @@ export class SharedService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/course/update_course`, body);
+    return this.http.post(`${API.apiRoot}/course/update_course`, body);
   }
 
   updateSessions(courseCode: string, newSessions: Array<any>): Observable<any> {
@@ -198,7 +196,7 @@ export class SharedService {
       sessions: newSessions,
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/course/update_sessions`, body);
+    return this.http.post(`${API.apiRoot}/course/update_sessions`, body);
   }
 
   linkCourse(courseId): Observable<any> {
@@ -207,7 +205,26 @@ export class SharedService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${this.apiRoot}/course/link_course`, body);
+    return this.http.post(`${API.apiRoot}/course/link_course`, body);
+  }
+
+  syncWithMoodle(courseCode: string): Observable<any> {
+    const body = {
+      courseCode,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
+    };
+    return this.http.post(`${API.apiRoot}/course/resync_course`, body);
+  }
+
+  // Chat
+  getMessages(courseCode: string, tutor: boolean = false) {
+    const body = {
+      chatroomCode: `${courseCode}:${tutor ? 'tutor' : 'normal'}`,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
+    };
+    return this.http.post(`${API.apiRoot}/chat/get_messages`, body);
   }
 
   // Forum
@@ -217,7 +234,7 @@ export class SharedService {
       userToken: this.currentUser.userToken,
       forumCode: forum
     };
-    return this.http.post(`${this.apiRoot}/forum/get_posts`, body);
+    return this.http.post(`${API.apiRoot}/forum/get_posts`, body);
   }
 
   getPost(post: string): Observable<any> {
@@ -226,7 +243,7 @@ export class SharedService {
       userToken: this.currentUser.userToken,
       postCode: post
     };
-    return this.http.post(`${this.apiRoot}/forum/get_post`, body)
+    return this.http.post(`${API.apiRoot}/forum/get_post`, body)
       .pipe(map((result: any) => {
         return { responseCode: result.responseCode, post: result.posts[0] }; // POST responds with array of single post
       }));
@@ -240,7 +257,7 @@ export class SharedService {
       title: post.title,
       body: post.body
     };
-    return this.http.post(`${this.apiRoot}/forum/make_post`, body);
+    return this.http.post(`${API.apiRoot}/forum/make_post`, body);
   }
 
   makeComment(post: any, comment: string): Observable<any> {
@@ -250,7 +267,7 @@ export class SharedService {
       postCode: post.code,
       body: comment
     };
-    return this.http.post(`${this.apiRoot}/forum/make_comment`, body);
+    return this.http.post(`${API.apiRoot}/forum/make_comment`, body);
   }
 
   markAsAnswer(postCode: string, commentCode: string): Observable<any> {
@@ -260,7 +277,7 @@ export class SharedService {
       postCode,
       commentCode
     };
-    return this.http.post(`${this.apiRoot}/forum/set_answer`, body);
+    return this.http.post(`${API.apiRoot}/forum/set_answer`, body);
   }
 
   vote(post: any, vote: number): Observable<any> {
@@ -270,7 +287,7 @@ export class SharedService {
       postCode: post.code,
       vote
     };
-    return this.http.post(`${this.apiRoot}/forum/make_vote`, body);
+    return this.http.post(`${API.apiRoot}/forum/make_vote`, body);
   }
 
   // Push
@@ -282,7 +299,7 @@ export class SharedService {
       title: announcement.title,
       courseCode,
     };
-    return this.http.post(`${this.apiRoot}/push/make_announcement`, body);
+    return this.http.post(`${API.apiRoot}/push/make_announcement`, body);
   }
 
   // Survey
@@ -295,7 +312,7 @@ export class SharedService {
       responseType: 'MC',
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
+    return this.http.post(`${API.apiRoot}/survey/make_survey`, body);
   }
 
   makeSurvey(courseCode: string, survey: any) {
@@ -307,7 +324,7 @@ export class SharedService {
       responseType: survey.responseType,
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/survey/make_survey`, body);
+    return this.http.post(`${API.apiRoot}/survey/make_survey`, body);
   }
 
   closeSurvey(courseCode: string): Observable<any> {
@@ -316,7 +333,7 @@ export class SharedService {
       userToken: this.currentUser.userToken,
       courseCode
     };
-    return this.http.post(`${this.apiRoot}/survey/close_survey`, body);
+    return this.http.post(`${API.apiRoot}/survey/close_survey`, body);
   }
 
   getSurvey(courseCode: string, getResults = false): Observable<any> {
@@ -326,9 +343,9 @@ export class SharedService {
       courseCode
     };
     if (getResults) {
-      return this.http.post(`${this.apiRoot}/survey/get_results`, body);
+      return this.http.post(`${API.apiRoot}/survey/get_results`, body);
     } else {
-      return this.http.post(`${this.apiRoot}/survey/get_survey`, body);
+      return this.http.post(`${API.apiRoot}/survey/get_survey`, body);
     }
   }
 
@@ -339,14 +356,14 @@ export class SharedService {
       courseCode,
       answer
     };
-    return this.http.post(`${this.apiRoot}/survey/send_answer`, body);
+    return this.http.post(`${API.apiRoot}/survey/send_answer`, body);
   }
 
   // util
   updatePreferences(field: string, value: any) {
     const user = this.currentUser;
     user.preferences[field] = value;
-    this.http.post(`${this.apiRoot}/auth/save_preferences`, user).subscribe((result: any) => {
+    this.http.post(`${API.apiRoot}/auth/save_preferences`, user).subscribe((result: any) => {
       switch (result.responseCode) {
         case 'successful':
           this.currentUser = user;
@@ -366,7 +383,7 @@ export class SharedService {
 
   loginUser(personNumber: string, userToken: string, preferences: any) {
     this.currentUser = new User(personNumber, userToken, preferences);
-    this.connnectToChatSocket();
+    this.socketService.connect(this.currentUser);
     this.logInSubject.next(true);
   }
 

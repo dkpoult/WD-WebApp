@@ -1,4 +1,4 @@
-import { VenueService } from './../venue.service';
+import { VenueService } from '../shared/venue.service';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/shared.service';
 import { TimetableService } from '../shared/timetable.service';

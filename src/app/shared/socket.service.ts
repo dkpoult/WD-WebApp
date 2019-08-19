@@ -4,6 +4,7 @@ import { User } from './user';
 import { Observable, Subscription } from 'rxjs';
 import { Message, StompHeaders } from '@stomp/stompjs';
 import { map } from 'rxjs/operators';
+import { API } from './api';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ export class SocketService {
   user: User;
 
   stomp$: Observable<Message>;
-  stompSubscription: Subscription;
+  // stompSubscription: Subscription;
 
   constructor(private stompService: StompRService) { }
 
-  connect(wsRoot: string, user: User) {
+  connect(user: User) {
     this.user = user;
     const stompConfig: StompConfig = {
-      url: `${wsRoot}/chatsocket/websocket`,
+      url: `${API.wsRoot}/chatsocket/websocket`,
       headers: {
         personNumber: user.personNumber,
         userToken: user.userToken
@@ -36,12 +37,12 @@ export class SocketService {
     this.stompService.initAndConnect();
   }
 
-  subscribeToCourse(courseCode: string): Observable<any> {
-    if (this.stompSubscription && !this.stompSubscription.closed) {
-      this.stompSubscription.unsubscribe();
-    }
+  subscribeToCourse(courseCode: string, tutor: boolean = false): Observable<any> {
+    // if (this.stompSubscription && !this.stompSubscription.closed) {
+    // this.stompSubscription.unsubscribe(); // ! what is this
+    // }
     this.courseCode = courseCode;
-    this.stomp$ = this.stompService.subscribe(`/topic/${courseCode}`, {
+    this.stomp$ = this.stompService.subscribe(`/topic/${courseCode}:${tutor ? 'tutor' : 'normal'}`, {
       personNumber: this.user.personNumber,
       userToken: this.user.userToken
     });
@@ -50,17 +51,35 @@ export class SocketService {
     }));
   }
 
-  sendMessage(message: string) {
-    this.stompService.publish(`/chat/${this.courseCode}/sendMessage`, JSON.stringify({ content: message, messageType: 'CHAT' }), {
-      personNumber: this.user.personNumber,
-      userToken: this.user.userToken
-    });
+  submitQuestion(question: string) {
+    this.stompService.publish(`/chat/${this.courseCode}:normal/sendMessage`,
+      JSON.stringify({ content: `${question}`, messageType: 'LIVE_QUESTION' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
   }
 
-  deleteMessage(id: any) {
-    this.stompService.publish(`/chat/${this.courseCode}/deleteMessage`, JSON.stringify({ content: id, messageType: 'DELETE' }), {
-      personNumber: this.user.personNumber,
-      userToken: this.user.userToken
-    });
+  voteQuestion(vote: any) {
+    this.stompService.publish(`/chat/${this.courseCode}:normal/sendMessage`,
+      JSON.stringify({ content: `${vote.id} ${vote.vote}`, messageType: 'LIVE_QUESTION_VOTE' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
+  }
+
+  sendMessage(message: string, tutor: boolean = false) {
+    this.stompService.publish(`/chat/${this.courseCode}:${tutor ? 'tutor' : 'normal'}/sendMessage`,
+      JSON.stringify({ content: message, messageType: 'CHAT' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
+  }
+
+  deleteMessage(id: any, tutor: boolean = false) {
+    this.stompService.publish(`/chat/${this.courseCode}:${tutor ? 'tutor' : 'normal'}/deleteMessage`,
+      JSON.stringify({ content: id, messageType: 'DELETE' }), {
+        personNumber: this.user.personNumber,
+        userToken: this.user.userToken
+      });
   }
 }

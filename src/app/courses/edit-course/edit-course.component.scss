@@ -1,0 +1,59 @@
+.add-btn {
+    bottom: 2px;
+}
+
+.details-container {
+    margin-top: 15px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table,
+mat-paginator {
+    width: 100%;
+    min-width: 650px;
+}
+
+.mat-cell,
+.mat-header-cell {
+
+    /*
+    :not(.dark) & {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .dark & {
+        //! this doesn't work from angular but does from chrome dev tools???
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    box-sizing: border-box;
+
+    &.mat-column-personNumber {
+        border-left: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    */
+    &:not(.mat-column-personNumber) {
+        width: 10%;
+        text-align: center;
+    }
+
+    &.mat-column-personNumber .privelages {
+        // display: inline-block;
+        transition: flex-grow 0.3s ease-in-out;
+
+        &.shown {
+            flex-grow: 1;
+        }
+
+        &:not(.shown) {
+            flex-grow: 0.0000001;
+        }
+    }
+}
+
+.perm-header {
+    text-transform: capitalize;
+}

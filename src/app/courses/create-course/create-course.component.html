@@ -1,0 +1,42 @@
+<section style="max-width: 500px;">
+  <h1 mat-dialog-title>Create Course</h1>
+  <form [formGroup]="form" (ngSubmit)="submit(form)">
+    <mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Course Code</mat-label>
+        <input matInput formControlName="code" autocomplete="off">
+        <mat-error *ngIf="form.controls['code'].hasError('required')">
+          Please enter a course code
+        </mat-error>
+        <mat-error *ngIf="form.controls['code'].hasError('minlength') || form.controls['code'].hasError('maxlength')">
+          Course code must be 8 characters long
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Course Name</mat-label>
+        <input matInput formControlName="name" autocomplete="off">
+        <mat-error>
+          Please enter a course name
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Course Description</mat-label>
+        <mat-hint>(Optional)</mat-hint>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Enrolment Key</mat-label>
+        <mat-hint>(Optional)</mat-hint>
+        <input matInput formControlName="password" autocomplete="off">
+      </mat-form-field>
+      <mat-error *ngIf="alreadyExists && form.pristine">
+        Course already exists
+      </mat-error>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Create</button>
+      <span fxFlex></span>
+      <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
+    </mat-dialog-actions>
+  </form>
+</section>

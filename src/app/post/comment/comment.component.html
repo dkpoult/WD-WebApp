@@ -1,0 +1,18 @@
+<mat-card class="comment">
+  <mat-card-subtitle>{{ comment.poster }}</mat-card-subtitle>
+  <mat-card-content>{{ comment.body }}</mat-card-content>
+  <mat-card-actions>
+    <app-post-action-buttons [post]="comment"></app-post-action-buttons>
+    <!--* Move this to subtitle?-->
+    <button *ngIf="level === 0 && isLecturer" [ngClass]="{'skip-animation': skipAnimation, 'answer': isAnswer}"
+      mat-icon-button matTooltip="Mark as Answer" (click)="markAsAnswer()">
+      <mat-icon>{{ isAnswer ? 'check_circle' : 'check_circle_outline' }}</mat-icon>
+    </button>
+    <button *ngIf="level === 0 && isAnswer && !isLecturer" disableRipple [ngClass]="{'skip-animation': skipAnimation, 'answer': isAnswer}" mat-icon-button
+      matTooltip="This was marked as the correct answer">
+      <mat-icon>{{ isAnswer ? 'check_circle' : 'check_circle_outline' }}</mat-icon>
+  </button>
+  </mat-card-actions>
+  <app-comment *ngFor="let comment of comment.comments" [postCode]="postCode" [level]="level + 1" [comment]="comment">
+  </app-comment>
+</mat-card>
