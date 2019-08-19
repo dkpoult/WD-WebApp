@@ -7,12 +7,35 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
-import { isNullOrUndefined } from 'util';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-edit-course',
   templateUrl: './edit-course.component.html',
-  styleUrls: ['./edit-course.component.scss']
+  styleUrls: ['./edit-course.component.scss'],
+  animations: [
+    trigger(
+      'fade',
+      [
+        transition(
+          ':enter',
+          [
+            style({ opacity: 0 }),
+            animate('.3s ease-out',
+              style({ opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ opacity: 1 }),
+            animate('.3s ease-in',
+              style({ opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class EditCourseComponent implements OnInit {
 

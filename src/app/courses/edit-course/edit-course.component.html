@@ -55,12 +55,25 @@
           <div class="table-container" *ngIf="gotPermissions">
             <table formArrayName="permissions" mat-table [dataSource]="users">
               <ng-container matColumnDef="personNumber">
-                <th mat-header-cell *matHeaderCellDef> Person </th>
-                <td mat-cell *matCellDef="let user"> {{user.personNumber}} </td>
+                <th mat-header-cell *matHeaderCellDef>Person</th>
+                <td mat-cell *matCellDef="let user">
+                  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
+                    {{user.personNumber}}
+                    <div class="privelages">
+                      <mat-icon [ngClass]="{'shown': hasPermission('EDIT_PERMISSIONS', user.permissions)}"
+                        matTooltip="Will be marked as a lecturer">
+                        school
+                      </mat-icon>
+                      <mat-icon [ngClass]="{'shown': hasPermission('MODERATE', user.permissions)}"
+                        matTooltip="Will be marked as a tutor">
+                        person
+                      </mat-icon>
+                    </div>
+                  </div>
+                </td>
               </ng-container>
-
               <ng-container matColumnDef="code">
-                <th mat-header-cell *matHeaderCellDef> Code </th>
+                <th mat-header-cell *matHeaderCellDef>Code</th>
                 <td mat-cell *matCellDef="let user; let i = index" form="permissions.controls[i].permissions">
                   {{user.permissions}}
                 </td>
