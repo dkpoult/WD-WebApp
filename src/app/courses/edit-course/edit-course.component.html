@@ -57,14 +57,14 @@
               <ng-container matColumnDef="personNumber">
                 <th mat-header-cell *matHeaderCellDef>Person</th>
                 <td mat-cell *matCellDef="let user">
-                  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
+                  <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px">
                     {{user.personNumber}}
-                    <div class="privelages">
-                      <mat-icon [@fade] *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)"
+                    <div class="privelages" fxLayout="row" fxLayoutGap="5px">
+                      <mat-icon fxFlex [@fade] [class.hidden]="!hasPermission('EDIT_PERMISSIONS', user.permissions)"
                         matTooltip="Will be marked as a lecturer">
                         school
                       </mat-icon>
-                      <mat-icon [@fade] *ngIf="hasPermission('MODERATE', user.permissions)"
+                      <mat-icon fxFlex [@fade] [class.hidden]="!hasPermission('MODERATE', user.permissions)"
                         matTooltip="Will be marked as a tutor">
                         person
                       </mat-icon>

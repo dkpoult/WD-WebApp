@@ -35,21 +35,20 @@ mat-paginator {
         border-left: 1px solid rgba(0, 0, 0, 0.12);
     }
     */
-    &:not(.mat-column-personNumber) {
-        width: 10%;
+    & {
+        width: 11.1111%;
         text-align: center;
     }
 
     &.mat-column-personNumber .privelages {
-        // display: inline-block;
-        transition: flex-grow 0.3s ease-in-out;
-
-        &.shown {
-            flex-grow: 1;
+        & .hidden {
+            transition: opacity 300ms ease-out;
+            opacity: 0;
         }
 
-        &:not(.shown) {
-            flex-grow: 0.0000001;
+        & :not(.hidden) {
+            transition: opacity 300ms ease-in;
+            opacity: 1;
         }
     }
 }
