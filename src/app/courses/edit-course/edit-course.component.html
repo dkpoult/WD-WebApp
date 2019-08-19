@@ -1,5 +1,5 @@
 <section *ngIf="gotCourse" style="padding: 15px;">
-  <h1 mat-dialog-title>Edit Course</h1>
+  <h1 matDialogTitle>Edit Course</h1>
   <form [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
       <mat-tab-group animationDuration="0ms" mat-stretch-tabs dynamicHeight>
@@ -36,7 +36,7 @@
         <mat-tab>
           <ng-template matTabLabel>
             Sessions ({{form.controls['sessions'].controls.length}})
-            <button mat-icon-button class="add-btn" selected color="primary" (click)="addSession()">
+            <button type="button" mat-icon-button class="add-btn" selected color="primary" (click)="addSession()">
               <mat-icon>add</mat-icon>
             </button>
           </ng-template>

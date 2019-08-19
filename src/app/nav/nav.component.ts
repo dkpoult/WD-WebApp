@@ -30,6 +30,8 @@ export class NavComponent implements OnInit {
   @ViewChild('drawer') drawer: MatSidenav;
   @ViewChild('darkMode') lightSwitch: MatSlideToggle;
 
+  get user() { return this.sharedService.currentUser; }
+
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
   menuItemsLoggedIn: Array<MenuItem> = [

@@ -1,13 +1,13 @@
 <ng-container *ngIf="gotCourse; else elseTemplate">
-  <div class="no-announcments" *ngIf="course.announcements.length === 0">
+  <div class="no-announcments" *ngIf="course.announcements.length === 0" class="no-content">
     There are no announcements for {{ course.courseCode }}
   </div>
-  <mat-card class="announcement" *ngFor="let announcement of course.announcements">
+  <mat-card [@inOutAnimation] class="announcement" *ngFor="let announcement of course.announcements">
     <mat-card-title>{{ announcement.title }}</mat-card-title>
     <mat-card-subtitle>{{ announcement.time }}</mat-card-subtitle>
     <mat-card-content>{{ announcement.body }}</mat-card-content>
   </mat-card>
-  <button *ngIf="isLecturer()" #fab mat-fab class="fab" matTooltip="Create A Post"
+  <button *ngIf="canAnnounce()" #fab mat-fab class="fab" matTooltip="Create an Announcement"
     (click)="openMakeAnnouncementDialog()">
     <mat-icon>add</mat-icon>
   </button>

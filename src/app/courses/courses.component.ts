@@ -9,6 +9,7 @@ import { EnrolComponent } from '../courses/enrol/enrol.component';
 import { EditCourseComponent } from '../courses/edit-course/edit-course.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { isNullOrUndefined } from 'util';
+import { ViewCourseComponent } from './view-course/view-course.component';
 
 @Component({
   selector: 'app-courses',
@@ -21,17 +22,33 @@ import { isNullOrUndefined } from 'util';
         transition(
           ':enter',
           [
-            style({ transform: 'translateX(-1000px)', opacity: 0 }),
+            style({
+              transform: 'translateX(-1000px)',
+              opacity: 0,
+              'box-shadow': '0 0 0 0 transparent'
+            }),
             animate('.3s ease-out',
-              style({ transform: 'translateX(0px)', opacity: 1 }))
+              style({
+                transform: 'translateX(0px)',
+                opacity: 1,
+                'box-shadow': '*'
+              }))
           ]
         ),
         transition(
           ':leave',
           [
-            style({ transform: 'translateX(0)', opacity: 1 }),
+            style({
+              transform: 'translateX(0)',
+              opacity: 1,
+              'box-shadow': '*'
+            }),
             animate('.3s ease-in',
-              style({ transform: 'translateX(-1000px)', opacity: 0 }))
+              style({
+                transform: 'translateX(-1000px)',
+                opacity: 0,
+                'box-shadow': '0 0 0 0 transparent'
+              }))
           ]
         )
       ]
@@ -65,6 +82,7 @@ export class CoursesComponent implements OnInit {
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
   enrolDialogRef: MatDialogRef<EnrolComponent>;
   editDialogRef: MatDialogRef<EditCourseComponent>;
+  viewDetailsDialogRef: MatDialogRef<ViewCourseComponent>;
 
   lectureOnly = false;
   tutorOnly = false;
@@ -200,5 +218,9 @@ export class CoursesComponent implements OnInit {
     if (tutorOnly) { pass = pass && tutor; }
 
     return pass;
+  }
+
+  openDetailsDialog(course: any) {
+    this.viewDetailsDialogRef = this.dialog.open(ViewCourseComponent, { data: course });
   }
 }

@@ -4,16 +4,11 @@
     margin: 20px auto;
     max-width: 80%;
     transition: all 0.2s ease;
-}
 
-.no-courses {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
+    &:not(div):hover {
+        transform: scale(1.05);
+    }
 
-mat-card:hover {
-    transform: scale(1.05);
 }
 
 .speed-dial {
@@ -23,13 +18,13 @@ mat-card:hover {
 }
 
 .lectured {
-    border: 3px solid $lecturerColor;
+    box-shadow: 0px 0px 10px 10px $lecturerColor !important;
 
     // background: $lecturerColor;
 }
 
 .tutored {
-    border: 3px solid $tutorColor;
+    box-shadow: 0px 0px 10px 10px $tutorColor !important;
 
     // background: $tutorColor
 }
@@ -58,7 +53,7 @@ $selectedColor: #df2727;
     margin-left: 10%;
     margin-right: auto;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 
     max-width: 90%;
     width: 175px;

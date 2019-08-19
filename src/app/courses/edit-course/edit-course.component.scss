@@ -42,12 +42,12 @@ mat-paginator {
 
     &.mat-column-personNumber .privelages {
         & .hidden {
-            transition: opacity 300ms ease-out;
+            transition: opacity 300ms ease-in;
             opacity: 0;
         }
 
         & :not(.hidden) {
-            transition: opacity 300ms ease-in;
+            transition: opacity 300ms ease-out;
             opacity: 1;
         }
     }

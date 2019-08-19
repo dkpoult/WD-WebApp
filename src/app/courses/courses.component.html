@@ -2,23 +2,23 @@
     <mat-spinner class="spinner"></mat-spinner>
 </div>
 <ng-template #elseTemplate>
-    <div *ngIf="courses.length === 0; else coursesTemplate" class="no-course" [@fade]>
+    <div *ngIf="courses.length === 0; else coursesTemplate" class="no-content" [@fade]>
         There are no courses to display. Please enrol in a course or create a new one
     </div>
     <ng-template #coursesTemplate>
         <!-- ! Search Bar ! -->
         <div class="search-form" fxLayout="row" fxLayoutAlign="start start">
-            <input type="search" [(ngModel)]="searchTerm" placeholder="Search" class="search-input">
+            <input type="search" #searchInput [(ngModel)]="searchTerm" placeholder="Search" class="search-input">
             <mat-icon class="search-icon">search</mat-icon>
             <div class="search-option">
-                <div>
+                <div #lectureToggle (mousedown)="$event.preventDefault()">
                     <input name="type" type="checkbox" [(ngModel)]="lectureOnly" id="type-lecture">
                     <label for="type-lecture">
                         <mat-icon>school</mat-icon>
                         <span>Lecturer</span>
                     </label>
                 </div>
-                <div>
+                <div #tutorToggle (mousedown)="$event.preventDefault()">
                     <input name="type" type="checkbox" [(ngModel)]="tutorOnly" id="type-tutor">
                     <label for="type-tutor">
                         <mat-icon>person</mat-icon>
@@ -28,11 +28,12 @@
             </div>
         </div>
         <!-- ! Course List ! -->
-        <div *ngIf="filteredCourses.length === 0" class="course no-courses" [@fade]>
+        <div *ngIf="filteredCourses.length === 0" class="course no-content" [@fade]>
             No courses match your search
         </div>
         <mat-card *ngFor="let course of filteredCourses" class="course"
-            [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" [@inOutAnimation]>
+            [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" (click)="openDetailsDialog(course)"
+            [@inOutAnimation]>
             <mat-card-title>{{ course.courseCode }}</mat-card-title>
             <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content>{{ course.courseDescription }}</mat-card-content>

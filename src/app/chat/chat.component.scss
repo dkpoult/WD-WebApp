@@ -1,18 +1,3 @@
-.tabs {
-    height: 100%;
-    width: 100%;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    position: relative;
-}
-
-.chat-container {
-    // position: sticky;
-    border: 5px solid orangered;
-}
-
 .questions-container {
     position: relative;
     right: 0;
@@ -43,7 +28,8 @@
     }
 }
 
-.input {
+
+.input-container {
     position: sticky;
     bottom: 0;
     padding: 15px;
@@ -53,19 +39,19 @@
     .send {
         color: black;
     }
-}
 
-.messageInput {
-    height: 1cm;
-    max-height: 5em;
-    border: none;
-    background: white !important;
-    border-radius: 2em;
-    padding: 10px 5px;
-    background: transparent;
-    outline: 0;
-    resize: none;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    .message-input {
+        height: 1cm;
+        max-height: 5em;
+        border: none;
+        background: white !important;
+        border-radius: 2em;
+        padding: 10px 5px;
+        background: transparent;
+        outline: 0;
+        resize: none;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
 }
 
 .animate mat-icon {

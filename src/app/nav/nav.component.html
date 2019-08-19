@@ -9,7 +9,10 @@
       </mat-list-item>
       <!--Login/Signup buttons-->
       <div fxLayoutAlign="space-between start" fxAlign="end">
-        <button fxFlex="50" mat-raised-button (click)="openLoginDialog()">Log In</button>
+        <button fxFlex="50" mat-raised-button (click)="openLoginDialog()">
+          <mat-icon>input</mat-icon>
+          Log In
+        </button>
         <button fxFlex="50" mat-raised-button color="accent" (click)="openSignupDialog()">Link
           Account</button>
       </div>
@@ -21,7 +24,10 @@
       </mat-list-item>
       <!--Sign out button-->
       <div fxLayoutAlign="space-between start" fxAlign="end">
-        <button fxFlex mat-raised-button color="accent" (click)="signOut(); drawer.close()">Sign Out</button>
+        <button fxFlex mat-raised-button color="accent" (click)="signOut(); drawer.close()">
+          {{ user.personNumber }}
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
       </div>
     </mat-nav-list>
     <!--Menu items all the time-->
@@ -53,7 +59,10 @@
           <a mat-button *ngFor="let menuItem of menuItemsLoggedOut" routerLink="{{ menuItem.path }}">
             {{ menuItem.text }}
           </a>
-          <button mat-button (click)="openLoginDialog()">Log In</button>
+          <button mat-button (click)="openLoginDialog()">
+            <mat-icon>input</mat-icon>
+            Log In
+          </button>
           <button mat-raised-button color="accent" (click)="openSignupDialog()">Link Account</button>
         </div>
         <!--Menu items if logged in-->
@@ -61,7 +70,10 @@
           <a mat-button *ngFor="let menuItem of menuItemsLoggedIn" routerLink="{{ menuItem.path }}">
             {{ menuItem.text }}
           </a>
-          <button mat-raised-button color="accent" (click)="signOut()">Sign Out</button>
+          <button mat-raised-button color="accent" (click)="signOut()">
+            Log Out
+            <mat-icon>exit_to_app</mat-icon>
+          </button>
         </div>
       </div>
     </mat-toolbar>

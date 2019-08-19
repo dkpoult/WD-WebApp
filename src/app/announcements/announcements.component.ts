@@ -5,11 +5,35 @@ import { SharedService } from '../shared/shared.service';
 import { MakeAnnouncementComponent } from '../announcements/make-announcement/make-announcement.component';
 import { switchMap } from 'rxjs/operators';
 import { PermissionService } from '../shared/permission.service';
+import { animate, trigger, transition, style } from '@angular/animations';
 
 @Component({
   selector: 'app-announcements',
   templateUrl: './announcements.component.html',
-  styleUrls: ['./announcements.component.scss']
+  styleUrls: ['./announcements.component.scss'],
+  animations: [
+    trigger(
+      'inOutAnimation',
+      [
+        transition(
+          ':enter',
+          [
+            style({ opacity: 0 }),
+            animate('.5s ease-out',
+              style({ opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ opacity: 1 }),
+            animate('.5s ease-in',
+              style({ opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class AnnouncementsComponent implements OnInit {
 
@@ -35,11 +59,11 @@ export class AnnouncementsComponent implements OnInit {
       });
   }
 
-  isLecturer() {
+  canAnnounce() {
     if (!this.gotCourse) {
       return false;
     }
-    return this.permissionService.isLecturer(this.course);
+    return this.permissionService.hasPermission('ANNOUNCE', this.course.permissions);
   }
 
   getCourse(courseCode: string): any {

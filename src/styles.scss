@@ -54,3 +54,10 @@ body {
 mat-form-field {
     width: 100%;
 }
+
+.no-content {
+    position: absolute;
+    margin: 10px auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

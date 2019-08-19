@@ -21,8 +21,8 @@
                         [outgoing]="message.personNumber === currentUser.personNumber" [canDelete]="isModerator()">
                     </app-chat-message>
                 </div>
-                <div class="input" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
-                    <textarea class="messageInput" fxFlex #messageInput placeholder="Type a message" autofocus
+                <div class="input-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
+                    <textarea class="message-input" fxFlex #messageInput placeholder="Type a message" autofocus
                         (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
                     <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
                         <mat-icon>send</mat-icon>
