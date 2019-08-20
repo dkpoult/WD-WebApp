@@ -10,22 +10,8 @@ mat-card {
     z-index: 100;
 }
 
-mat-card-actions {
-    z-index: 100;
-}
-
-mat-card {
-    margin: 15px;
-    animation-name: bounceInUp;
-    animation-duration: 2000ms;
-    transform-origin: center bottom;
-    right: 0%;
-    white-space: normal;
-    word-wrap: break-word;
-    .time {
-        float: right;
-        color: transparentize($color: #000000, $amount: 0.5)
-    }
-
-   
+.time {
+    position: absolute;
+    top: 5%;
+    right: 5%;
 }
