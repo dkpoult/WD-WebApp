@@ -40,7 +40,9 @@
             </button>
           </ng-template>
           <div formArrayName="sessions" style="padding-top: 20px;">
-            <div class="no-content on-top">There are no sessions for {{ course.courseCode}}</div>
+            <div class="no-content" *ngIf="form.controls['sessions'].controls.length === 0">
+              There are no sessions
+            </div>
             <div class="sessions">
               <mat-accordion [multi]="false">
                 <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"

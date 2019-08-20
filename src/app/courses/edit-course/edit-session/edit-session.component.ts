@@ -3,12 +3,35 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsul
 import { MatChip, MatExpansionPanel } from '@angular/material';
 import { VenueService } from 'src/app/shared/venue.service';
 import { TimetableService } from 'src/app/shared/timetable.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-edit-session',
   templateUrl: './edit-session.component.html',
   styleUrls: ['./edit-session.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger(
+      'fade',
+      [
+        transition(
+          ':enter',
+          [
+            style({ opacity: 0 }),
+            animate('.3s ease-out',
+              style({ opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ opacity: 1 }),
+            animate('.3s ease-in',
+              style({ opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class EditSessionComponent implements OnInit {
 

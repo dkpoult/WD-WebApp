@@ -63,6 +63,16 @@ mat-form-field {
 }
 
 mat-tab-group mat-tab-body {
-    height: 84.4vh;
+    min-height: 42.2vh;
     width: 100%;
+}
+
+// ! Temp fix for animating accordion
+.ng-animating mat-expansion-panel-header {
+    height: 48px;
+}
+
+.ng-animating div.mat-expansion-panel-content {
+    height: 0px;
+    visibility: hidden;
 }
