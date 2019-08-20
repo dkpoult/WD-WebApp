@@ -16,3 +16,8 @@
 .skip-animation {
     animation-duration: 0s !important;
 }
+
+.time {
+    float: right;
+    color: transparentize($color: #000000, $amount: 0.5)
+}

@@ -23,12 +23,5 @@ mat-card {
     white-space: normal;
     word-wrap: break-word;
 
-    .time {
-        float: right;
-        color: transparentize($color: #000000, $amount: 0.5)
-    }
-    .title {
-        font-weight: bold;
-        font-size: 1.3em;
-    }
+   
 }
