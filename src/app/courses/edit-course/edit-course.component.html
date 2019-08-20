@@ -1,9 +1,8 @@
-<section *ngIf="gotCourse" style="padding: 15px;">
-  <h1 matDialogTitle>Edit Course</h1>
-  <form [formGroup]="form" (ngSubmit)="submit(form)">
+<section *ngIf="gotCourse">
+  <form [formGroup]=" form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
       <mat-tab-group animationDuration="0ms" mat-stretch-tabs dynamicHeight>
-        <mat-tab label="Details">
+        <mat-tab label="Edit Details">
           <!-- Course -->
           <div class="details-container">
             <mat-form-field>
@@ -35,12 +34,13 @@
         <!-- Sessions -->
         <mat-tab>
           <ng-template matTabLabel>
-            Sessions ({{form.controls['sessions'].controls.length}})
+            Edit Sessions ({{form.controls['sessions'].controls.length}})
             <button type="button" mat-icon-button class="add-btn" selected color="primary" (click)="addSession()">
               <mat-icon>add</mat-icon>
             </button>
           </ng-template>
           <div formArrayName="sessions" style="padding-top: 20px;">
+            <div class="no-content on-top">There are no sessions for {{ course.courseCode}}</div>
             <div class="sessions">
               <mat-accordion [multi]="false">
                 <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
@@ -51,7 +51,7 @@
           </div>
         </mat-tab>
         <!-- Permissions -->
-        <mat-tab label="Permissions">
+        <mat-tab label="Edit Permissions">
           <div class="table-container" *ngIf="gotPermissions">
             <table formArrayName="permissions" mat-table [dataSource]="users">
               <ng-container matColumnDef="personNumber">
@@ -72,6 +72,7 @@
                   </div>
                 </td>
               </ng-container>
+
               <ng-container matColumnDef="code">
                 <th mat-header-cell *matHeaderCellDef>Code</th>
                 <td mat-cell *matCellDef="let user; let i = index" form="permissions.controls[i].permissions">

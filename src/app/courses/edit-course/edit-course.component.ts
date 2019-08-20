@@ -1,3 +1,4 @@
+import { PostActionButtonsComponent } from './../../post/post-action-buttons/post-action-buttons.component';
 import { PermissionService } from './../../shared/permission.service';
 import { VenueService } from '../../shared/venue.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
@@ -8,6 +9,7 @@ import { switchMap } from 'rxjs/operators';
 import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-edit-course',
@@ -43,6 +45,7 @@ export class EditCourseComponent implements OnInit {
   gotCourse = false;
   form: FormGroup;
   course: any;
+  initialValues: any;
 
   users: Array<any>;
   newPermissions$ = this.permissionService.newPermissions$;
@@ -113,10 +116,10 @@ export class EditCourseComponent implements OnInit {
 
   removeSession(i: number) {
     this.form.markAsDirty();
-    this.lastRemoved = this.sessions.at(i);
-    const snackBarRef = this.snackBar.open('Removed session', 'Undo', { duration: 2000 });
+    const removed = this.sessions.at(i);
+    const snackBarRef = this.snackBar.open('Removed session', 'Undo', { duration: 2000, panelClass: ['snackbar'] });
     snackBarRef.onAction().subscribe(() => {
-      this.sessions.insert(i, this.lastRemoved);
+      this.sessions.insert(i, removed);
     });
     this.sessions.removeAt(i);
   }
@@ -127,6 +130,7 @@ export class EditCourseComponent implements OnInit {
 
   getCourse(courseCode: string) {
     this.form = new FormGroup({});
+    this.initialValues = {};
     this.sharedService.getCourse(courseCode).subscribe((response: any) => {
       this.gotCourse = true;
       this.course = response.course;
@@ -171,17 +175,22 @@ export class EditCourseComponent implements OnInit {
         sessions.push(newSession);
       });
       this.form.addControl('courseCode', new FormControl(this.course.courseCode));
+      this.initialValues.courseCode = this.course.courseCode;
       this.form.addControl('name', new FormControl(this.course.courseName, [Validators.required]));
+      this.initialValues.name = this.course.courseName;
       this.form.addControl('description', new FormControl(this.course.courseDescription));
+      this.initialValues.description = this.course.courseDescription;
       this.form.addControl('password', new FormControl(''));
+      this.initialValues.password = '';
       this.form.addControl('clearKey', new FormControl({ value: false, disabled: !this.course.hasPassword }));
+      this.initialValues.clearKey = false;
       this.form.addControl('sessions', new FormArray(sessions));
+      this.initialValues.sessions = sessions;
     });
     this.permissionService.getAllPermissions(courseCode).subscribe((response: any) => {
       switch (response.responseCode) {
         case 'successful':
           const perms = response.allPermissions;
-          const permissions: Array<FormControl> = [];
 
           this.users = [];
           for (const user in perms) {
@@ -189,11 +198,10 @@ export class EditCourseComponent implements OnInit {
               this.users.push({ personNumber: user, permissions: perms[user] });
             }
           }
-          this.users.forEach(user => {
-            const newPermission = new FormControl(user);
-            permissions.push(newPermission);
-          });
+
+          const permissions: Array<FormControl> = this.users.map(e => new FormControl(e));
           this.form.addControl('permissions', new FormArray(permissions));
+          this.initialValues.permissions = this.users;
           this.gotPermissions = true;
           break;
       }
@@ -202,9 +210,23 @@ export class EditCourseComponent implements OnInit {
 
   hasErrors() {
     return (
-      (this.form.invalid) ||
-      (this.form.pristine)
+      (this.form.invalid)
+      || (this.form.pristine)
+      || (!this.hasLecturers())
     );
+  }
+
+  hasLecturers(): boolean {
+    const permissions = this.form.value.permissions;
+    if (isNullOrUndefined(permissions)) { return; }
+    let flag = false;
+    permissions.forEach(permission => {
+      if (this.hasPermission('EDIT_PERMISSIONS', permission.permissions)) {
+        flag = true;
+        return;
+      }
+    });
+    return flag;
   }
 
   toggleClearKey() {

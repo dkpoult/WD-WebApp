@@ -2,7 +2,7 @@
   <mat-spinner class="spinner"></mat-spinner>
 </div>
 <ng-template #elseTemplate>
-  <div *ngIf="posts.length === 0">There are no posts for {{ course }}</div>
+  <div *ngIf="posts.length === 0" class="no-content">There are no posts for {{ course }}</div>
   <mat-card *ngFor="let post of posts" routerLink="{{ post.code }}">
     <mat-card-title>{{ post.title }}</mat-card-title>
     <mat-card-subtitle>{{ post.poster }}</mat-card-subtitle>
