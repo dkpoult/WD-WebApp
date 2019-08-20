@@ -8,9 +8,9 @@ describe('PostActionButtonsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PostActionButtonsComponent ]
+      declarations: [PostActionButtonsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

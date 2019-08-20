@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
-import { PostComponent } from './post/post.component';
+import { PostComponent } from './forum/post/post.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { EditCourseComponent } from './courses/edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';

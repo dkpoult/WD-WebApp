@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { CreatePostComponent } from '../post/create-post/create-post.component';
+import { CreatePostComponent } from '../forum/post/create-post/create-post.component';
 
 @Component({
   selector: 'app-forum',

@@ -23,11 +23,11 @@ import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component
 import { EnrolComponent } from './courses/enrol/enrol.component';
 import { ForumComponent } from './forum/forum.component';
 import { ConfirmEnrolmentComponent } from './courses/enrol/confirm-enrolment/confirm-enrolment.component';
-import { CreatePostComponent } from './post/create-post/create-post.component';
-import { PostComponent } from './post/post.component';
-import { CommentComponent } from './post/comment/comment.component';
-import { PostActionButtonsComponent } from './post/post-action-buttons/post-action-buttons.component';
-import { CreateCommentComponent } from './post/create-comment/create-comment.component';
+import { CreatePostComponent } from './forum/post/create-post/create-post.component';
+import { PostComponent } from './forum/post/post.component';
+import { CommentComponent } from './forum/post/comment/comment.component';
+import { PostActionButtonsComponent } from './forum/post/post-action-buttons/post-action-buttons.component';
+import { CreateCommentComponent } from './forum/post/create-comment/create-comment.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { MakeAnnouncementComponent } from './announcements/make-announcement/make-announcement.component';
 import { EditCourseComponent } from './courses/edit-course/edit-course.component';

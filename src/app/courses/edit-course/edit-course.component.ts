@@ -1,4 +1,4 @@
-import { PostActionButtonsComponent } from './../../post/post-action-buttons/post-action-buttons.component';
+import { PostActionButtonsComponent } from './../../forum/post/post-action-buttons/post-action-buttons.component';
 import { PermissionService } from './../../shared/permission.service';
 import { VenueService } from '../../shared/venue.service';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
