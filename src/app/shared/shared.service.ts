@@ -208,6 +208,15 @@ export class SharedService {
     return this.http.post(`${API.apiRoot}/course/link_course`, body);
   }
 
+  syncWithMoodle(courseCode: string): Observable<any> {
+    const body = {
+      courseCode,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
+    };
+    return this.http.post(`${API.apiRoot}/course/resync_course`, body);
+  }
+
   // Chat
   getMessages(courseCode: string, tutor: boolean = false) {
     const body = {

@@ -1,5 +1,5 @@
 <section style="max-width: 230px;">
-  <h1 mat-dialog-title>Confirm Enrolment in {{ data.code }} </h1>
+  <h1 matDialogTitle>Confirm Enrolment in {{ data.code }} </h1>
   <form *ngIf="data.password" [formGroup]="form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
       <mat-form-field>

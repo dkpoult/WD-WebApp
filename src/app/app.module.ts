@@ -44,6 +44,7 @@ import { MapComponent } from './map/map.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
 import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-question.component';
+import { ViewCourseComponent } from './courses/view-course/view-course.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -84,6 +85,7 @@ export function initialiseApp(config: SharedService) {
     ConfirmDialogComponent,
     LiveQuestionsComponent,
     AskQuestionComponent,
+    ViewCourseComponent,
   ],
   imports: [
     HttpClientModule,
@@ -123,6 +125,7 @@ export function initialiseApp(config: SharedService) {
     CreateSurveyComponent,
     ConfirmDialogComponent,
     AskQuestionComponent,
+    ViewCourseComponent
   ]
 })
 export class AppModule { }

@@ -8,6 +8,8 @@ import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.componen
 import { EnrolComponent } from '../courses/enrol/enrol.component';
 import { EditCourseComponent } from '../courses/edit-course/edit-course.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { isNullOrUndefined } from 'util';
+import { ViewCourseComponent } from './view-course/view-course.component';
 
 @Component({
   selector: 'app-courses',
@@ -20,17 +22,54 @@ import { trigger, transition, style, animate } from '@angular/animations';
         transition(
           ':enter',
           [
-            style({ height: 0, opacity: 0 }),
+            style({
+              transform: 'translateX(-1000px)',
+              opacity: 0,
+              'box-shadow': '0 0 0 0 transparent'
+            }),
             animate('.3s ease-out',
-              style({ height: 300, opacity: 1 }))
+              style({
+                transform: 'translateX(0px)',
+                opacity: 1,
+                'box-shadow': '*'
+              }))
           ]
         ),
         transition(
           ':leave',
           [
-            style({ height: 300, opacity: 1 }),
+            style({
+              transform: 'translateX(0)',
+              opacity: 1,
+              'box-shadow': '*'
+            }),
             animate('.3s ease-in',
-              style({ height: 0, opacity: 0 }))
+              style({
+                transform: 'translateX(-1000px)',
+                opacity: 0,
+                'box-shadow': '0 0 0 0 transparent'
+              }))
+          ]
+        )
+      ]
+    ),
+    trigger(
+      'fade',
+      [
+        transition(
+          ':enter',
+          [
+            style({ opacity: 0 }),
+            animate('.3s ease-out',
+              style({ opacity: 1 }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ opacity: 1 }),
+            animate('.3s ease-in',
+              style({ opacity: 0 }))
           ]
         )
       ]
@@ -43,6 +82,7 @@ export class CoursesComponent implements OnInit {
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
   enrolDialogRef: MatDialogRef<EnrolComponent>;
   editDialogRef: MatDialogRef<EditCourseComponent>;
+  viewDetailsDialogRef: MatDialogRef<ViewCourseComponent>;
 
   lectureOnly = false;
   tutorOnly = false;
@@ -148,6 +188,21 @@ export class CoursesComponent implements OnInit {
     }
   }
 
+  syncWithMoodle(courseCode: any, course: any, spinButton?) {
+    this.sharedService.syncWithMoodle(courseCode).subscribe((response: any) => {
+      course = response.course;
+    });
+    // Animate the button
+    spinButton._elementRef.nativeElement.classList.add('animate');
+    setTimeout(() => {
+      spinButton._elementRef.nativeElement.classList.remove('animate');
+    }, 600);
+  }
+
+  isMoodleCourse(course: any): boolean {
+    return (!isNullOrUndefined(course.moodleId));
+  }
+
   filter(value: any, lectureOnly?: boolean, tutorOnly?: boolean, searchTerm?: string) {
     searchTerm = searchTerm.toLowerCase();
 
@@ -163,5 +218,9 @@ export class CoursesComponent implements OnInit {
     if (tutorOnly) { pass = pass && tutor; }
 
     return pass;
+  }
+
+  openDetailsDialog(course: any) {
+    this.viewDetailsDialogRef = this.dialog.open(ViewCourseComponent, { data: course });
   }
 }

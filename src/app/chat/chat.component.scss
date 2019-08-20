@@ -1,17 +1,21 @@
-.tabs {
-    height: 100%;
-    width: 100%;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    position: relative;
+:host {
+    box-sizing: border-box;
+    display: block;
+    height: 89.7vh;
 }
 
-.chat-container {
-    height: 88.3vh;
-    flex: 1;
-    // border: 5px solid orangered;
+#wrapper {
+    min-height: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#tab-group {
+    height: 100%;
+}
+
+#tab-group mat-tab-body {
+    flex-grow: 1;
 }
 
 .questions-container {
@@ -44,29 +48,31 @@
     }
 }
 
-.input {
+
+.input-container {
     position: relative;
     bottom: 0;
+    width: 100%;
     padding: 15px;
-    background: #bfbfbf;
+    background: rgba(0, 0, 0, 0.12);
     // background: mat-color($wd-accent);
 
     .send {
-        color: black !important;
+        color: black;
     }
-}
 
-.messageInput {
-    height: 1cm;
-    max-height: 5em;
-    border: none;
-    background: white !important;
-    border-radius: 2em;
-    padding: 10px 5px;
-    background: transparent;
-    outline: 0;
-    resize: none;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    .message-input {
+        height: 1cm;
+        max-height: 5em;
+        border: none;
+        background: white !important;
+        border-radius: 2em;
+        padding: 10px 5px;
+        background: transparent;
+        outline: 0;
+        resize: none;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
 }
 
 .animate mat-icon {

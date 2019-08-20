@@ -38,11 +38,12 @@
       </p>
       <app-chart [labels]="survey.options" [data]="survey.results"></app-chart>
     </div>
-    <!-- TODO: Fancy graphing/Analytics -->
     <button mat-raised-button color="primary" (click)="closeSurvey()">Close this survey</button>
   </div>
 </ng-container>
 <ng-template #elseTemplate>
-  <mat-error>There are no currently open surveys</mat-error>
-  <button mat-raised-button *ngIf="isLecturer()" color="primary" (click)="createSurvey()">Open a survey</button>
+  <div class="">
+    <div class="text">There are currently no open surveys</div>
+    <button mat-raised-button *ngIf="isLecturer()" color="primary" (click)="createSurvey()">Open a survey</button>
+  </div>
 </ng-template>

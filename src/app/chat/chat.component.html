@@ -1,56 +1,61 @@
-<mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChange($event)" mat-stretch-tabs dynamicHeight>
-    <mat-tab #chat>
-        <ng-template matTabLabel>
-            <span matBadge="{{ unreadMessages }}" matBadgeHidden="{{ unreadMessages === 0 }}" matBadgeOverlap="false"
-                matBadgeColor="warn">
-                Chat
-                <button mat-icon-button #switchButton *ngIf="isModerator()" (click)="switchMode()"
-                    color="{{ tutorMode ? 'warn' : 'primary' }}"
-                    matTooltip="Switch to {{tutorMode ? 'student' : 'tutor'}} mode">
-                    <mat-icon>autorenew</mat-icon>
-                </button>
-            </span>
-        </ng-template>
-        <ng-template matTabContent>
-            <div fxLayout="column" class="chat-container">
-                <!-- TODO Make this a virtual scroll -->
-                <!-- TODO Make autoscroll work properly, without errors -->
-                <div class="message-container" #autoscroll [scrollTop]="autoscroll.scrollHeight">
-                    <app-chat-message *ngFor="let message of tutorMode ? messagesTutor : messagesStudent;"
-                        (delete)="deleteMessage(message.id)" [message]="message"
-                        [outgoing]="message.personNumber === currentUser.personNumber" [canDelete]="isModerator()">
-                    </app-chat-message>
-                </div>
-                <div class="input" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
-                    <textarea class="messageInput" fxFlex #messageInput placeholder="Type a message" autofocus
-                        (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
-                    <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
-                        <mat-icon>send</mat-icon>
+<div id="wrapper">
+    <mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChange($event)" mat-stretch-tabs id="tab-group">
+        <mat-tab #chat>
+            <ng-template matTabLabel>
+                <span matBadge="{{ unreadMessages }}" matBadgeHidden="{{ unreadMessages === 0 }}"
+                    matBadgeOverlap="false" matBadgeColor="warn">
+                    Chat
+                    <button mat-icon-button #switchButton *ngIf="isModerator()" (click)="switchMode()"
+                        color="{{ tutorMode ? 'warn' : 'primary' }}"
+                        matTooltip="Switch to {{tutorMode ? 'student' : 'tutor'}} mode">
+                        <mat-icon>autorenew</mat-icon>
                     </button>
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <div fxLayout="column" class="chat-container">
+                    <!-- TODO Make this a virtual scroll -->
+                    <!-- TODO Make autoscroll work properly, without errors -->
+                    <div class="message-container" #autoscroll [scrollTop]="autoscroll.scrollHeight">
+                        <app-chat-message *ngFor="let message of tutorMode ? messagesTutor : messagesStudent;"
+                            (delete)="deleteMessage(message.id)" [message]="message"
+                            [outgoing]="message.personNumber === currentUser.personNumber" [canDelete]="isModerator()">
+                        </app-chat-message>
+                    </div>
+                    <div class="input-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
+                        <textarea class="message-input" fxFlex #messageInput placeholder="Type a message" autofocus
+                            (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
+                        <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
+                            <mat-icon>send</mat-icon>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </ng-template>
-    </mat-tab>
-    <mat-tab #survey>
-        <ng-template matTabLabel>
-            <span matBadge="★" matBadgeHidden="{{ !unansweredSurvey }}" matBadgeOverlap="false" matBadgeColor="warn">
-                Survey
-            </span>
-        </ng-template>
-        <ng-template matTabContent>
-            <app-view-survey [course]="course" [survey]="survey$ | async"></app-view-survey>
-        </ng-template>
-    </mat-tab>
-    <mat-tab #questions>
-        <ng-template matTabLabel>
-            <span>
-                Questions
-            </span>
-        </ng-template>
-        <ng-template matTabContent>
-            <app-live-questions [questions]="liveQuestions" [canDelete]="isModerator()"
-                (delete)="deleteQuestion($event)" (upvote)="voteQuestion($event)" (newQuestion)="askQuestion($event)">
-            </app-live-questions>
-        </ng-template>
-    </mat-tab>
-</mat-tab-group>
+            </ng-template>
+        </mat-tab>
+        <mat-tab #survey>
+            <ng-template matTabLabel>
+                <span matBadge="★" matBadgeHidden="{{ !unansweredSurvey }}" matBadgeOverlap="false"
+                    matBadgeColor="warn">
+                    Survey
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-view-survey [course]="course" [survey]="survey$ | async"></app-view-survey>
+            </ng-template>
+        </mat-tab>
+        <mat-tab #questions>
+            <ng-template matTabLabel>
+                <span>
+                    Questions
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <div *ngIf="liveQuestions.length === 0" class="no-content">There are no questions</div>
+                <app-live-questions [questions]="liveQuestions" [canDelete]="isModerator()"
+                    (delete)="deleteQuestion($event)" (upvote)="voteQuestion($event)"
+                    (newQuestion)="askQuestion($event)">
+                </app-live-questions>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</div>
