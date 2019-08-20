@@ -63,8 +63,11 @@ mat-form-field {
 }
 
 mat-tab-group mat-tab-body {
-    min-height: 42.2vh;
     width: 100%;
+}
+
+.mat-tab-body-wrapper {
+    flex-grow: 1;
 }
 
 // ! Temp fix for animating accordion
