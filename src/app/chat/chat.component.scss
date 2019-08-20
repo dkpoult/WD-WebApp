@@ -1,6 +1,7 @@
 :host {
     box-sizing: border-box;
     display: block;
+    height: 89.7vh;
 }
 
 #wrapper {
@@ -49,6 +50,7 @@
 
 
 .input-container {
+    position: relative;
     bottom: 0;
     width: 100%;
     padding: 15px;

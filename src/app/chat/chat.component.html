@@ -50,6 +50,7 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
+                <div *ngIf="liveQuestions.length === 0" class="no-content">There are no questions</div>
                 <app-live-questions [questions]="liveQuestions" [canDelete]="isModerator()"
                     (delete)="deleteQuestion($event)" (upvote)="voteQuestion($event)"
                     (newQuestion)="askQuestion($event)">

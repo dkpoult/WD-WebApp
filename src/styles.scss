@@ -37,6 +37,8 @@ $wd-web-theme: mat-light-theme($wd-web-primary, $wd-web-accent, $wd-web-warn);
 
 html,
 body {
+    margin: 0;
+    width: 100%;
     height: 100%;
 }
 
