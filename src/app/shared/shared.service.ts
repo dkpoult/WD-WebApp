@@ -50,10 +50,10 @@ export class SharedService {
       this._loggedIn = value;
       if (value) {
         let darkMode = false;
+        if (isNullOrUndefined(this.currentUser.preferences)) { this.currentUser.preferences = {}; }
         if (!isNullOrUndefined(this.currentUser.preferences.darkMode)) {
           darkMode = coerceBooleanProperty(this.currentUser.preferences.darkMode);
         }
-        console.log('Prefers ' + (darkMode ? 'dark' : 'light'));
         setTimeout(() => {
           this.themeService.setDarkMode(darkMode);
         }, 100);

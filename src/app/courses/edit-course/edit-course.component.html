@@ -1,7 +1,7 @@
-<section *ngIf="gotCourse">
+<div *ngIf="gotCourse" id="wrapper">
   <form [formGroup]=" form" (ngSubmit)="submit(form)">
     <mat-dialog-content>
-      <mat-tab-group animationDuration="0ms" mat-stretch-tabs dynamicHeight>
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs id="tab-group">
         <mat-tab label="Edit Details">
           <!-- Course -->
           <div class="details-container">
@@ -32,23 +32,23 @@
           </div>
         </mat-tab>
         <!-- Sessions -->
-        <mat-tab>
-          <ng-template matTabLabel>
-            Edit Sessions ({{form.controls['sessions'].controls.length}})
-            <button type="button" mat-icon-button class="add-btn" selected color="primary" (click)="addSession()">
-              <mat-icon>add</mat-icon>
-            </button>
-          </ng-template>
+        <mat-tab label="Edit Sessions ({{form.controls['sessions'].controls.length}})">
           <div formArrayName="sessions" style="padding-top: 20px;">
-            <div class="no-content" *ngIf="form.controls['sessions'].controls.length === 0">
-              There are no sessions
-            </div>
-            <div class="sessions">
+            <div class="sessions" *ngIf="form.controls['sessions'].controls.length > 0" [@slideInOut]>
+              <button mat-mini-fab type="button" class="add-fab" (click)="addSession()">
+                <mat-icon>add</mat-icon>
+              </button>
               <mat-accordion [multi]="false">
                 <app-edit-session *ngFor="let session of form.controls['sessions'].controls; let i = index"
                   [form]="form.controls['sessions'].controls[i]" (remove)="removeSession(i)">
                 </app-edit-session>
               </mat-accordion>
+            </div>
+            <div class="no-sessions" *ngIf="form.controls['sessions'].controls.length === 0" [@fadeOutDelayed]>
+              <div class="no-content" fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="15px">
+                <p>There are no sessions.</p>
+                <button mat-raised-button type="button" (click)="addSession()" color="primary">Add One</button>
+              </div>
             </div>
           </div>
         </mat-tab>
@@ -62,11 +62,12 @@
                   <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px">
                     {{user.personNumber}}
                     <div class="privelages" fxLayout="row" fxLayoutGap="5px">
-                      <mat-icon fxFlex [@fade] [class.hidden]="!hasPermission('EDIT_PERMISSIONS', user.permissions)"
+                      <mat-icon fxFlex [@fadeInOut]
+                        [class.hidden]="!hasPermission('EDIT_PERMISSIONS', user.permissions)"
                         matTooltip="Will be marked as a lecturer">
                         school
                       </mat-icon>
-                      <mat-icon fxFlex [@fade] [class.hidden]="!hasPermission('MODERATE', user.permissions)"
+                      <mat-icon fxFlex [@fadeInOut] [class.hidden]="!hasPermission('MODERATE', user.permissions)"
                         matTooltip="Will be marked as a tutor">
                         person
                       </mat-icon>
@@ -107,4 +108,4 @@
       <span fxFlex></span>
     </mat-dialog-actions>
   </form>
-</section>
+</div>

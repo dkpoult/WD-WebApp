@@ -17,7 +17,7 @@ import { isNullOrUndefined } from 'util';
   styleUrls: ['./edit-course.component.scss'],
   animations: [
     trigger(
-      'fade',
+      'fadeInOut',
       [
         transition(
           ':enter',
@@ -35,8 +35,79 @@ import { isNullOrUndefined } from 'util';
               style({ opacity: 0 }))
           ]
         )
+      ],
+    ),
+    trigger(
+      'fadeInDelayed',
+      [
+        transition(
+          ':enter',
+          [
+            style({ opacity: 0 }),
+            animate('.3s .3s ease-out',
+              style({ opacity: 1 }))
+          ]
+        )
+      ],
+    ),
+    trigger(
+      'growInOut',
+      [
+        transition(
+          ':enter',
+          [
+            style({ transform: 'scale(0)' }),
+            animate('.3s ease-out',
+              style({ transform: 'scale(1)' }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({ transform: 'scale(1)' }),
+            animate('.3s ease-in',
+              style({ transform: 'scale(0)' }))
+          ]
+        )
+      ],
+    ),
+    trigger(
+      'slideInOut',
+      [
+        transition(
+          ':enter',
+          [
+            style({
+              transform: 'translateX(-1000px)',
+              opacity: 0,
+              'box-shadow': '0 0 0 0 transparent'
+            }),
+            animate('.3s ease-out',
+              style({
+                transform: 'translateX(0px)',
+                opacity: 1,
+                'box-shadow': '*'
+              }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({
+              transform: 'translateX(0)',
+              opacity: 1,
+              'box-shadow': '*'
+            }),
+            animate('.3s ease-in',
+              style({
+                transform: 'translateX(-1000px)',
+                opacity: 0,
+                'box-shadow': '0 0 0 0 transparent'
+              }))
+          ]
+        )
       ]
-    )
+    ),
   ]
 })
 export class EditCourseComponent implements OnInit {

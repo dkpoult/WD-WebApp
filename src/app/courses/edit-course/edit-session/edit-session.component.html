@@ -1,5 +1,5 @@
 <form [formGroup]="form" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-  <mat-expansion-panel [@fade] #panel fxFlex (opened)="panelOpenState = false" (closed)="panelOpenState = true"
+  <mat-expansion-panel [@growInOut] #panel fxFlex (opened)="panelOpenState = false" (closed)="panelOpenState = true"
     class="panel">
     <mat-expansion-panel-header>
       <mat-panel-title>

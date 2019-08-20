@@ -1,13 +1,15 @@
-@import '../../assets/theming/colors';
+@import 'src/assets/theming/colors';
+@import 'src/assets/theming/mixins';
 
 .course {
     margin: 30px auto;
     max-width: 80%;
     transition: all 0.2s ease;
     box-sizing: border-box;
-    border-left: 10px solid white;
+    border-left: 10px solid transparent;
 
     &:not(div):hover {
+        @include card(2);
         transform: scale(1.05);
     }
 }
@@ -23,7 +25,7 @@
 }
 
 .tutored {
-    border-color:darken($tutorColor, 25%);
+    border-color: darken($tutorColor, 25%);
 }
 
 .animate mat-icon {

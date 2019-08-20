@@ -33,7 +33,7 @@
         </div>
         <mat-card *ngFor="let course of filteredCourses" class="course"
             [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" (click)="openDetailsDialog(course)"
-            [@inOutAnimation]>
+            [@slideInOut]>
             <mat-card-title>{{ course.courseCode }}</mat-card-title>
             <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content>{{ course.courseDescription }}</mat-card-content>
@@ -65,5 +65,6 @@
         </mat-card>
     </ng-template>
 </ng-template>
-<app-speed-dial-fab #fab class="speed-dial" [icon]="'list'" [actions]="fabActions" (clicked)="doAction($event)">
+<app-speed-dial-fab #fab class="speed-dial" icon="list" [spin]="false" [actions]="fabActions"
+    (clicked)="doAction($event)">
 </app-speed-dial-fab>

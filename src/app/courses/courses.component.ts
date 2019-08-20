@@ -17,7 +17,7 @@ import { ViewCourseComponent } from './view-course/view-course.component';
   styleUrls: ['./courses.component.scss'],
   animations: [
     trigger(
-      'inOutAnimation',
+      'slideInOut',
       [
         transition(
           ':enter',
