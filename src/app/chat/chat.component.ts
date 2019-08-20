@@ -63,13 +63,13 @@ export class ChatComponent implements OnInit {
                 case 'successful':
                   const temp = res.messages.reverse();
                   temp.forEach(message => {
-                    this.handleMessage(message, this.messagesTutor);
+                    this.handleMessage(message, true);
                   });
                   break;
               }
             });
             this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
-              this.handleMessage(message, this.messagesTutor);
+              this.handleMessage(message, true);
             });
           }
         });
@@ -83,13 +83,13 @@ export class ChatComponent implements OnInit {
             case 'successful':
               const temp = res.messages.reverse();
               temp.forEach(message => {
-                this.handleMessage(message, this.messagesStudent);
+                this.handleMessage(message, false);
               });
               break;
           }
         });
         this.socketService.subscribeToCourse(result).subscribe((message: any) => {
-          this.handleMessage(message, this.messagesStudent);
+          this.handleMessage(message, false);
         });
       });
   }
@@ -112,11 +112,12 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  handleMessage(message: any, array: Array<any>) {
+  handleMessage(message: any, tutorMode: boolean) {
     // this.autoscroll.nativeElement.scrollTop = this.autoscroll.nativeElement.scrollHeight;
+    const array = tutorMode ? this.messagesTutor : this.messagesStudent;
     switch (message.messageType) {
       case 'DELETE':
-        this.removeMessage(parseInt(message.content, 10), array);
+        this.removeMessage(parseInt(message.content, 10), tutorMode);
         break;
       case 'SURVEY':
         console.log('Received survey:', message);
@@ -193,20 +194,22 @@ export class ChatComponent implements OnInit {
   }
 
   // remove it from our local list of messages
-  removeMessage(id: number, array?: Array<any>) {
-    if (!isNullOrUndefined(array)) {
-      array = array.filter((value) => value.id !== id); // Will remove messages
+  removeMessage(id: number, tutorMode: boolean) {
+    if (tutorMode) {
+      this.messagesTutor = this.messagesTutor.filter((value) => value.id !== id); // Will remove messages
+    } else {
+      this.messagesStudent = this.messagesStudent.filter((value) => value.id !== id);
     }
     this.liveQuestions = this.liveQuestions.filter((value) => value.id !== id); // Will remove questions
   }
 
   // send delete message to everyone
   deleteMessage(id: number) {
-    this.socketService.deleteMessage(id); // delete it (outgoing only)
+    this.socketService.deleteMessage(id, this.tutorMode); // delete it (outgoing only)
   }
 
   deleteQuestion(id: number) {
-    this.removeMessage(id); // local  side
+    this.removeMessage(id, false); // local  side
     this.deleteMessage(id); // server side
   }
 

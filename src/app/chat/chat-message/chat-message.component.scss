@@ -2,6 +2,15 @@
 
 $indent: 8%;
 
+.options {
+    position: relative;
+    opacity: 0.7;
+    cursor: pointer;
+    :hover {
+        opacity: 0.9;
+    }
+}
+
 .spacer {
     min-width: 50px;
 }
