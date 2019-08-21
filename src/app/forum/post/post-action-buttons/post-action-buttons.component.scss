@@ -10,13 +10,26 @@ $duration: 300ms;
     color: #7193ff; // periwinkle
 }
 
+[class*="-button"] {
+    opacity: 0.8;
+
+    &:hover {
+        opacity: 1;
+    }
+
+}
+
 .vote-button {
     transition: color 300ms;
 }
 
 .score {
-    display: inline-block;
-    width: 25px;
+    &:not(:last-of-type) {
+        // Don't reflow when changing values
+        position: absolute;
+    }
+
+    max-width: 50px;
     text-overflow: clip;
     text-align: center;
 }

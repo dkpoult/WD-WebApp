@@ -1,4 +1,5 @@
-@import '../../../assets/theming/colors';
+@import 'src/assets/theming/colors';
+@import 'src/assets/theming/mixins';
 
 $indent: 8%;
 
@@ -6,6 +7,7 @@ $indent: 8%;
     position: relative;
     opacity: 0.7;
     cursor: pointer;
+
     :hover {
         opacity: 0.9;
     }
@@ -29,7 +31,7 @@ $indent: 8%;
     min-width: 150px;
     max-width: 45%;
     margin: 15px auto;
-    border-radius: 15px;
+    border-radius: 5px;
     padding: 20px;
     line-height: 100%;
     display: block;
@@ -45,8 +47,6 @@ $indent: 8%;
         position: absolute;
         border: 15px solid transparent;
     }
-
-    box-shadow: 4px 5px 5px transparentize($color: #000000, $amount: 0.5);
 
     &.out {
         margin-right: $indent;

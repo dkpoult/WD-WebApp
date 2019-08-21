@@ -1,5 +1,5 @@
 <div id="wrapper">
-    <mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChange($event)" mat-stretch-tabs id="tab-group">
+    <mat-tab-group animationDuration="500ms" (selectedTabChange)="tabChange($event)" mat-stretch-tabs id="tab-group">
         <mat-tab #chat>
             <ng-template matTabLabel>
                 <span matBadge="{{ unreadMessages }}" matBadgeHidden="{{ unreadMessages === 0 }}"
@@ -13,22 +13,20 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                <div fxLayout="column" class="chat-container">
-                    <!-- TODO Make this a virtual scroll -->
-                    <!-- TODO Make autoscroll work properly, without errors -->
-                    <div class="message-container" #autoscroll [scrollTop]="autoscroll.scrollHeight">
-                        <app-chat-message *ngFor="let message of tutorMode ? messagesTutor : messagesStudent;"
-                            (delete)="deleteMessage(message.id)" [message]="message"
-                            [outgoing]="message.personNumber === currentUser.personNumber" [canDelete]="isModerator()">
-                        </app-chat-message>
-                    </div>
-                    <div class="input-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
-                        <textarea class="message-input" fxFlex #messageInput placeholder="Type a message" autofocus
-                            (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
-                        <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
-                            <mat-icon>send</mat-icon>
-                        </button>
-                    </div>
+                <!-- TODO Make this a virtual scroll -->
+                <!-- TODO Make autoscroll work properly, without errors -->
+                <div class="message-container" #autoscroll [scrollTop]="autoscroll.scrollHeight">
+                    <app-chat-message *ngFor="let message of tutorMode ? messagesTutor : messagesStudent;"
+                        (delete)="deleteMessage(message.id)" [message]="message"
+                        [outgoing]="message.personNumber === currentUser.personNumber" [canDelete]="isModerator()">
+                    </app-chat-message>
+                </div>
+                <div class="input-container" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="15ppx">
+                    <textarea class="message-input" fxFlex #messageInput placeholder="Type a message" autofocus
+                        (keydown.enter)="sendMessage(messageInput, $event)"></textarea>
+                    <button mat-icon-button class="send" (click)="sendMessage(messageInput)">
+                        <mat-icon>send</mat-icon>
+                    </button>
                 </div>
             </ng-template>
         </mat-tab>

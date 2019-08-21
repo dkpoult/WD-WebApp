@@ -2,7 +2,7 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CreateCommentComponent } from '../create-comment/create-comment.component';
 import { SharedService } from 'src/app/shared/shared.service';
-import { trigger, style, transition, animate, keyframes } from '@angular/animations';
+import { trigger, style, transition, animate, keyframes, state } from '@angular/animations';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -10,6 +10,12 @@ import { isNullOrUndefined } from 'util';
   templateUrl: './post-action-buttons.component.html',
   styleUrls: ['./post-action-buttons.component.scss'],
   animations: [
+    trigger('fadeInOut', [
+      state('void', style({ opacity: 0 })),
+      state('*', style({ opacity: 1 })),
+      transition('void => *', [animate('0.2s 0.2s ease-in')]),
+      transition('* => void', [animate('0.2s ease-in')])
+    ]),
     trigger(
       'bounce', [
         transition('none <=> upvoted, none <=> downvoted', [
@@ -35,6 +41,9 @@ export class PostActionButtonsComponent implements OnInit {
   createCommentDialogRef: MatDialogRef<CreateCommentComponent>;
 
   get score(): number { return this.post.upscore - this.post.downscore; }
+
+  get upvoted() { return this.post.voted === 1; }
+  get downvoted() { return this.post.voted === -1; }
 
   constructor(
     private sharedService: SharedService,

@@ -46,12 +46,14 @@ import { LiveQuestionsComponent } from './chat/live-questions/live-questions.com
 import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-question.component';
 import { ViewCourseComponent } from './courses/view-course/view-course.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { IfChangesDirective } from './shared/directives.module';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
 }
 @NgModule({
   declarations: [
+    IfChangesDirective,
     AppComponent,
     NavComponent,
     LoginDialogComponent,
