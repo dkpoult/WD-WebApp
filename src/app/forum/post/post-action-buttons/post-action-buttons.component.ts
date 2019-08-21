@@ -1,8 +1,9 @@
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CreateCommentComponent } from '../create-comment/create-comment.component';
 import { SharedService } from 'src/app/shared/shared.service';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
+import { trigger, style, transition, animate, keyframes } from '@angular/animations';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-post-action-buttons',
@@ -25,21 +26,11 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
             ]),
           )])
       ]),
-    trigger(
-      'fadeInOut', [
-        transition('none <=> upvoted, none <=> downvoted, upvoted <=> downvoted', [
-          animate(500,
-            keyframes([
-              style({ opacity: 1, transform: 'scale(1)' }),
-              style({ opacity: 0, transform: 'scale(0.5)' }),
-              style({ opacity: 1, transform: 'scale(1)' })
-            ]),
-          )])
-      ])
   ]
 })
 export class PostActionButtonsComponent implements OnInit {
   @Input() post: any = {};
+  @Output() changeVote = new EventEmitter<number>();
 
   createCommentDialogRef: MatDialogRef<CreateCommentComponent>;
 
@@ -56,7 +47,9 @@ export class PostActionButtonsComponent implements OnInit {
     this.createCommentDialogRef = this.dialog.open(CreateCommentComponent, { data: this.post });
     this.createCommentDialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        this.post.comments.push(result);
+        if (!isNullOrUndefined(this.post.comments)) {
+          this.post.comments.push(result);
+        }
       }
     });
   }
@@ -86,6 +79,7 @@ export class PostActionButtonsComponent implements OnInit {
         }
     }
     this.post.voted = vote;
+    this.changeVote.next(vote);
     this.sharedService.vote(this.post, vote).subscribe();
   }
 

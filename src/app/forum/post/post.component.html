@@ -5,6 +5,7 @@
     <app-post-action-buttons [post]="post"></app-post-action-buttons>
     <!-- TODO: Make permissions dynamic -->
     <app-comment *ngFor="let comment of post.comments" (newAnswer)="markNewAnswer($event)" [postCode]="post.code"
-      [isAnswer]="isAnswer(comment)" [comment]="comment" [permissions]="32"></app-comment>
+      [isAnswer]="isAnswer(comment)" [comment]="comment" [permissions]="32" (changeVote)="sortComments()">
+    </app-comment>
   </div>
 </section>

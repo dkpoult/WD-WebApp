@@ -41,12 +41,13 @@ export class PostComponent implements OnInit {
     this.sharedService.getPost(this.postCode).subscribe((response: any) => {
       this.gotPost = true;
       this.post = response.post;
-      this.sortComments(this.post);
+      this.sortComments();
     });
   }
 
   markNewAnswer(comment: any) {
     this.post.answer = comment;
+    this.sortComments();
   }
 
   isAnswer(comment: any) {
@@ -56,11 +57,16 @@ export class PostComponent implements OnInit {
     return this.post.answer.code === comment.code;
   }
 
-  sortComments(post, reversing = false, sortMode = this.sortMode) {
+  changeVote(newVote: number) {
+    console.log(`Vote changed to ${newVote}. Sorting comments`);
+    this.sortComments();
+  }
+
+  sortComments(post = this.post, reversing = false, sortMode = this.sortMode) {
     if (post.comments && post.comments.length > 1) {
       // Recursively call to sort children
       post.comments.forEach(comment => {
-        this.sortComments(comment);
+        this.sortComments(comment, reversing, sortMode);
       });
       // Actually sort the comments
       switch (sortMode) {
