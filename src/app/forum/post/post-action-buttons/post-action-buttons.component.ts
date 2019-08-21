@@ -65,29 +65,28 @@ export class PostActionButtonsComponent implements OnInit {
     if (this.post.voted === vote) {
       vote = 0;
     }
-    this.sharedService.vote(this.post, vote).subscribe(() => {
-      switch (vote) {
-        case -1:
-          if (this.post.voted === 1) {
-            this.post.upscore--;
-          }
-          this.post.downscore++;
-          break;
-        case 1:
-          if (this.post.voted === -1) {
-            this.post.downscore--;
-          }
-          this.post.upscore++;
-          break;
-        case 0:
-          if (this.post.voted === 1) {
-            this.post.upscore--;
-          } else if (this.post.voted === -1) {
-            this.post.downscore--;
-          }
-      }
-      this.post.voted = vote;
-    });
+    switch (vote) {
+      case -1:
+        if (this.post.voted === 1) {
+          this.post.upscore--;
+        }
+        this.post.downscore++;
+        break;
+      case 1:
+        if (this.post.voted === -1) {
+          this.post.downscore--;
+        }
+        this.post.upscore++;
+        break;
+      case 0:
+        if (this.post.voted === 1) {
+          this.post.upscore--;
+        } else if (this.post.voted === -1) {
+          this.post.downscore--;
+        }
+    }
+    this.post.voted = vote;
+    this.sharedService.vote(this.post, vote).subscribe();
   }
 
   downvoteState(): string {

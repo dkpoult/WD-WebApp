@@ -3,14 +3,14 @@
 $duration: 300ms;
 
 .upvoted {
-    color: #FF4500; // orangered
+    color: #ff4500; // orangered
 }
 
 .downvoted {
-    color: #7193FF; // Periwinkle blue
+    color: #7193ff; // periwinkle
 }
 
-vote-button {
+.vote-button {
     transition: color 300ms;
 }
 
