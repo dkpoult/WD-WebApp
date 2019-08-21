@@ -2,15 +2,16 @@
 @import 'src/assets/theming/mixins';
 
 .course {
-    margin: 30px auto;
-    max-width: 80%;
+    margin: 15px auto;
+    max-width: 70%;
     transition: all 0.2s ease;
     box-sizing: border-box;
     border-left: 10px solid transparent;
 
     &:not(div):hover {
         @include card(2);
-        transform: scale(1.05);
+        transform: scale(1.1);
+        z-index: 0;
     }
 }
 
@@ -19,6 +20,13 @@
     right: 15px;
     bottom: 15px;
 }
+
+// .content-holder {
+//     margin: auto;
+//     @include card(2);
+//     padding: 50px 30px;
+//     width: 60%;
+// }
 
 .lectured {
     border-color: darken($lecturerColor, 35%);
