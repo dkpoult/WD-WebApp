@@ -45,6 +45,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
 import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-question.component';
 import { ViewCourseComponent } from './courses/view-course/view-course.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -86,6 +87,7 @@ export function initialiseApp(config: SharedService) {
     LiveQuestionsComponent,
     AskQuestionComponent,
     ViewCourseComponent,
+    SearchBarComponent,
   ],
   imports: [
     HttpClientModule,

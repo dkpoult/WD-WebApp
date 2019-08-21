@@ -2,33 +2,14 @@
     <mat-spinner class="spinner"></mat-spinner>
 </div>
 <ng-template #elseTemplate>
-    <div *ngIf="courses.length === 0; else coursesTemplate" class="no-content" [@fade]>
+    <div *ngIf="courses.length === 0; else coursesTemplate" class="no-content" [@fadeInOut]>
         There are no courses to display. Please enrol in a course or create a new one
     </div>
     <ng-template #coursesTemplate>
         <!-- ! Search Bar ! -->
-        <div class="search-form" fxLayout="row" fxLayoutAlign="start start">
-            <input type="search" #searchInput [(ngModel)]="searchTerm" placeholder="Search" class="search-input">
-            <mat-icon class="search-icon">search</mat-icon>
-            <div class="search-option">
-                <div #lectureToggle (mousedown)="$event.preventDefault(); searchInput.focus()">
-                    <input name="type" type="checkbox" [(ngModel)]="lectureOnly" id="type-lecture">
-                    <label for="type-lecture">
-                        <mat-icon>school</mat-icon>
-                        <span>Lecturer</span>
-                    </label>
-                </div>
-                <div #tutorToggle (mousedown)="$event.preventDefault(); searchInput.focus()">
-                    <input name="type" type="checkbox" [(ngModel)]="tutorOnly" id="type-tutor">
-                    <label for="type-tutor">
-                        <mat-icon>person</mat-icon>
-                        <span>Tutor</span>
-                    </label>
-                </div>
-            </div>
-        </div>
+        <app-search-bar (searchTerm)="searchTerm = $event" [options]="toggleOptions"></app-search-bar>
         <!-- ! Course List ! -->
-        <div *ngIf="filteredCourses.length === 0" class="course no-content" [@fade]>
+        <div *ngIf="filteredCourses.length === 0" class="course no-content" [@fadeInOut]>
             No courses match your search
         </div>
         <mat-card *ngFor="let course of filteredCourses" class="course"
@@ -53,8 +34,9 @@
                     routerLink="{{ course.courseCode }}/edit">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button *ngIf="isLecturer(course)" [disabled]="!isMoodleCourse(course)" mat-icon-button #spinButton
-                    matTooltip="Fetch Moodle Data" (click)="syncWithMoodle(course.courseCode, course, spinButton)">
+                <button *ngIf="isLecturer(course)" [disabled]="!isMoodleCourse(course)" mat-icon-button
+                    matTooltip="Fetch Moodle Data" [@spin]="spin"
+                    (click)="syncWithMoodle(course.courseCode, course); $event.stopPropagation()">
                     <mat-icon>cached</mat-icon>
                 </button>
                 <!--! For when muting courses is a thing-->
