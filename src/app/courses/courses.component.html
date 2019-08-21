@@ -15,7 +15,11 @@
         <div class="content-holder">
             <mat-card *ngFor="let course of filteredCourses" class="course"
                 [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}"
-                (click)="openDetailsDialog(course)" [@slideInOut]>
+                (click)="openDetailsDialog(course)" [@slideInOut] id="course-card">
+                <label for="course-card" class="course-label">
+                    <span *ngIf="isLecturer(course)">You are a lecturer for this course</span>
+                    <span *ngIf="isTutor(course)">You are a tutor for this course</span>
+                </label>
                 <mat-card-title>{{ course.courseCode }}</mat-card-title>
                 <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
                 <mat-card-content>{{ course.courseDescription }}</mat-card-content>
