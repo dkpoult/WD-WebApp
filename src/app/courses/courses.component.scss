@@ -16,7 +16,6 @@ $course-width: 75%;
         transform: scale(1.05);
         z-index: 0;
     }
-
     // Hoverable region
     .course-label {
         width: calc(100% + #{$border-width});
@@ -33,7 +32,6 @@ $course-width: 75%;
 app-search-bar {
     --max-width: #{$course-width};
 }
-
 .speed-dial {
     position: fixed;
     right: 15px;
@@ -61,7 +59,6 @@ app-search-bar {
         background: $color;
         color: $text-color;
         font-size: 10px;
-        // font-weight: bold;
         letter-spacing: 1px;
         line-height: 1;
         text-transform: capitalize;
@@ -84,8 +81,6 @@ app-search-bar {
     }
 
     &:hover span {
-        // width: fit-content;
-        // height: fit-content;
         visibility: visible;
         opacity: 1;
     }
