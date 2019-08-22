@@ -10,6 +10,7 @@ import { EditCourseComponent } from '../courses/edit-course/edit-course.componen
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { isNullOrUndefined } from 'util';
 import { ViewCourseComponent } from './view-course/view-course.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-courses',
@@ -117,6 +118,8 @@ import { ViewCourseComponent } from './view-course/view-course.component';
   ]
 })
 export class CoursesComponent implements OnInit {
+
+  isHandset$: Observable<boolean> = this.sharedService.isHandset$;
 
   createCourseDialogRef: MatDialogRef<CreateCourseComponent>;
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;

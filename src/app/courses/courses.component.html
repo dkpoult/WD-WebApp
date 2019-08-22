@@ -1,3 +1,5 @@
+<!-- ! Search Bar ! -->
+<app-search-bar (searchTerm)="searchTerm = $event" [options]="toggleOptions"></app-search-bar>
 <div *ngIf="!gotCourses; else elseTemplate">
     <mat-spinner class="spinner"></mat-spinner>
 </div>
@@ -6,16 +8,18 @@
         There are no courses to display. Please enrol in a course or create a new one
     </div>
     <ng-template #coursesTemplate>
-        <!-- ! Search Bar ! -->
-        <app-search-bar (searchTerm)="searchTerm = $event" [options]="toggleOptions"></app-search-bar>
-        <!-- ! Course List ! -->
         <div *ngIf="filteredCourses.length === 0" class="course no-content" [@fadeInOut]>
             No courses match your search
         </div>
+        <!-- ! Course List ! -->
         <div class="content-holder">
             <mat-card *ngFor="let course of filteredCourses" class="course"
                 [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}"
-                (click)="openDetailsDialog(course)" [@slideInOut]>
+                (click)="openDetailsDialog(course)" [@slideInOut] id="course-card">
+                <label for="course-card" class="course-label" *ngIf="!(isHandset$ | async)">
+                    <span *ngIf="isLecturer(course)">You are a lecturer for this course</span>
+                    <span *ngIf="isTutor(course)">You are a tutor for this course</span>
+                </label>
                 <mat-card-title>{{ course.courseCode }}</mat-card-title>
                 <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
                 <mat-card-content>{{ course.courseDescription }}</mat-card-content>

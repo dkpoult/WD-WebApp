@@ -1,3 +1,5 @@
+@import 'src/assets/theming/mixins';
+
 :host {
     box-sizing: border-box;
     display: block;
@@ -22,7 +24,13 @@
 }
 
 .details-container {
+    @include card(1);
     margin-top: 15px;
+    padding: 15px;
+    transition: all 0.3s ease-in-out;
+    &:focus-within {
+        @include card(2);
+    }
 }
 
 .table-container {

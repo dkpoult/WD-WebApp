@@ -1,18 +1,37 @@
 @import 'src/assets/theming/colors';
 @import 'src/assets/theming/mixins';
 
+$border-width: 10px;
+$course-width: 75%;
+
 .course {
-    margin: 15px auto;
-    max-width: 70%;
+    margin: 20px auto;
+    max-width: $course-width;
     transition: all 0.2s ease;
     box-sizing: border-box;
-    border-left: 10px solid transparent;
+    border-left: $border-width solid transparent;
 
     &:not(div):hover {
         @include card(2);
-        transform: scale(1.1);
+        transform: scale(1.05);
         z-index: 0;
     }
+
+    // Hoverable region
+    .course-label {
+        width: calc(100% + #{$border-width});
+        height: 100%;
+        box-sizing: border-box;
+        border-radius: 4px;
+
+        left: -$border-width;
+        top: 0;
+        position: absolute;
+    }
+}
+
+app-search-bar {
+    --max-width: #{$course-width};
 }
 
 .speed-dial {
@@ -21,19 +40,77 @@
     bottom: 15px;
 }
 
-// .content-holder {
-//     margin: auto;
-//     @include card(2);
-//     padding: 50px 30px;
-//     width: 60%;
-// }
+/// Creates a hover popup for course labels.
+/// @param {Color} $color - The background color of the popup
+/// @param {Color} $text-color - The color of the text
+@mixin popup($color, $text-color: #fff, $arrow-size: 5px) {
+
+    // The label
+    span {
+        position: absolute;
+        display: block;
+        text-align: center;
+        left: 0%;
+        top: 50%;
+        max-width: 5vw;
+
+        opacity: 0;
+        transform: translate(-100%, -50%) translateX(-$arrow-size);
+        visibility: hidden;
+
+        background: $color;
+        color: $text-color;
+        font-size: 10px;
+        // font-weight: bold;
+        letter-spacing: 1px;
+        line-height: 1;
+        text-transform: capitalize;
+        padding: 4px 7px;
+        border-radius: 12px;
+        transition: opacity .3s ease-in-out;
+
+        // The little arrow
+        &::after {
+            content: '';
+            position: absolute;
+            right: calc(-#{$arrow-size} + 1px);
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: $arrow-size solid $color;
+            border-top: $arrow-size solid transparent;
+            border-bottom: $arrow-size solid transparent;
+            transition: opacity .3s ease-in-out;
+        }
+    }
+
+    &:hover span {
+        // width: fit-content;
+        // height: fit-content;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    label {
+        display: block;
+        cursor: pointer;
+    }
+
+}
 
 .lectured {
-    border-color: darken($lecturerColor, 35%);
+    border-color: $darkLecturerColor;
+
+    .course-label {
+        @include popup($darkLecturerColor);
+    }
 }
 
 .tutored {
-    border-color: darken($tutorColor, 25%);
+    border-color: $darkTutorColor;
+
+    .course-label {
+        @include popup($darkTutorColor);
+    }
 }
 
 .animate mat-icon {
