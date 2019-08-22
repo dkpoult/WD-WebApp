@@ -1,6 +1,6 @@
 // ! Search Bar
 :host {
-    // Default color
+    // Default
     --activeColor: red;
 }
 
@@ -15,7 +15,7 @@ $activeColor: var(--activeColor);
     margin-top: 20px;
     margin-bottom: 20px;
 
-    max-width: 90%;
+    max-width: var(--max-width);
     width: 175px;
     height: 40px;
     border-radius: 40px;
@@ -24,7 +24,7 @@ $activeColor: var(--activeColor);
     transition: all 0.3s ease;
 
     &:focus-within {
-        width: 350px;
+        width: 400px;
         opacity: 1;
     }
 
