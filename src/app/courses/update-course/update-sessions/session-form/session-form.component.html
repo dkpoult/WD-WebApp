@@ -67,7 +67,8 @@
         <input matInput type="number" formControlName="repeatGap">
       </mat-form-field>
     </div>
-    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" class="cancellations">
+    <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" class="cancellations"
+      *ngIf="form.get('repeatType').value !== 'ONCE'">
       <div>
         <mat-label>Except dates</mat-label>
         <input matInput disabled #hiddenDateInput [matDatepicker]="cancelDatePicker" class="hiddenInPlace"

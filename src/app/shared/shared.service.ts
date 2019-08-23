@@ -171,6 +171,14 @@ export class SharedService {
     return this.http.post(`${API.apiRoot}/course/update_course`, body);
   }
 
+  updateCourseDetails(courseCode: string, details: any) {
+    const body = details;
+    body.courseCode = courseCode;
+    body.personNumber = this.currentUser.personNumber;
+    body.userToken = this.currentUser.userToken;
+    return this.http.post(`${API.apiRoot}/course/update_course`, body);
+  }
+
   updateSessions(courseCode: string, newSessions: Array<any>): Observable<any> {
     newSessions.forEach((session: any) => {
       const date = new Date(session.date);

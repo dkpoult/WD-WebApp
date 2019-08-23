@@ -6,7 +6,6 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { LinkCourseComponent } from './link-course/link-course.component';
 import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.component';
 import { EnrolComponent } from '../courses/enrol/enrol.component';
-import { EditCourseComponent } from '../courses/edit-course/edit-course.component';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { isNullOrUndefined } from 'util';
 import { ViewCourseComponent } from './view-course/view-course.component';
@@ -124,7 +123,6 @@ export class CoursesComponent implements OnInit {
   createCourseDialogRef: MatDialogRef<CreateCourseComponent>;
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
   enrolDialogRef: MatDialogRef<EnrolComponent>;
-  editDialogRef: MatDialogRef<EditCourseComponent>;
   viewDetailsDialogRef: MatDialogRef<ViewCourseComponent>;
 
   get lectureOnly() { return this.toggleOptions[0].checked; }
@@ -220,6 +218,15 @@ export class CoursesComponent implements OnInit {
         this.courses = response.courses;
         this.gotCourses = true;
       });
+  }
+
+  canEdit(course: any) {
+
+    return (
+      this.permissionService.hasPermission('EDIT', course.permissions) || // Details
+      // this.permissionService.hasPermission('EDIT', course.permissions) || // Sessions
+      this.permissionService.hasPermission('EDIT_PERMISSIONS', course.permissions)); // Permissions
+
   }
 
   isLecturer(course) {

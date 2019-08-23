@@ -133,19 +133,6 @@ export class VenueInputComponent implements OnDestroy, MatFormFieldControl<Venue
     }
   }
 
-  writeValue(): void {
-    throw new Error('Method not implemented.');
-  }
-  registerOnChange(): void {
-    throw new Error('Method not implemented.');
-  }
-  registerOnTouched(): void {
-    throw new Error('Method not implemented.');
-  }
-  setDisabledState?(): void {
-    throw new Error('Method not implemented.');
-  }
-
   ngOnDestroy() {
     this.stateChanges.complete();
     this.fm.stopMonitoring(this.elRef.nativeElement);

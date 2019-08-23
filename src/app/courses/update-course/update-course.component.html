@@ -1,0 +1,11 @@
+<mat-tab-group mat-stretch-tabs *ngIf="gotCourse">
+  <mat-tab label="Details" *ngIf="canEditDetails()">
+    <app-update-details [course]="course" (submitCourse)="submitCourse($event)"></app-update-details>
+  </mat-tab>
+  <mat-tab label="Sessions" *ngIf="canEditSessions()">
+    <app-update-sessions [sessions]="course.sessions" (submitSessions)="submitSessions($event)"></app-update-sessions>
+  </mat-tab>
+  <mat-tab label="Permissions" *ngIf="canEditPermissions()">
+    <app-update-permissions [users]="users" (submitPermissions)="submitPermissions($event)"></app-update-permissions>
+  </mat-tab>
+</mat-tab-group>

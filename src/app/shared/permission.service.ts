@@ -15,7 +15,7 @@ interface Permission {
 })
 export class PermissionService {
 
-  private newPermSubject = new Subject<void>();
+  private newPermSubject = new Subject<any>();
   newPermissions$ = this.newPermSubject.asObservable();
   permissions: Array<Permission> = [];
   private lookup: any;
@@ -30,7 +30,7 @@ export class PermissionService {
       switch (response.responseCode) {
         case 'successful':
           this.permissions = response.permissions;
-          this.newPermSubject.next();
+          this.newPermSubject.next(this.permissions);
           this.lookup = [];
           this.permissions.forEach((permission: Permission) => {
             this.lookup[permission.identifier] = permission.value;

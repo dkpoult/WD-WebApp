@@ -1,6 +1,7 @@
 import { TimetableService } from './timetable.service';
 import { SharedService } from './shared.service';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,10 @@ import { Injectable } from '@angular/core';
 export class VenueService {
 
   venues: Array<any>;
+  private newVenuesSubject = new Subject<any>();
+  newVenues$ = this.newVenuesSubject.asObservable();
 
   constructor(private sharedService: SharedService) { }
-
 
   updateVenues() {
     const req = this.sharedService.getVenues();
@@ -21,6 +23,7 @@ export class VenueService {
           this.venues.forEach(venue => {
             venue.coordinates = venue.coordinates.split(',');
           });
+          this.newVenuesSubject.next(this.venues);
           break;
       }
     });

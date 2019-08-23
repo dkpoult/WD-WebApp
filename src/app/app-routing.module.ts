@@ -7,8 +7,8 @@ import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
 import { PostComponent } from './forum/post/post.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
-import { EditCourseComponent } from './courses/edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
+import { UpdateCourseComponent } from './courses/update-course/update-course.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -23,7 +23,8 @@ const routes: Routes = [
               { path: ':post', component: PostComponent }
             ]
           },
-          { path: 'edit', component: EditCourseComponent },
+          // { path: 'edit', component: EditCourseComponent },
+          { path: 'edit', component: UpdateCourseComponent },
           { path: 'announcements', component: AnnouncementsComponent },
           { path: 'chat', component: ChatComponent }
         ]

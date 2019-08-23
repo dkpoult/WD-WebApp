@@ -1,14 +1,14 @@
 import { FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatChip, MatExpansionPanel } from '@angular/material';
 import { VenueService } from 'src/app/shared/venue.service';
 import { TimetableService } from 'src/app/shared/timetable.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
-  selector: 'app-edit-session',
-  templateUrl: './edit-session.component.html',
-  styleUrls: ['./edit-session.component.scss'],
+  selector: 'app-session-form',
+  templateUrl: './session-form.component.html',
+  styleUrls: ['./session-form.component.scss'],
   animations: [
     trigger(
       'fade',
@@ -54,7 +54,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ),
   ]
 })
-export class EditSessionComponent implements OnInit {
+export class SessionFormComponent implements OnInit {
 
   @Input() form: FormGroup;
   @Output() remove = new EventEmitter<void>();
@@ -116,9 +116,11 @@ export class EditSessionComponent implements OnInit {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.venues = this.venueService.venues.map(e => e.buildingCode);
-    }, 500);
+    this.venues = [];
+    this.venueService.newVenues$.subscribe((venues: any) => {
+      this.venues = venues.map(e => e.buildingCode);
+    });
+    this.venueService.updateVenues();
   }
 
   removeSession() {

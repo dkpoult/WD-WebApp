@@ -1,3 +1,7 @@
+import { UpdatePermissionsComponent } from './courses/update-course/update-permissions/update-permissions.component';
+import { UpdateSessionsComponent } from './courses/update-course/update-sessions/update-sessions.component';
+import { UpdateDetailsComponent } from './courses/update-course/update-details/update-details.component';
+import { UpdateCourseComponent } from './courses/update-course/update-course.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,16 +34,15 @@ import { PostActionButtonsComponent } from './forum/post/post-action-buttons/pos
 import { CreateCommentComponent } from './forum/post/create-comment/create-comment.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { MakeAnnouncementComponent } from './announcements/make-announcement/make-announcement.component';
-import { EditCourseComponent } from './courses/edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
-import { EditSessionComponent } from './courses/edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
 import { ViewSurveyComponent } from './chat/view-survey/view-survey.component';
 import { CreateSurveyComponent } from './chat/view-survey/create-survey/create-survey.component';
 import { ChartComponent } from './chat/view-survey/chart/chart.component';
 import { CalendarComponent } from './timetable/calendar/calendar.component';
-import { VenueInputComponent } from './courses/edit-course/edit-session/venue-input/venue-input.component';
+import { SessionFormComponent } from './courses/update-course/update-sessions/session-form/session-form.component';
+import { VenueInputComponent } from './courses/update-course/update-sessions/session-form/venue-input/venue-input.component';
 import { MapComponent } from './map/map.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
@@ -74,9 +77,8 @@ export function initialiseApp(config: SharedService) {
     CreateCommentComponent,
     AnnouncementsComponent,
     MakeAnnouncementComponent,
-    EditCourseComponent,
     TimetableComponent,
-    EditSessionComponent,
+    SessionFormComponent,
     ChatComponent,
     ChatMessageComponent,
     ViewSurveyComponent,
@@ -90,6 +92,10 @@ export function initialiseApp(config: SharedService) {
     AskQuestionComponent,
     ViewCourseComponent,
     SearchBarComponent,
+    UpdateCourseComponent,
+    UpdateDetailsComponent,
+    UpdateSessionsComponent,
+    UpdatePermissionsComponent
   ],
   imports: [
     HttpClientModule,
