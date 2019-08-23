@@ -73,7 +73,7 @@ export class SessionFormComponent implements OnInit {
   venues;
 
   repeatTypes = [
-    { value: 'ONCE', text: 'Never' },
+    { value: 'ONCE', text: 'Once only' },
     { value: 'DAILY', text: 'Daily' },
     { value: 'WEEKLY', text: 'Weekly' },
     { value: 'MONTHLY', text: 'Monthly' },
@@ -93,7 +93,6 @@ export class SessionFormComponent implements OnInit {
       session.date = session.nextDate;
     }
     const classStrings = [];
-
     for (const c in session.cancellations) {
       if (c < session.cancellations.length) {
         const cancellation = new Date(session.cancellations[c]);
@@ -103,7 +102,6 @@ export class SessionFormComponent implements OnInit {
         }
       }
     }
-
     if (this.timetableService.sessionFallsOn(session, d)) {
       classStrings.push('fallsOn');
     }
@@ -191,6 +189,7 @@ export class SessionFormComponent implements OnInit {
     }
     const cancellation = `${year}-${month}-${day}`;
     if (this.cancellations.includes(cancellation)) {
+      this.cancellations = this.cancellations.filter(v => v !== cancellation);
       return;
     }
     this.cancellations.push(cancellation);

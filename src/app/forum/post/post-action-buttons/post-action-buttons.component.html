@@ -3,7 +3,7 @@
     [@bounce]="upvoteState()" [ngClass]="{'upvoted': upvoted}" (click)="vote(1); $event.stopPropagation()">
     <mat-icon>thumb_up</mat-icon>
   </button>
-  <i class="score" *ifChanges="score" [@fadeInOut] [ngClass]="{'downvoted': downvoted, 'upvoted': upvoted}">
+  <i class="score" *appIfChanges="score" [@fadeInOut] [ngClass]="{'downvoted': downvoted, 'upvoted': upvoted}">
     {{ score }}
   </i>
   <button mat-icon-button disableRipple [matTooltip]="downvoted ? 'Remove Downvote':'Downvote'" class="vote-button"

@@ -3,18 +3,17 @@
 
     <!-- ! Person Number Column ! -->
     <ng-container matColumnDef="personNumber">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header="personNumber">Person</th>
+      <th mat-header-cell *matHeaderCellDef>Person</th>
       <td mat-cell *matCellDef="let user">
         <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px">
           {{user.personNumber}}
-          <div class="privelages" fxLayout="row" fxLayoutGap="5px">
-            <mat-icon fxFlex [@fadeInOut] class="lecturer"
-              [class.hidden]="!hasPermission('EDIT_PERMISSIONS', user.permissions)"
-              matTooltip="Will be marked as a lecturer" (click)="togglePermission(user, 'EDIT_PERMISSIONS')">
+          <div class="privelages">
+            <mat-icon [@fadeSlideInOut] class="lecturer" *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)"
+              matTooltip="Is marked as a lecturer" (click)="togglePermission(user, 'EDIT_PERMISSIONS')">
               school
             </mat-icon>
-            <mat-icon fxFlex [@fadeInOut] class="tutor" [class.hidden]="!hasPermission('MODERATE', user.permissions)"
-              matTooltip="Will be marked as a tutor" (click)="togglePermission(user, 'MODERATE')">
+            <mat-icon [@fadeSlideInOut] class="tutor" *ngIf="hasPermission('MODERATE', user.permissions)"
+              matTooltip="Is marked as a tutor" (click)="togglePermission(user, 'MODERATE')">
               person
             </mat-icon>
           </div>

@@ -1,7 +1,7 @@
 import { FormControl, FormArray } from '@angular/forms';
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { PermissionService } from 'src/app/shared/permission.service';
-import { trigger, transition, style, animate, state } from '@angular/animations';
+import { trigger, transition, style, animate, state, sequence } from '@angular/animations';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -10,94 +10,37 @@ import { isNullOrUndefined } from 'util';
   styleUrls: ['./update-permissions.component.scss'],
   animations: [
     trigger(
-      'fadeInOut',
+      'fadeSlideInOut',
       [
         transition(
           ':enter',
           [
-            style({ opacity: 0 }),
-            animate('.3s ease-out',
-              style({ opacity: 1 }))
+            style({ width: 0, opacity: 0 }),
+            sequence([
+              animate('.3s ease-out',
+                style({ width: '*' })
+              ),
+              animate('.3s ease-out',
+                style({ opacity: '*' })
+              )
+            ])
           ]
         ),
         transition(
           ':leave',
           [
-            style({ opacity: 1 }),
-            animate('.3s ease-in',
-              style({ opacity: 0 }))
+            style({ width: '*' }),
+            sequence([
+              animate('.3s ease-in',
+                style({ opacity: 0 })
+              ),
+              animate('.3s ease-in',
+                style({ width: 0 })
+              )
+            ])
           ]
         )
       ],
-    ),
-    trigger(
-      'fadeIn',
-      [
-        state('hidden', style({ opacity: 0, display: 'none' })),
-        state('shown', style({ opacity: 1, display: '*' })),
-        transition(
-          'hidden => shown',
-          animate('.3s ease-in-out')
-        )
-      ],
-    ),
-    trigger(
-      'growInOut',
-      [
-        transition(
-          ':enter',
-          [
-            style({ transform: 'scale(0)' }),
-            animate('.3s ease-out',
-              style({ transform: 'scale(1)' }))
-          ]
-        ),
-        transition(
-          ':leave',
-          [
-            style({ transform: 'scale(1)' }),
-            animate('.3s ease-in',
-              style({ transform: 'scale(0)' }))
-          ]
-        )
-      ],
-    ),
-    trigger(
-      'slideInOut',
-      [
-        transition(
-          ':enter',
-          [
-            style({
-              transform: 'translateX(-1000px)',
-              opacity: 0,
-              'box-shadow': '0 0 0 0 transparent'
-            }),
-            animate('.3s ease-out',
-              style({
-                transform: 'translateX(0px)',
-                opacity: 1,
-                'box-shadow': '*'
-              }))
-          ]
-        ),
-        transition(
-          ':leave',
-          [
-            style({
-              transform: 'translateX(0)',
-              opacity: 1,
-              'box-shadow': '*'
-            }),
-            animate('.3s ease-in',
-              style({
-                transform: 'translateX(-1000px)',
-                opacity: 0,
-                'box-shadow': '0 0 0 0 transparent'
-              }))
-          ]
-        )
-      ]
     ),
   ]
 })

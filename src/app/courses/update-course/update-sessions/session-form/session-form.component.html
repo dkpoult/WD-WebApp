@@ -70,7 +70,7 @@
     <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px" class="cancellations"
       *ngIf="form.get('repeatType').value !== 'ONCE'">
       <div>
-        <mat-label>Except dates</mat-label>
+        <mat-label>Skip these dates</mat-label>
         <input matInput disabled #hiddenDateInput [matDatepicker]="cancelDatePicker" class="hiddenInPlace"
           (dateChange)="addCancellation($event.value)">
         <mat-datepicker-toggle matPrefix [for]="cancelDatePicker"></mat-datepicker-toggle>

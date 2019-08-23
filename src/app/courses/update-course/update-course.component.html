@@ -1,4 +1,4 @@
-<mat-tab-group mat-stretch-tabs *ngIf="gotCourse">
+<mat-tab-group mat-stretch-tabs *ngIf="gotCourse; else spinnerTemplate">
   <mat-tab label="Details" *ngIf="canEditDetails()">
     <app-update-details [course]="course" (submitCourse)="submitCourse($event)"></app-update-details>
   </mat-tab>
@@ -9,3 +9,6 @@
     <app-update-permissions [users]="users" (submitPermissions)="submitPermissions($event)"></app-update-permissions>
   </mat-tab>
 </mat-tab-group>
+<ng-template #spinnerTemplate>
+  <mat-spinner class="spinner"></mat-spinner>
+</ng-template>

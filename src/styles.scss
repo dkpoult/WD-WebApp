@@ -48,9 +48,8 @@ body {
 }
 
 .spinner {
-    left: 50%;
-    top: 50%;
-    position: fixed;
+    margin: 15% auto;
+    position: absolute;
 }
 
 mat-form-field {

@@ -71,14 +71,15 @@ export class TimetableService {
 
   sessionFallsOn(session, date: Date): boolean {
     const startDate: Date = new Date(session.date);
-
     // Don't include times
     startDate.setHours(0);
     startDate.setMinutes(0);
+    startDate.setSeconds(0);
     startDate.setMilliseconds(0);
 
     date.setHours(0);
     date.setMinutes(0);
+    date.setSeconds(0);
     date.setMilliseconds(0);
 
     if (date.valueOf() === startDate.valueOf()) {

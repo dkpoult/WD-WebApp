@@ -1,7 +1,7 @@
 import { Directive, ViewContainerRef, TemplateRef, Input } from '@angular/core';
 
 @Directive({
-  selector: '[ifChanges]'
+  selector: '[appIfChanges]'
 })
 export class IfChangesDirective {
   private currentValue: any;
@@ -12,7 +12,7 @@ export class IfChangesDirective {
     private templateRef: TemplateRef<any>
   ) { }
 
-  @Input() set ifChanges(val: any) {
+  @Input() set appIfChanges(val: any) {
     if (!this.hasView) {
       this.viewContainer.clear();
       this.viewContainer.createEmbeddedView(this.templateRef);
