@@ -8,12 +8,14 @@
         <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px">
           {{user.personNumber}}
           <div class="privelages">
-            <mat-icon [@fadeSlideInOut] class="lecturer" *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)"
-              matTooltip="Is marked as a lecturer" (click)="togglePermission(user, 'EDIT_PERMISSIONS')">
+            <!-- <mat-icon [@fadeSlideInOut] class="lecturer" *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)" -->
+            <mat-icon [@fadeSlideInOut] class="lecturer" matTooltip="Is marked as a lecturer" [class.active]="hasPermission('EDIT_PERMISSIONS', user.permissions)"
+              (click)="togglePermission(user, 'EDIT_PERMISSIONS')">
               school
             </mat-icon>
-            <mat-icon [@fadeSlideInOut] class="tutor" *ngIf="hasPermission('MODERATE', user.permissions)"
-              matTooltip="Is marked as a tutor" (click)="togglePermission(user, 'MODERATE')">
+            <!-- <mat-icon [@fadeSlideInOut] class="tutor" *ngIf="hasPermission('MODERATE', user.permissions)" -->
+            <mat-icon [@fadeSlideInOut] class="tutor" matTooltip="Is marked as a tutor" [class.active]="hasPermission('MODERATE', user.permissions)"
+              (click)="togglePermission(user, 'MODERATE')">
               person
             </mat-icon>
           </div>

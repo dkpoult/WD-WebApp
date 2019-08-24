@@ -18,8 +18,6 @@ export class UpdateCourseComponent implements OnInit {
   course: any;
   users: Array<any> = [];
 
-  get sessionCount() { return 0; }
-
   constructor(
     private permissionService: PermissionService,
     private sharedService: SharedService,

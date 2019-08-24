@@ -8,7 +8,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Type</mat-label>
-        <mat-select formControlName="responseType">
+        <mat-select formControlName="responseType" (valueChange)="handleTypeChange($event)">
           <mat-option value="MC">Multiple Choice</mat-option>
           <mat-option value="TEXT">Text</mat-option>
           <mat-option value="NUMERIC">Numeric</mat-option>
@@ -39,3 +39,5 @@
     </mat-dialog-actions>
   </form>
 </section>
+
+<button (click)="log(form)">Test</button>

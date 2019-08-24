@@ -18,6 +18,7 @@ export function requiredIf(condition: boolean): ValidatorFn {
 export class CreateSurveyComponent implements OnInit {
 
   form: FormGroup;
+  private oldResponseType: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,7 +31,6 @@ export class CreateSurveyComponent implements OnInit {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
       responseType: new FormControl('', [Validators.required]),
-      options: new FormArray([]) // TODO: Make this initialise to 2 empty options
     });
   }
 
@@ -69,4 +69,20 @@ export class CreateSurveyComponent implements OnInit {
     });
   }
 
+  handleTypeChange(event: any) {
+    if (this.oldResponseType === 'MC') {
+      this.form.removeControl('options');
+    }
+    this.oldResponseType = event;
+    if (event === 'MC') {
+      this.form.addControl('options', new FormArray([
+        new FormControl('', Validators.required),
+        new FormControl('', Validators.required)
+      ]));
+    }
+  }
+
+  log(msg: any) {
+    console.log(msg);
+  }
 }

@@ -4,12 +4,6 @@
     <div [ngSwitch]="survey.responseType">
       <mat-form-field *ngSwitchCase="'MC'">
         <mat-label>Choose an answer</mat-label>
-        <!-- TODO: this should be radio button -->
-        <!-- <mat-select formControlName="answer">
-          <mat-option *ngFor="let option of survey.options; let i = index" value="i">
-            {{ option }}
-          </mat-option>
-        </mat-select> -->
         <mat-radio-group formControlName="answer">
           <mat-radio-button *ngFor="let option of survey.options; let i = index" value="i">
             {{ option }}
@@ -42,8 +36,8 @@
   </div>
 </ng-container>
 <ng-template #elseTemplate>
-  <div class="no-content" fxLayout="column" fxLayoutAlign="start center">
+  <div class="no-content" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="15px">
     <div class="text">There are currently no open surveys</div>
-    <button mat-raised-button *ngIf="isLecturer()" color="primary" (click)="createSurvey()">Open a survey</button>
+    <button mat-raised-button *ngIf="isLecturer()" color="primary" (click)="createSurvey()">Create One</button>
   </div>
 </ng-template>
