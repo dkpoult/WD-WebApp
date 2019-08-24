@@ -1,7 +1,7 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { SharedService } from '../../shared/shared.service';
+import { SharedService } from '../../shared/services/shared.service';
 
 @Component({
   selector: 'app-make-announcement',

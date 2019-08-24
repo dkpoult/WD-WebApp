@@ -16,7 +16,7 @@ import { AgmCoreModule } from '@agm/core';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
-import { SharedService } from './shared/shared.service';
+import { SharedService } from './shared/services/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';

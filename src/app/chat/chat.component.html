@@ -13,7 +13,7 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                <!-- TODO Make this a virtual scroll -->
+<!--                 TODO Make this a virtual scroll -->
                 <!-- TODO Make autoscroll work properly, without errors -->
                 <div class="message-container" #autoscroll [scrollTop]="autoscroll.scrollHeight">
                     <app-chat-message *ngFor="let message of tutorMode ? messagesTutor : messagesStudent;"

@@ -1,28 +1,25 @@
-import { SharedService } from 'src/app/shared/shared.service';
-import { API } from './api';
-import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
-import { isNullOrUndefined } from 'util';
-import { Observable, Subject } from 'rxjs';
-
-interface Permission {
-  identifier: string;
-  value: number;
-}
+import {API} from './api';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {Permission} from './models';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PermissionService {
 
+  permissions: Permission[] = [];
   private newPermSubject = new Subject<any>();
   newPermissions$ = this.newPermSubject.asObservable();
-  permissions: Array<Permission> = [];
   private lookup: any;
 
   constructor(
-    private http: HttpClient
-  ) { }
+    private http: HttpClient,
+    private userService: UserService,
+  ) {
+  }
 
 
   updateLookups() {
@@ -41,7 +38,7 @@ export class PermissionService {
   }
 
   setPermissions(personNumber: string, permissions: number, courseCode: string) {
-    const user = JSON.parse(window.localStorage.getItem('user')); // ! Thats nasty. Logged In user should be extracted to a new service
+    const user = this.userService.currentUser;
     const body = {
       personNumber: user.personNumber,
       userToken: user.userToken,
@@ -53,7 +50,7 @@ export class PermissionService {
   }
 
   getAllPermissions(courseCode: string): Observable<any> {
-    const user = JSON.parse(window.localStorage.getItem('user')); // ! Thats nasty. Logged In user should be extracted to a new service
+    const user = this.userService.currentUser;
     const body = {
       personNumber: user.personNumber,
       userToken: user.userToken,

@@ -28,55 +28,55 @@ $wd-web-theme: mat-light-theme($wd-web-primary, $wd-web-accent, $wd-web-warn);
 
 /* You can add global styles to this file, and also import other style files */
 :not(.dark) {
-    @import 'assets/theming/wd-light-theme.scss'; // Default Wits colours theme
+  @import 'assets/theming/wd-light-theme.scss'; // Default Wits colours theme
 }
 
 .dark {
-    @import 'assets/theming/wd-dark-theme.scss'; // Dark colours theme
+  @import 'assets/theming/wd-dark-theme.scss'; // Dark colours theme
 }
 
 html,
 body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .spinner {
-    margin: 15% auto;
-    position: absolute;
+  margin: 15% auto;
+  position: absolute;
 }
 
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
 .no-content {
-    position: absolute;
-    margin: 30px auto;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  margin: 30px auto;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 mat-tab-group mat-tab-body {
-    width: 100%;
+  width: 100%;
 }
 
 .mat-tab-body-wrapper {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 // ! Temp fix for animating accordion
 .ng-animating mat-expansion-panel-header {
-    height: 48px;
+  height: 48px;
 }
 
 .ng-animating div.mat-expansion-panel-content {
-    height: 0px;
-    visibility: hidden;
+  height: 0px;
+  visibility: hidden;
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { TimetableService } from 'src/app/shared/timetable.service';
+import {Component, Input, OnInit} from '@angular/core';
+import {TimetableService} from 'src/app/shared/services/timetable.service';
 
 enum CalendarScale {
   Year = 'Year',
@@ -17,9 +17,10 @@ export class CalendarComponent implements OnInit {
 
   @Input() scale: CalendarScale;
 
-  @Input() sessions: Array<any>;
+  @Input() sessions: any[];
 
-  constructor(private timetableService: TimetableService) { }
+  constructor(private timetableService: TimetableService) {
+  }
 
   ngOnInit() {
   }

@@ -1,10 +1,10 @@
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
-import { SharedService } from '../shared/shared.service';
+import { SharedService } from '../shared/services/shared.service';
 import { MakeAnnouncementComponent } from '../announcements/make-announcement/make-announcement.component';
 import { switchMap } from 'rxjs/operators';
-import { PermissionService } from '../shared/permission.service';
+import { PermissionService } from '../shared/services/permission.service';
 import { animate, trigger, transition, style } from '@angular/animations';
 
 @Component({

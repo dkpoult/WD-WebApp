@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
-import { SharedService } from '../shared/shared.service';
-import { MatDialogRef } from '@angular/material';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {SharedService} from '../shared/services/shared.service';
+import {MatDialogRef} from '@angular/material';
+import {Router} from '@angular/router';
+import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -19,8 +20,10 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<LoginDialogComponent>,
     private sharedService: SharedService,
+    private userService: UserService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -42,7 +45,7 @@ export class LoginDialogComponent implements OnInit {
       switch (response.responseCode) {
         case 'successful':
           this.loginFailed = false;
-          this.sharedService.loginUser(user.personNumber, response.userToken, response.preferences);
+          this.userService.loginUser(user.personNumber, response.userToken, response.preferences);
           this.router.navigateByUrl('/courses');
           this.dialogRef.close(true);
           break;

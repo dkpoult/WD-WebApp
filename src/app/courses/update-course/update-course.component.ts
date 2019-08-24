@@ -1,9 +1,8 @@
-import { SharedService } from './../../shared/shared.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { PermissionService } from 'src/app/shared/permission.service';
-import { VenueService } from 'src/app/shared/venue.service';
+import {SharedService} from '../../shared/services/shared.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
+import {PermissionService} from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-update-course',
@@ -12,27 +11,30 @@ import { VenueService } from 'src/app/shared/venue.service';
 })
 export class UpdateCourseComponent implements OnInit {
 
-  get gotCourse() { return !!this.course; }
-
   courseCode: string;
   course: any;
-  users: Array<any> = [];
+  users: any[] = [];
 
   constructor(
     private permissionService: PermissionService,
     private sharedService: SharedService,
     private route: ActivatedRoute,
-  ) { }
+  ) {
+  }
+
+  get gotCourse() {
+    return !!this.course;
+  }
 
   ngOnInit() {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
-        this.courseCode = result;
-        this.getCourse();
-        this.getPermissions();
-      });
+      this.courseCode = result;
+      this.getCourse();
+      this.getPermissions();
+    });
   }
 
   getCourse() {
@@ -53,7 +55,7 @@ export class UpdateCourseComponent implements OnInit {
 
           for (const user in perms) {
             if (perms.hasOwnProperty(user)) {
-              this.users.push({ personNumber: user, permissions: perms[user] });
+              this.users.push({personNumber: user, permissions: perms[user]});
             }
           }
           break;

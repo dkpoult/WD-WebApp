@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { trigger, transition, style, animate, state, query, stagger, keyframes } from '@angular/animations';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {animate, keyframes, query, stagger, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-speed-dial-fab',
@@ -18,28 +18,28 @@ import { trigger, transition, style, animate, state, query, stagger, keyframes }
     trigger('speedDialStagger', [
       transition('* => *', [
 
-        query(':enter', style({ opacity: 0 }), { optional: true }),
+        query(':enter', style({opacity: 0}), {optional: true}),
 
         query(':enter', stagger('40ms',
           [
             animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
               keyframes(
                 [
-                  style({ opacity: 0, transform: 'translateY(10px)' }),
-                  style({ opacity: 1, transform: 'translateY(0)' }),
+                  style({opacity: 0, transform: 'translateY(10px)'}),
+                  style({opacity: 1, transform: 'translateY(0)'}),
                 ]
               )
             )
           ]
-        ), { optional: true }),
+        ), {optional: true}),
 
         query(':leave',
           animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)',
             keyframes([
-              style({ opacity: 1 }),
-              style({ opacity: 0 }),
+              style({opacity: 1}),
+              style({opacity: 0}),
             ])
-          ), { optional: true }
+          ), {optional: true}
         )
 
       ])
@@ -49,11 +49,12 @@ import { trigger, transition, style, animate, state, query, stagger, keyframes }
 export class SpeedDialFabComponent implements OnInit {
   @Input() icon = 'add';
   @Input() spin = true;
-  @Input() actions: Array<any>;
+  @Input() actions: any[];
   @Output() clicked = new EventEmitter<string>();
   opened = false;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
