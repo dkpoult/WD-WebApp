@@ -16,7 +16,7 @@ import { AgmCoreModule } from '@agm/core';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
-import { SharedService } from './shared/shared.service';
+import { SharedService } from './shared/services/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
@@ -48,7 +48,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
 import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-question.component';
 import { ViewCourseComponent } from './courses/view-course/view-course.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
+import { SearchBarComponent } from './widgets/search-bar/search-bar.component';
 import { IfChangesDirective } from './shared/directives.module';
 
 export function initialiseApp(config: SharedService) {
@@ -95,7 +95,7 @@ export function initialiseApp(config: SharedService) {
     UpdateCourseComponent,
     UpdateDetailsComponent,
     UpdateSessionsComponent,
-    UpdatePermissionsComponent
+    UpdatePermissionsComponent,
   ],
   imports: [
     HttpClientModule,

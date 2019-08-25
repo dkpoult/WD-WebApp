@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { SharedService } from '../../shared/shared.service';
+import { SharedService } from '../../shared/services/shared.service';
 import { switchMap } from 'rxjs/operators';
 
 enum SortMode {

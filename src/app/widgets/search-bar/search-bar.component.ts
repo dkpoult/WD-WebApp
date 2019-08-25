@@ -1,5 +1,5 @@
-import { DomSanitizer } from '@angular/platform-browser';
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-search-bar',
@@ -9,11 +9,13 @@ import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angu
 export class SearchBarComponent implements OnInit {
 
   @Output() searchTerm = new EventEmitter<string>();
-  @Input() options: Array<{ checked: boolean, hint: string, icon: string, color: string }>;
+  @Input() options: { checked: boolean, hint: string, icon: string, color: string }[];
 
-  constructor(public sanitizer: DomSanitizer) { }
+  constructor(public sanitizer: DomSanitizer) {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
   searchBarClick(focusElement, event: MouseEvent) {
     event.preventDefault();

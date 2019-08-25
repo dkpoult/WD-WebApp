@@ -1,8 +1,7 @@
-import { FormControl, FormArray } from '@angular/forms';
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { PermissionService } from 'src/app/shared/permission.service';
-import { trigger, transition, style, animate, state, sequence } from '@angular/animations';
-import { isNullOrUndefined } from 'util';
+import {FormArray, FormControl} from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {PermissionService} from 'src/app/shared/services/permission.service';
+import {animate, sequence, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-update-permissions',
@@ -15,13 +14,13 @@ import { isNullOrUndefined } from 'util';
         transition(
           ':enter',
           [
-            style({ width: 0, opacity: 0 }),
+            style({width: 0, opacity: 0}),
             sequence([
               animate('.3s ease-out',
-                style({ width: '*' })
+                style({width: '*'})
               ),
               animate('.3s ease-out',
-                style({ opacity: '*' })
+                style({opacity: '*'})
               )
             ])
           ]
@@ -29,13 +28,13 @@ import { isNullOrUndefined } from 'util';
         transition(
           ':leave',
           [
-            style({ width: '*' }),
+            style({width: '*'}),
             sequence([
               animate('.3s ease-in',
-                style({ opacity: 0 })
+                style({opacity: 0})
               ),
               animate('.3s ease-in',
-                style({ width: 0 })
+                style({width: 0})
               )
             ])
           ]
@@ -47,21 +46,24 @@ import { isNullOrUndefined } from 'util';
 export class UpdatePermissionsComponent implements OnInit {
 
   @Output() submitPermissions = new EventEmitter<any>();
-  @Input() users: Array<any> = [];
+  @Input() users: any[] = [];
 
   form: FormArray;
 
   newPermissions$ = this.permissionService.newPermissions$;
   permissions = [];
-  get gotPermissions() { return !!this.permissions; }
-
   displayedColumns = [
     'personNumber',
   ];
 
   constructor(
     private permissionService: PermissionService,
-  ) { }
+  ) {
+  }
+
+  get gotPermissions() {
+    return !!this.permissions;
+  }
 
   ngOnInit() {
     this.newPermissions$.subscribe((newPermissions: any) => {
@@ -75,7 +77,7 @@ export class UpdatePermissionsComponent implements OnInit {
     });
     this.permissionService.updateLookups();
 
-    const permissions: Array<FormControl> = this.users.map(e => new FormControl(e));
+    const permissions: FormControl[] = this.users.map(e => new FormControl(e));
     this.form = new FormArray(permissions);
   }
 

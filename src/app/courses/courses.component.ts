@@ -1,15 +1,16 @@
-import { PermissionService } from './../shared/permission.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SharedService } from '../shared/shared.service';
-import { CreateCourseComponent } from './create-course/create-course.component';
-import { MatDialogRef, MatDialog } from '@angular/material';
-import { LinkCourseComponent } from './link-course/link-course.component';
-import { SpeedDialFabComponent } from '../speed-dial-fab/speed-dial-fab.component';
-import { EnrolComponent } from '../courses/enrol/enrol.component';
-import { trigger, transition, style, animate, keyframes } from '@angular/animations';
-import { isNullOrUndefined } from 'util';
-import { ViewCourseComponent } from './view-course/view-course.component';
-import { Observable } from 'rxjs';
+import {PermissionService} from '../shared/services/permission.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {SharedService} from '../shared/services/shared.service';
+import {CreateCourseComponent} from './create-course/create-course.component';
+import {MatDialog, MatDialogRef} from '@angular/material';
+import {LinkCourseComponent} from './link-course/link-course.component';
+import {SpeedDialFabComponent} from '../speed-dial-fab/speed-dial-fab.component';
+import {EnrolComponent} from '../courses/enrol/enrol.component';
+import {animate, keyframes, style, transition, trigger} from '@angular/animations';
+import {isNullOrUndefined} from 'util';
+import {ViewCourseComponent} from './view-course/view-course.component';
+import {Observable} from 'rxjs';
+import {Course} from '../shared/services/models';
 
 @Component({
   selector: 'app-courses',
@@ -89,17 +90,17 @@ import { Observable } from 'rxjs';
         transition(
           ':enter',
           [
-            style({ opacity: 0 }),
+            style({opacity: 0}),
             animate('.3s ease-out',
-              style({ opacity: 1 }))
+              style({opacity: 1}))
           ]
         ),
         transition(
           ':leave',
           [
-            style({ opacity: 1 }),
+            style({opacity: 1}),
             animate('.3s ease-in',
-              style({ opacity: 0 }))
+              style({opacity: 0}))
           ]
         )
       ]
@@ -108,8 +109,8 @@ import { Observable } from 'rxjs';
       [
         transition('true <=> false', [
           animate(300, keyframes([
-            style({ transform: 'rotate(0deg)' }),
-            style({ transform: 'rotate(-180deg)' })
+            style({transform: 'rotate(0deg)'}),
+            style({transform: 'rotate(-180deg)'})
           ]))
         ])
       ]
@@ -124,19 +125,10 @@ export class CoursesComponent implements OnInit {
   linkCourseDialogRef: MatDialogRef<LinkCourseComponent>;
   enrolDialogRef: MatDialogRef<EnrolComponent>;
   viewDetailsDialogRef: MatDialogRef<ViewCourseComponent>;
-
-  get lectureOnly() { return this.toggleOptions[0].checked; }
-  get tutorOnly() { return this.toggleOptions[1].checked; }
   searchTerm = '';
   spin = false;
-  courses: Array<any>;
-  get filteredCourses() {
-    return this.courses.filter((value) =>
-      this.filter(value, this.lectureOnly, this.tutorOnly, this.searchTerm));
-  }
+  courses: any[];
   gotCourses = false;
-
-
   @ViewChild('fab') fab: SpeedDialFabComponent;
   fabActions = [
     {
@@ -155,7 +147,6 @@ export class CoursesComponent implements OnInit {
       event: 'create'
     }
   ];
-
   toggleOptions = [
     {
       hint: 'Lecturer',
@@ -175,7 +166,21 @@ export class CoursesComponent implements OnInit {
     private sharedService: SharedService,
     private permissionService: PermissionService,
     private dialog: MatDialog,
-  ) { }
+  ) {
+  }
+
+  get lectureOnly() {
+    return this.toggleOptions[0].checked;
+  }
+
+  get tutorOnly() {
+    return this.toggleOptions[1].checked;
+  }
+
+  get filteredCourses(): Course[] {
+    return this.courses.filter((value) =>
+      this.filter(value, this.lectureOnly, this.tutorOnly, this.searchTerm));
+  }
 
   ngOnInit() {
     this.getCourses();
@@ -272,17 +277,19 @@ export class CoursesComponent implements OnInit {
     const lecturer: boolean = this.isLecturer(value);
     const tutor: boolean = this.isTutor(value);
 
-    const searchMatch = (name.includes(searchTerm) || code.includes(searchTerm));
-
-    let pass = searchMatch;
-    if (lectureOnly) { pass = pass && lecturer; }
-    if (tutorOnly) { pass = pass && tutor; }
+    let pass = (name.includes(searchTerm) || code.includes(searchTerm));
+    if (lectureOnly) {
+      pass = pass && lecturer;
+    }
+    if (tutorOnly) {
+      pass = pass && tutor;
+    }
 
     return pass;
   }
 
   openDetailsDialog(course: any) {
-    this.viewDetailsDialogRef = this.dialog.open(ViewCourseComponent, { data: course });
+    this.viewDetailsDialogRef = this.dialog.open(ViewCourseComponent, {data: course});
   }
 
   searchBarClick(searchBar: any, event: MouseEvent) {

@@ -1,35 +1,35 @@
-@import 'src/assets/theming/animations.scss';
+@import 'src/assets/animations.scss';
 
 $duration: 300ms;
 
 .upvoted {
-    color: #ff4500; // orangered
+  color: #ff4500; // orangered
 }
 
 .downvoted {
-    color: #7193ff; // periwinkle
+  color: #7193ff; // periwinkle
 }
 
 [class*="-button"] {
-    opacity: 0.8;
+  opacity: 0.8;
 
-    &:hover {
-        opacity: 1;
-    }
+  &:hover {
+    opacity: 1;
+  }
 
 }
 
 .vote-button {
-    transition: color 300ms;
+  transition: color 300ms;
 }
 
 .score {
-    &:not(:last-of-type) {
-        // Don't reflow when changing values
-        position: absolute;
-    }
+  &:not(:last-of-type) {
+    // Don't reflow when changing values
+    position: absolute;
+  }
 
-    max-width: 50px;
-    text-overflow: clip;
-    text-align: center;
+  max-width: 50px;
+  text-overflow: clip;
+  text-align: center;
 }

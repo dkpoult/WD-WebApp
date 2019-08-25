@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { SharedService } from 'src/app/shared/shared.service';
-import { PermissionService } from 'src/app/shared/permission.service';
+import { SharedService } from 'src/app/shared/services/shared.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 import { transition, trigger, style, animate, keyframes } from '@angular/animations';
+import {UserService} from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-comment',
@@ -38,10 +39,11 @@ export class CommentComponent implements OnInit {
 
   get isLecturer() { return this.permissionService.isLecturer(this.permissions); }
 
-  get isOwnPost() { return this.comment.poster === this.sharedService.currentUser.personNumber; }
+  get isOwnPost() { return this.comment.poster === this.userService.currentUser.personNumber; }
 
   constructor(
     private sharedService: SharedService,
+    private userService: UserService,
     private permissionService: PermissionService,
   ) { }
 

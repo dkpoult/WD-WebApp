@@ -1,75 +1,75 @@
-@import 'src/assets/theming/mixins';
-@import 'src/assets/theming/colors';
+@import 'src/assets/mixins';
+@import 'src/assets/colors';
 
 .table-container {
-    @include card(1);
-    overflow-x: auto;
-    margin: 15px;
+  @include card(1);
+  overflow-x: auto;
+  margin: 15px;
 
-    table,
-    mat-paginator {
-        width: 100%;
-        min-width: 650px;
+  table,
+  mat-paginator {
+    width: 100%;
+    min-width: 650px;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    width: 10%;
+    height: 32px;
+
+    ::ng-deep:not(.dark) & {
+      &:not(:last-of-type) {
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+      }
     }
 
-    .mat-cell,
-    .mat-header-cell {
-        width: 10%;
-        height: 32px;
-
-        ::ng-deep:not(.dark) & {
-            &:not(:last-of-type) {
-                border-right: 1px solid rgba(0, 0, 0, 0.12);
-            }
-        }
-
-        ::ng-deep.dark & {
-            &:not(:last-of-type) {
-                border-right: 1px solid rgba(255, 255, 255, 0.12);
-            }
-        }
-
-        &.mat-column-personNumber .privelages {
-            .lecturer {
-                color: $darkLecturerColor;
-            }
-
-            .tutor {
-                color: $darkTutorColor;
-            }
-
-            .hidden {
-                transition: opacity 300ms ease-in;
-                opacity: 0;
-                visibility: hidden;
-            }
-
-            :not(.hidden) {
-                transition: opacity 300ms ease-out;
-                opacity: 1;
-
-                &:hover {
-                    cursor: pointer;
-                    opacity: 0.7;
-                }
-            }
-        }
-
-        &:not(.mat-column-personNumber) {
-            text-align: center;
-        }
-
-        &:first-of-type {
-            width: 20%;
-            padding-left: 5px;
-        }
-
-        &:last-of-type {
-            padding-right: 0;
-        }
+    ::ng-deep.dark & {
+      &:not(:last-of-type) {
+        border-right: 1px solid rgba(255, 255, 255, 0.12);
+      }
     }
 
-    .perm-header {
-        text-transform: capitalize;
+    &.mat-column-personNumber .privelages {
+      .lecturer {
+        color: $darkLecturerColor;
+      }
+
+      .tutor {
+        color: $darkTutorColor;
+      }
+
+      .hidden {
+        transition: opacity 300ms ease-in;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      :not(.hidden) {
+        transition: opacity 300ms ease-out;
+        opacity: 1;
+
+        &:hover {
+          cursor: pointer;
+          opacity: 0.7;
+        }
+      }
     }
+
+    &:not(.mat-column-personNumber) {
+      text-align: center;
+    }
+
+    &:first-of-type {
+      width: 20%;
+      padding-left: 5px;
+    }
+
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+
+  .perm-header {
+    text-transform: capitalize;
+  }
 }

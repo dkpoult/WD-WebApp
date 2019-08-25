@@ -1,7 +1,7 @@
-import { SharedService } from '../../shared/shared.service';
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatDialog } from '@angular/material';
-import { ConfirmEnrolmentComponent } from './confirm-enrolment/confirm-enrolment.component';
+import {SharedService} from '../../shared/services/shared.service';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog, MatDialogRef} from '@angular/material';
+import {ConfirmEnrolmentComponent} from './confirm-enrolment/confirm-enrolment.component';
 
 @Component({
   selector: 'app-enrol',
@@ -12,14 +12,15 @@ export class EnrolComponent implements OnInit {
 
   confirmDialogRef: MatDialogRef<ConfirmEnrolmentComponent>;
 
-  courses: Array<any>;
+  courses: any[];
   gotCourses = false;
 
   constructor(
     private sharedService: SharedService,
     private dialogRef: MatDialogRef<EnrolComponent>,
     private dialog: MatDialog,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.getCourses();

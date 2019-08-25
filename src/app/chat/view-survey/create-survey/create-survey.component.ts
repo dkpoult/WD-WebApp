@@ -1,8 +1,8 @@
-import { SurveyService } from '../../../shared/survey.service';
+import { SurveyService } from '../../../shared/services/survey.service';
 import { FormGroup, FormControl, FormArray, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { SharedService } from '../../../shared/shared.service';
+import { SharedService } from '../../../shared/services/shared.service';
 
 
 export function requiredIf(condition: boolean): ValidatorFn {

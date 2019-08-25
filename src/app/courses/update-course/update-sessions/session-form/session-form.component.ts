@@ -1,9 +1,9 @@
-import { FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatChip, MatExpansionPanel } from '@angular/material';
-import { VenueService } from 'src/app/shared/venue.service';
-import { TimetableService } from 'src/app/shared/timetable.service';
-import { trigger, transition, style, animate } from '@angular/animations';
+import {FormGroup} from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatChip, MatExpansionPanel} from '@angular/material';
+import {VenueService} from 'src/app/shared/venue.service';
+import {TimetableService} from 'src/app/shared/services/timetable.service';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-session-form',
@@ -16,17 +16,17 @@ import { trigger, transition, style, animate } from '@angular/animations';
         transition(
           ':enter',
           [
-            style({ opacity: 0 }),
+            style({opacity: 0}),
             animate('.3s ease-out',
-              style({ opacity: 1 }))
+              style({opacity: 1}))
           ]
         ),
         transition(
           ':leave',
           [
-            style({ opacity: 1 }),
+            style({opacity: 1}),
             animate('.3s ease-in',
-              style({ opacity: 0 }))
+              style({opacity: 0}))
           ]
         )
       ]
@@ -37,17 +37,17 @@ import { trigger, transition, style, animate } from '@angular/animations';
         transition(
           ':enter',
           [
-            style({ transform: 'scale(0)' }),
+            style({transform: 'scale(0)'}),
             animate('.3s ease-out',
-              style({ transform: 'scale(1)' }))
+              style({transform: 'scale(1)'}))
           ]
         ),
         transition(
           ':leave',
           [
-            style({ transform: 'scale(1)' }),
+            style({transform: 'scale(1)'}),
             animate('.3s ease-in',
-              style({ transform: 'scale(0)' }))
+              style({transform: 'scale(0)'}))
           ]
         )
       ],
@@ -63,31 +63,43 @@ export class SessionFormComponent implements OnInit {
   @ViewChild('panel') panel: MatExpansionPanel;
 
   panelOpenState: boolean;
-
-  get cancellations(): Array<string> { return this.form.get('cancellations').value; }
-  set cancellations(v: Array<string>) { this.form.get('cancellations').setValue(v); }
-
-  get startDate() { return this.form.get('date').value; }
-  set startDate(v) { this.form.get('date').setValue(v); }
-
   venues;
-
   repeatTypes = [
-    { value: 'ONCE', text: 'Once only' },
-    { value: 'DAILY', text: 'Daily' },
-    { value: 'WEEKLY', text: 'Weekly' },
-    { value: 'MONTHLY', text: 'Monthly' },
+    {value: 'ONCE', text: 'Once only'},
+    {value: 'DAILY', text: 'Daily'},
+    {value: 'WEEKLY', text: 'Weekly'},
+    {value: 'MONTHLY', text: 'Monthly'},
   ];
   sessionTypes = [
-    { value: 'LECTURE', text: 'Lecture' },
-    { value: 'LAB', text: 'Lab' },
-    { value: 'TUTORIAL', text: 'Tutorial' },
-    { value: 'TEST', text: 'Test' },
-    { value: 'OTHER', text: 'Other' },
+    {value: 'LECTURE', text: 'Lecture'},
+    {value: 'LAB', text: 'Lab'},
+    {value: 'TUTORIAL', text: 'Tutorial'},
+    {value: 'TEST', text: 'Test'},
+    {value: 'OTHER', text: 'Other'},
   ];
-  constructor(private venueService: VenueService, private timetableService: TimetableService) { }
 
-  dateClass = (d: Date) => {
+  constructor(private venueService: VenueService, private timetableService: TimetableService) {
+  }
+
+  get cancellations(): string[] {
+    return this.form.get('cancellations').value;
+  }
+
+  set cancellations(v: string[]) {
+    this.form.get('cancellations').setValue(v);
+  }
+
+  get startDate() {
+    return this.form.get('date').value;
+  }
+
+  set startDate(v) {
+    this.form.get('date').setValue(v);
+  }
+
+  dateClass = this.getDateClass;
+
+  getDateClass(d: Date) {
     const session = this.form.value;
     if (!session.date) {
       session.date = session.nextDate;
@@ -163,7 +175,7 @@ export class SessionFormComponent implements OnInit {
       this.panel.close();
     }
     this.panel.disabled = state;
-    this.form.setErrors({ required: state });
+    this.form.setErrors({required: state});
     if (state) {
       this.form.markAsDirty();
     }
@@ -178,16 +190,8 @@ export class SessionFormComponent implements OnInit {
 
   addCancellation(date) {
     this.cancelDatePicker._selected = null;
-    const year = date.getFullYear().toString();
-    let month = (date.getMonth() + 1).toString(); // Month is 0 based for whatever reason
-    if (month.length < 2) {
-      month = '0' + month;
-    }
-    let day = date.getDate().toString();
-    if (day.length < 2) {
-      day = '0' + day;
-    }
-    const cancellation = `${year}-${month}-${day}`;
+    const dateString: string = this.timetableService.getDateString(date);
+    const cancellation = `${dateString}`;
     if (this.cancellations.includes(cancellation)) {
       this.cancellations = this.cancellations.filter(v => v !== cancellation);
       return;

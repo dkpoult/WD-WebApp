@@ -1,9 +1,9 @@
-import { VenueService } from '../shared/venue.service';
-import { Component, OnInit } from '@angular/core';
-import { SharedService } from '../shared/shared.service';
-import { TimetableService } from '../shared/timetable.service';
-import { Router } from '@angular/router';
-import { isNullOrUndefined } from 'util';
+import {VenueService} from '../shared/venue.service';
+import {Component, OnInit} from '@angular/core';
+import {SharedService} from '../shared/services/shared.service';
+import {TimetableService} from '../shared/services/timetable.service';
+import {Router} from '@angular/router';
+import {Course, Session, Venue} from '../shared/services/models';
 
 @Component({
   selector: 'app-timetable',
@@ -12,29 +12,28 @@ import { isNullOrUndefined } from 'util';
 })
 export class TimetableComponent implements OnInit {
 
-  courses: Array<{
-    courseCode: string,
-    courseName: string,
-    courseDescription: string,
-    lecturer: string,
-    hasPassword: boolean,
-    questionForum: string,
-    forums: Array<string>,
-    sessions: Array<any>
-  }>;
+  courses: Course[];
 
-  sessions: Array<any>;
+  sessions: Session[];
 
   gotCourses = false;
+
+  venues: Venue[];
+  newVenues$ = this.venueService.newVenues$;
 
   constructor(
     private sharedService: SharedService,
     private timetableService: TimetableService,
     private venueService: VenueService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
+    this.newVenues$.subscribe((venues: Venue[]) => {
+      this.venues = venues;
+    });
+
     this.getCourses();
     this.venueService.updateVenues();
   }
@@ -82,8 +81,8 @@ export class TimetableComponent implements OnInit {
   }
 
   venueHasCoords(venue) {
-    // TODO: Find out why venueService.venues is always null
-    return true;
+    const dbVenue = this.venues.find(v => v.buildingCode === venue.buildingCode);
+    return !!dbVenue.coordinates;
   }
 
   showInMap(venue) {

@@ -3,7 +3,6 @@
     class="search-input">
   <mat-icon class="search-icon">search</mat-icon>
   <div class="search-option" (mousedown)="searchBarClick(searchInput, $event)">
-    <!-- <app-toggle-option *ngFor="let opt of options; let i = index" [option]="options[i]"></app-toggle-option> -->
     <div *ngFor="let option of options;"
       [attr.style]="sanitizer.bypassSecurityTrustStyle('--activeColor: ' + option.color)">
       <input name=" filter" type="checkbox" [(ngModel)]="option.checked" id="filter-{{option.hint}}">

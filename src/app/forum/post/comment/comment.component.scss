@@ -1,15 +1,15 @@
-@import 'src/assets/theming/animations';
+@import 'src/assets/animations';
 
 .comment {
-    margin: 15px;
-    transition: ease-in-out;
+  margin: 15px;
+  transition: ease-in-out;
 }
 
 .answer {
-    color: #37ba1d;
+  color: #37ba1d;
 }
 
 .time {
-    float: right;
-    color: transparentize($color: #000000, $amount: 0.5)
+  float: right;
+  color: transparentize($color: #000000, $amount: 0.5)
 }

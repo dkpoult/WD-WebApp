@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-update-sessions',
@@ -11,8 +11,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     trigger(
       'fadeIn',
       [
-        state('hidden', style({ opacity: 0, display: 'none' })),
-        state('shown', style({ opacity: 1, display: '*' })),
+        state('hidden', style({opacity: 0, display: 'none'})),
+        state('shown', style({opacity: 1, display: '*'})),
         transition(
           'hidden => shown',
           animate('.3s ease-in-out')
@@ -61,20 +61,26 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class UpdateSessionsComponent implements OnInit {
 
   form: FormGroup;
-  get formSessions() { return (this.form.get('sessions') as FormArray); }
-
   @Input() sessions: any = {};
   @Output() submitSessions = new EventEmitter<any>();
 
-  get sessionCount() { return this.formSessions.length; }
-
   constructor(
     private snackBar: MatSnackBar,
-  ) { }
+  ) {
+  }
+
+  get formSessions() {
+    return (this.form.get('sessions') as FormArray);
+  }
+
+  get sessionCount() {
+    return this.formSessions.length;
+  }
 
   ngOnInit() {
+    console.log(this.sessions);
     this.form = new FormGroup({});
-    const sessions: Array<FormGroup> = [];
+    const sessions: FormGroup[] = [];
     this.sessions.forEach(session => {
       const date = new Date(session.nextDate);
       let dateStr: string;
@@ -90,7 +96,7 @@ export class UpdateSessionsComponent implements OnInit {
         endStr = this.getTimeString(date, session.duration);
       }
       if (!session.venue) {
-        session.venue = { building: null, room: null };
+        session.venue = {building: null, room: null};
       }
       if (!session.cancellations) {
         session.cancellations = [];
@@ -137,7 +143,7 @@ export class UpdateSessionsComponent implements OnInit {
   removeSession(i: number) {
     this.form.markAsDirty();
     const removed = this.formSessions.at(i);
-    const snackBarRef = this.snackBar.open('Removed session', 'Undo', { duration: 2000 });
+    const snackBarRef = this.snackBar.open('Removed session', 'Undo', {duration: 2000});
     snackBarRef.onAction().subscribe(() => {
       this.formSessions.insert(i, removed);
     });
@@ -169,19 +175,27 @@ export class UpdateSessionsComponent implements OnInit {
   }
 
   findInvalidControls(_input: AbstractControl, _invalidControls: AbstractControl[]): AbstractControl[] {
-    if (!_invalidControls) { _invalidControls = []; }
+    if (!_invalidControls) {
+      _invalidControls = [];
+    }
     if (_input instanceof FormControl) {
-      if (_input.invalid) { _invalidControls.push(_input); }
+      if (_input.invalid) {
+        _invalidControls.push(_input);
+      }
       return _invalidControls;
     }
 
-    if (!(_input instanceof FormArray) && !(_input instanceof FormGroup)) { return _invalidControls; }
+    if (!(_input instanceof FormArray) && !(_input instanceof FormGroup)) {
+      return _invalidControls;
+    }
 
     const controls = _input.controls;
     // tslint:disable-next-line: forin
     for (const name in controls) {
       const control = controls[name];
-      if (control.invalid) { _invalidControls.push(control); }
+      if (control.invalid) {
+        _invalidControls.push(control);
+      }
       switch (control.constructor.name) {
         case 'FormArray':
           (control as FormArray).controls.forEach(_control => _invalidControls = this.findInvalidControls(_control, _invalidControls));
@@ -236,6 +250,7 @@ export class UpdateSessionsComponent implements OnInit {
       session.duration = this.timeBetween(session.time, session.endTime);
       delete session.endTime;
     });
+    console.log(newSessions);
     this.submitSessions.next(newSessions);
     this.form.markAsPristine();
   }

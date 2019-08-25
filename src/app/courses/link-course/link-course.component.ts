@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SharedService } from '../../shared/shared.service';
+import { SharedService } from '../../shared/services/shared.service';
 import { MatDialogRef } from '@angular/material';
 import { CreateCourseComponent } from '../create-course/create-course.component';
 

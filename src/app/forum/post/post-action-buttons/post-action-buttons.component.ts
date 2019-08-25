@@ -1,7 +1,7 @@
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CreateCommentComponent } from '../create-comment/create-comment.component';
-import { SharedService } from 'src/app/shared/shared.service';
+import { SharedService } from 'src/app/shared/services/shared.service';
 import { trigger, style, transition, animate, keyframes, state } from '@angular/animations';
 import { isNullOrUndefined } from 'util';
 

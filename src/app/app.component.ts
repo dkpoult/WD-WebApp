@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { ThemeService } from './shared/theme.service';
+import { ThemeService } from './shared/services/theme.service';
 
 @Component({
   selector: 'app-root',
