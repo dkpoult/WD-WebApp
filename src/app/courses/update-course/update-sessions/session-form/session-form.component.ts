@@ -123,7 +123,7 @@ export class SessionFormComponent implements OnInit {
     }
 
     return classStrings.join(' ');
-  }
+  };
 
   ngOnInit() {
     this.venues = [];
