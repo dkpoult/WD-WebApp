@@ -36,9 +36,10 @@
 
 
 /// Creates a hover popup for course labels.
-/// @param {Color} $color - The background color of the popup
 /// @param {Color} $text-color - The color of the text
-@mixin popupLabel($color, $text-color: #fff, $arrow-size: 5px) {
+/// @param {Color} $position - top / right / bottom / left
+/// @param {Color} $text-color - The color of the text
+@mixin popupLabel($color, $position, $text-color: #fff, $arrow-size: 5px) {
   // The label
   span {
     position: absolute;

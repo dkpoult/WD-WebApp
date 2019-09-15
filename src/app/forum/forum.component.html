@@ -8,7 +8,7 @@
     <mat-card-title class="title">{{ post.title }}</mat-card-title>
     <mat-card-subtitle>{{ post.poster }}</mat-card-subtitle>
     <mat-card-content mat-ripple>
-      {{ post.body }}
+      <div>{{post.body}}</div>
     </mat-card-content>
     <mat-card-actions>
       <app-post-action-buttons [post]="post"></app-post-action-buttons>

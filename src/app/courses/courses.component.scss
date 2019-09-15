@@ -11,9 +11,13 @@ $course-width: 75%;
   box-sizing: border-box;
   border-left: $border-width solid transparent;
 
+  .description {
+
+  }
+
   &:not(div):hover {
     @include card(2);
-    transform: scale(1.05);
+    transform: scale(1.025);
     z-index: 0;
   }
 
@@ -44,7 +48,7 @@ app-search-bar {
   border-color: $darkLecturerColor;
 
   .course-label {
-    @include popupLabel($darkLecturerColor);
+    @include popupLabel($darkLecturerColor, left);
   }
 }
 
@@ -52,7 +56,7 @@ app-search-bar {
   border-color: $darkTutorColor;
 
   .course-label {
-    @include popupLabel($darkTutorColor);
+    @include popupLabel($darkTutorColor, left);
   }
 }
 

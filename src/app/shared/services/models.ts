@@ -2,7 +2,6 @@ export interface User {
   personNumber: string;
   userToken: string | undefined;
   preferences: any | undefined;
-
 }
 
 export interface Person {

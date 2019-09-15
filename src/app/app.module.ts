@@ -50,6 +50,8 @@ import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-que
 import { ViewCourseComponent } from './courses/view-course/view-course.component';
 import { SearchBarComponent } from './widgets/search-bar/search-bar.component';
 import { IfChangesDirective } from './shared/directives.module';
+import { ViewUserComponent } from './user/view-user/view-user.component';
+import { MarkdownPipe } from './markdown.pipe';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -96,6 +98,8 @@ export function initialiseApp(config: SharedService) {
     UpdateDetailsComponent,
     UpdateSessionsComponent,
     UpdatePermissionsComponent,
+    ViewUserComponent,
+    MarkdownPipe,
   ],
   imports: [
     HttpClientModule,

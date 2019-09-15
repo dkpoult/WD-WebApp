@@ -132,7 +132,7 @@ export class CoursesComponent implements OnInit {
   @ViewChild('fab') fab: SpeedDialFabComponent;
   fabActions = [
     {
-      icon: 'class',
+      icon: 'import_contacts',
       text: 'Enrol In A Course',
       event: 'enrol'
     },
