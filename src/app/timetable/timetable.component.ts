@@ -4,6 +4,7 @@ import {SharedService} from '../shared/services/shared.service';
 import {TimetableService} from '../shared/services/timetable.service';
 import {Router} from '@angular/router';
 import {Course, Session, Venue} from '../shared/services/models';
+import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-timetable',
@@ -27,6 +28,7 @@ export class TimetableComponent implements OnInit {
     private sharedService: SharedService,
     private timetableService: TimetableService,
     private venueService: VenueService,
+    private userService: UserService,
     private router: Router
   ) {
   }
@@ -73,6 +75,15 @@ export class TimetableComponent implements OnInit {
     this.venueService.updateVenues();
   }
 
+  bookingsFor(session: any) {
+    const i = this.timetableService.repeatsSince(session.startDate, this.selectedDate, session.repeatType, session.repeatGap).toString();
+    return session.bookings[i];
+  }
+
+  getSlotStartTime(session, i) {
+    return this.timetableService.getSlotStartTime(session, i);
+  }
+
   getCourses() {
     this.sharedService.getCourses()
       .subscribe((response: any) => {
@@ -86,6 +97,14 @@ export class TimetableComponent implements OnInit {
             session.startDate = new Date(session.startDate);
             session.date = this.timetableService.getNextDate(session);
           });
+          const bookableSessions = course.bookableSessions[this.userService.currentUser.personNumber];
+          for (const s in bookableSessions) {
+            if (bookableSessions.hasOwnProperty(s)) {
+              const session = bookableSessions[s] as any;
+              session.startDate = new Date(session.startDate);
+              session.date = this.timetableService.getNextDate(session);
+            }
+          }
         });
         this.sessions = [];
         this.courses = response.courses;
@@ -95,6 +114,13 @@ export class TimetableComponent implements OnInit {
             session.courseCode = course.courseCode;
             this.sessions.push(session);
           });
+          const bookableSessions = course.bookableSessions[this.userService.currentUser.personNumber];
+          if (!!bookableSessions) {
+            bookableSessions.forEach(session => {
+              session.courseCode = course.courseCode;
+              this.sessions.push(session);
+            });
+          }
         });
         this.changeSelected(new Date());
       });

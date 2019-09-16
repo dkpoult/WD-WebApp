@@ -97,27 +97,14 @@ export class MakeBookingComponent implements OnInit {
   }
 
   getSlotStartTime(session, i: number) {
-    const duration = session.duration / session.slotCount;
-    const time = new Date(session.startDate).getTime();
-    const t = new Date(time + duration * this.timetableService.minutesToMillis * i);
-    const hours = t.getHours();
-    const minutes = t.getMinutes();
-    return `${hours.toString(10).padStart(2, '0')}:${minutes.toString(10).padStart(2, '0')}`;
+    return this.timetableService.getSlotStartTime(session, i);
   }
 
   getSlotEndTime(session, i: number) {
-    const duration = session.duration / session.slotCount;
-    const time = new Date(session.startDate).getTime();
-    const t = new Date(time
-      + duration * this.timetableService.minutesToMillis * (i + 1)
-      - session.slotGap * this.timetableService.minutesToMillis);
-    const hours = t.getHours();
-    const minutes = t.getMinutes();
-    return `${hours.toString(10).padStart(2, '0')}:${minutes.toString(10).padStart(2, '0')}`;
+    return this.timetableService.getSlotEndTime(session, i);
   }
 
   getSlotDuration(session) {
-    return (session.duration / session.slotCount) * this.timetableService.minutesToMillis
-      - session.slotGap * this.timetableService.minutesToMillis;
+    return this.timetableService.getSlotDuration(session);
   }
 }

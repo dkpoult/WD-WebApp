@@ -83,6 +83,31 @@ export class TimetableService {
     }
   }
 
+  getSlotStartTime(session, i: number) {
+    const duration = session.duration / session.slotCount;
+    const time = new Date(session.startDate).getTime();
+    const t = new Date(time + duration * this.minutesToMillis * i);
+    const hours = t.getHours();
+    const minutes = t.getMinutes();
+    return `${hours.toString(10).padStart(2, '0')}:${minutes.toString(10).padStart(2, '0')}`;
+  }
+
+  getSlotEndTime(session, i: number) {
+    const duration = session.duration / session.slotCount;
+    const time = new Date(session.startDate).getTime();
+    const t = new Date(time
+      + duration * this.minutesToMillis * (i + 1)
+      - session.slotGap * this.minutesToMillis);
+    const hours = t.getHours();
+    const minutes = t.getMinutes();
+    return `${hours.toString(10).padStart(2, '0')}:${minutes.toString(10).padStart(2, '0')}`;
+  }
+
+  getSlotDuration(session) {
+    return (session.duration / session.slotCount) * this.minutesToMillis
+      - session.slotGap * this.minutesToMillis;
+  }
+
   inPast(session, date: Date): boolean {
     const startDate: Date = new Date(session.startDate);
     const yesterday = new Date();
