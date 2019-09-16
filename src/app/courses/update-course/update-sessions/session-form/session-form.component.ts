@@ -101,9 +101,6 @@ export class SessionFormComponent implements OnInit {
 
   getDateClass(d: Date) {
     const session = this.form.value;
-    if (!session.date) {
-      session.date = session.startDate;
-    }
     const classStrings = [];
     for (const c in session.cancellations) {
       if (c < session.cancellations.length) {
@@ -123,7 +120,7 @@ export class SessionFormComponent implements OnInit {
     }
 
     return classStrings.join(' ');
-  };
+  }
 
   ngOnInit() {
     this.venues = [];

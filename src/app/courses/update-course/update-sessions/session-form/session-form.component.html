@@ -52,7 +52,7 @@
     <div class="repeats" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
       <mat-form-field fxFlex="30" id="fromDate">
         <mat-label>Beginning On</mat-label>
-        <input [matDatepicker]="startDatePicker" formControlName="date" matInput>
+        <input [matDatepicker]="startDatePicker" formControlName="startDate" matInput>
         <mat-datepicker-toggle [for]="startDatePicker" matSuffix></mat-datepicker-toggle>
         <mat-datepicker #startDatePicker [dateClass]="dateClass"></mat-datepicker>
       </mat-form-field>

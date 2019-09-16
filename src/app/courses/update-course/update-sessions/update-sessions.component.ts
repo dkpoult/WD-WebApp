@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {TimetableService} from '../../../shared/services/timetable.service';
 
 @Component({
   selector: 'app-update-sessions',
@@ -66,6 +67,7 @@ export class UpdateSessionsComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
+    private timetableService: TimetableService
   ) {
   }
 
@@ -78,7 +80,6 @@ export class UpdateSessionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.sessions);
     this.form = new FormGroup({});
     const sessions: FormGroup[] = [];
     this.sessions.forEach(session => {
@@ -93,7 +94,7 @@ export class UpdateSessionsComponent implements OnInit {
       } else {
         dateStr = date.toISOString();
         timeStr = date.toTimeString().substr(0, 5);
-        endStr = this.getTimeString(date, session.duration);
+        endStr = this.timetableService.getTimeString(date, session.duration);
       }
       if (!session.venue) {
         session.venue = {building: null, room: null};
@@ -112,7 +113,7 @@ export class UpdateSessionsComponent implements OnInit {
         repeatType: new FormControl(session.repeatType, [Validators.required]),
         repeatGap: new FormControl(session.repeatGap, [Validators.required]),
         sessionType: new FormControl(session.sessionType, [Validators.required]),
-        date: new FormControl(dateStr, [Validators.required]),
+        startDate: new FormControl(dateStr, [Validators.required]),
         time: new FormControl(timeStr, [Validators.required]),
         endTime: new FormControl(endStr, [Validators.required]),
         cancellations: new FormControl(session.cancellations),
@@ -132,7 +133,7 @@ export class UpdateSessionsComponent implements OnInit {
       repeatType: new FormControl('WEEKLY', [Validators.required]),
       repeatGap: new FormControl('1', [Validators.required, Validators.min(1)]),
       sessionType: new FormControl('LECTURE', [Validators.required]),
-      date: new FormControl(new Date(), [Validators.required]),
+      startDate: new FormControl(new Date(), [Validators.required]),
       time: new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required]),
       cancellations: new FormControl([]),
@@ -148,26 +149,6 @@ export class UpdateSessionsComponent implements OnInit {
       this.formSessions.insert(i, removed);
     });
     this.formSessions.removeAt(i);
-  }
-
-  getTimeString(start: Date, duration: number) {
-    return new Date(start.valueOf() + duration * 60000).toTimeString().substr(0, 5);
-  }
-
-  // TODO: Move this to a utils file
-  timeBetween(start: string, end: string) {
-    const startH = parseInt(start.substr(0, 2), 10);
-    const startM = parseInt(start.substr(3, 2), 10);
-    const endH = parseInt(end.substr(0, 2), 10);
-    const endM = parseInt(end.substr(3, 2), 10);
-
-    let h = endH - startH;
-    const m = endM - startM;
-    if (endH < startH) {
-      // We have crossed midnight
-      h = (24 - startH) + endH;
-    }
-    return m + 60 * h;
   }
 
   log(item: any) {
@@ -247,7 +228,7 @@ export class UpdateSessionsComponent implements OnInit {
   submit() {
     const newSessions = this.form.value.sessions;
     newSessions.forEach((session: any) => {
-      session.duration = this.timeBetween(session.time, session.endTime);
+      session.duration = this.timetableService.timeBetween(session.time, session.endTime);
       delete session.endTime;
     });
     console.log(newSessions);

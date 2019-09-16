@@ -27,7 +27,7 @@ export enum RepeatType {'DAILY', 'WEEKLY', 'MONTHLY', 'ONCE'}
 
 export interface Session {
   duration: number;
-  cancellations: string | Date[];
+  cancellations: (string| Date)[];
   venue: Venue;
   repeatType: string; // RepeatType;
   repeatGap: number;
@@ -36,7 +36,6 @@ export interface Session {
   endDate: string | Date | undefined;
   time: Date | string | undefined;
   courseCode: string | undefined;
-  date: Date | string | undefined; // This is mine
 }
 
 export interface BookableSession extends Session {

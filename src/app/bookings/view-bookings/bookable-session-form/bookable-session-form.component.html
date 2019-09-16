@@ -1,0 +1,105 @@
+<form [formGroup]="form" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <mat-expansion-panel #panel (closed)="panelOpenState = true" (opened)="panelOpenState = false" [@growInOut]
+                       class="panel"
+                       fxFlex>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{titleCase(form.get('sessionType').value)}} in
+        {{form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] + form.get('venue').value['subCode'] : "unspecified venue"}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-action-row fxLayoutAlign="start center">
+      <!-- <span fxFlex></span> -->
+      <mat-chip (click)="removeSession()" color="warn" selected>
+        <mat-icon>delete</mat-icon>
+      </mat-chip>
+    </mat-action-row>
+    <!-- Content -->
+    <div class="chips">
+      <mat-chip-list formControlName="sessionType">
+        <mat-chip #chip="matChip" (click)="selectChip(chip)" *ngFor="let type of sessionTypes" value="{{type.value}}">
+          {{type.text}}
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <form formGroupName="venue">
+      <mat-autocomplete #buildingAuto="matAutocomplete">
+        <mat-option *ngFor="let building of venues" [value]="building">
+          {{building}}
+        </mat-option>
+      </mat-autocomplete>
+      <div class="venue" fxLayout="col" fxLayoutAlign="start center" fxLayoutGap="23px">
+        <mat-form-field>
+          <mat-label>Venue</mat-label>
+          <input [matAutocomplete]="buildingAuto" formControlName="buildingCode" matInput>
+        </mat-form-field>
+        <mat-form-field>
+          <input autocomplete="off" formControlName="subCode" matInput>
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="time" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+      <mat-form-field id="start">
+        <mat-label>Start Time</mat-label>
+        <input formControlName="time" matInput type="time">
+      </mat-form-field>
+      <span> to </span>
+      <mat-form-field id="end">
+        <mat-label>End Time</mat-label>
+        <input formControlName="endTime" matInput type="time">
+      </mat-form-field>
+    </div>
+    <div class="repeats" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+      <mat-form-field fxFlex="30" id="fromDate">
+        <mat-label>Beginning On</mat-label>
+        <input [matDatepicker]="startDatePicker" formControlName="startDate" matInput>
+        <mat-datepicker-toggle [for]="startDatePicker" matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field id="repeatType">
+        <mat-label>Repeats</mat-label>
+        <mat-select formControlName="repeatType">
+          <mat-option *ngFor="let type of repeatTypes" [value]="type.value">{{type.text}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="form.get('repeatType').value !== 'ONCE'">
+        <mat-label>Every</mat-label>
+        <span matSuffix>{{getPeriod(form.get('repeatType').value, form.get('repeatGap').value)}}</span>
+        <input formControlName="repeatGap" matInput type="number">
+      </mat-form-field>
+    </div>
+    <div *ngIf="form.get('repeatType').value !== 'ONCE'" class="cancellations" fxLayout="column"
+         fxLayoutAlign="start start"
+         fxLayoutGap="5px">
+      <div>
+        <mat-label>Skip these dates</mat-label>
+        <input #hiddenDateInput (dateChange)="addCancellation($event.value)"
+               [matDatepicker]="cancelDatePicker //noinspection InvalidExpressionResultType,InvalidExpressionResultType"
+               class="hiddenInPlace"
+               disabled
+               matInput>
+        <mat-datepicker-toggle [for]="cancelDatePicker" matPrefix></mat-datepicker-toggle>
+<!--        TODO: Date class -->
+        <mat-datepicker #cancelDatePicker disabled="false"></mat-datepicker>
+      </div>
+      <mat-chip-list>
+        <mat-chip (removed)="removeCancellation(i)" *ngFor="let cancellation of cancellations; let i = index"
+                  [removable]="true">
+          {{cancellation}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <div class="slots" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+      <mat-form-field id="counts">
+        <mat-label>Slot Count</mat-label>
+        <input formControlName="slotCount" matInput type="number">
+      </mat-form-field>
+      <span fxFlex></span>
+      <mat-form-field id="gap">
+        <mat-label>Slot Gap</mat-label>
+        <input formControlName="slotGap" matInput type="number">
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+</form>

@@ -123,13 +123,12 @@ export class SharedService {
   }
 
   updateSessions(courseCode: string, newSessions: Session[]): Observable<any> {
-    newSessions.forEach((session: any) => {
-      const date = new Date(session.date);
+    newSessions.forEach((session: Session) => {
+      const date = new Date(session.startDate);
       const dateString: string = this.timetableService.getDateString(date);
       session.startDate = `${dateString} ${session.time}:00`;
 
       // Don't send useless info
-      delete session.date;
       delete session.time;
     });
     const body = {

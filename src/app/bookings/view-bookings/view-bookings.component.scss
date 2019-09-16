@@ -1,0 +1,30 @@
+@import 'src/assets/mixins';
+
+.no-sessions {
+  position: absolute;
+  margin-top: 30px;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
+}
+
+.sessions {
+  width: 80%;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 25px;
+  min-height: fit-content;
+  padding: 20px;
+  @include card(1);
+}
+
+.add-fab {
+  position: absolute;
+  transform: translate(-38px, -38px);
+}
+
+::ng-deep.mat-simple-snackbar {
+  .mat-simple-snackbar-action {
+    color: #f44336;
+  }
+}

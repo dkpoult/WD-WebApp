@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Session} from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +64,7 @@ export class TimetableService {
   }
 
   inPast(session, date: Date): boolean {
-    const startDate: Date = new Date(session.date);
+    const startDate: Date = new Date(session.startDate);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
@@ -143,37 +144,56 @@ export class TimetableService {
     return Math.floor(diff / repeatGap);
   }
 
-  getNextDate(session) {
-    const year = session.date.getFullYear();
-    const month = session.date.getMonth();
-    const day = session.date.getDate();
+  getTimeString(start: Date, duration: number) {
+    return new Date(start.valueOf() + duration * 60000).toTimeString().substr(0, 5);
+  }
 
+  timeBetween(start: string, end: string) {
+    const startH = parseInt(start.substr(0, 2), 10);
+    const startM = parseInt(start.substr(3, 2), 10);
+    const endH = parseInt(end.substr(0, 2), 10);
+    const endM = parseInt(end.substr(3, 2), 10);
+
+    let h = endH - startH;
+    const m = endM - startM;
+    if (endH < startH) {
+      // We have crossed midnight
+      h = (24 - startH) + endH;
+    }
+    return m + 60 * h;
+  }
+
+  getNextDate(session: Session) {
+    session.startDate = new Date(session.startDate);
+    const year = session.startDate.getFullYear();
+    const month = session.startDate.getMonth();
+    const day = session.startDate.getDate();
     let diff: number;
     let date: Date;
     let newDay;
     switch (session.repeatType) {
       case 'ONCE':
-        date = session.date;
+        date = session.startDate;
         break;
       case 'DAILY':
-        diff = this.diffDays(session.date, new Date());
+        diff = this.diffDays(session.startDate, new Date());
         newDay = day + Math.ceil(diff / session.repeatGap) * session.repeatGap;
         date = new Date(year, month, newDay);
         break;
       case 'WEEKLY':
-        diff = this.diffWeeks(session.date, new Date());
+        diff = this.diffWeeks(session.startDate, new Date());
         newDay = day + 7 * (Math.ceil(diff / session.repeatGap) * session.repeatGap);
         date = new Date(year, month, newDay);
         break;
       case 'MONTHLY':
-        diff = this.diffMonths(session.date, new Date());
+        diff = this.diffMonths(session.startDate, new Date());
         const newMonth = month + Math.ceil(diff / session.repeatGap) * session.repeatGap;
         date = new Date(year, newMonth, Math.min(day, this.daysInMonth(year, newMonth)));
         break;
     }
 
-    date.setHours(session.date.getHours());
-    date.setMinutes(session.date.getMinutes());
+    date.setHours(session.startDate.getHours());
+    date.setMinutes(session.startDate.getMinutes());
     return date;
   }
 }
