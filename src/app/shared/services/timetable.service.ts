@@ -9,7 +9,9 @@ export class TimetableService {
   constructor() {
   }
 
-  get minutesToMillis() { return 60000; }
+  get minutesToMillis() {
+    return 60000;
+  }
 
   getDateString(date) {
     const year = date.getFullYear().toString();
@@ -27,7 +29,7 @@ export class TimetableService {
 
   diffDays(start: Date, end: Date) {
     const diffMs = end.valueOf() - start.valueOf();
-    return diffMs / (86400000); // 86 400 000 = 1000 * 3600 * 24 = mstoSec * secToHour * hourToDay
+    return diffMs / (86400000); // 86 400 000 = 1000 * 3600 * 24 = msToSec * secToHour * hourToDay
   }
 
   sameWeek(a: Date, b: Date) {
@@ -144,7 +146,7 @@ export class TimetableService {
     return Math.floor(diff / repeatGap);
   }
 
-  getTimeString(start: Date, duration: number) {
+  getEndTimeString(start: Date, duration: number) {
     return new Date(start.valueOf() + duration * 60000).toTimeString().substr(0, 5);
   }
 
@@ -160,6 +162,7 @@ export class TimetableService {
       // We have crossed midnight
       h = (24 - startH) + endH;
     }
+    console.log(`${start} - ${end} = ${m + 60 * h} minutes`);
     return m + 60 * h;
   }
 

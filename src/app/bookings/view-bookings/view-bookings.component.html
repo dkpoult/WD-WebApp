@@ -11,10 +11,9 @@
   </form>
   <div class="no-sessions" [@fadeIn]="sessionCount === 0 ? 'shown' : 'hidden'">
     <div class="no-content" fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="15px">
-      <p>There are no sessions.</p>
+      <p>There are no bookable sessions.</p>
       <button mat-raised-button type="button" (click)="addSession()" color="primary">Add One</button>
     </div>
   </div>
 </div>
 <button mat-button [disabled]="hasErrors()" (click)="submit()">Submit</button>
-<pre>{{form.value | json}}</pre>

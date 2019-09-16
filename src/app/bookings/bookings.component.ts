@@ -48,10 +48,17 @@ export class BookingsComponent implements OnInit {
 
   // Update bookings for lecturer
   updateSessions(sessions: any) {
+    this.bookingsService.updateSessions(this.courseCode, sessions).subscribe((result) => {
+      console.log(result);
+      this.getCourse();
+    });
   }
 
   bookSlot(booking: any) {
-    this.bookingsService.makeBooking(this.courseCode, booking).subscribe((result) => { console.log(result); this.getCourse(); });
+    this.bookingsService.makeBooking(this.courseCode, booking).subscribe((result) => {
+      console.log(result);
+      this.getCourse();
+    });
   }
 
 }

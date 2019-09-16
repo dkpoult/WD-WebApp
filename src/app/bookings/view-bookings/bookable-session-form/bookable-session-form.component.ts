@@ -74,7 +74,30 @@ export class BookableSessionFormComponent implements OnInit {
     {value: 'CONSULTATION', text: 'Consultation'},
     {value: 'MEETING', text: 'Meeting'},
   ];
-  // dateClass = this.getDateClass;
+
+  dateClass = (d: Date) => {
+    const session = this.form.value;
+    const classStrings = [];
+    for (const c in session.cancellations) {
+      if (c < session.cancellations.length) {
+        const cancellation = new Date(session.cancellations[c]);
+        cancellation.setHours(0);
+        if (cancellation.valueOf() === d.valueOf()) {
+          classStrings.push('cancelled');
+        }
+      }
+    }
+    if (this.timetableService.sessionFallsOn(session, d)) {
+      classStrings.push('fallsOn');
+    }
+
+    if (this.timetableService.inPast(session, d)) {
+      classStrings.push('inPast');
+    }
+
+    return classStrings.join(' ');
+  }
+
   constructor(private venueService: VenueService, private timetableService: TimetableService) {
   }
 

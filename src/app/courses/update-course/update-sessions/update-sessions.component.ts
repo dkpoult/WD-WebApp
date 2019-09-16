@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {TimetableService} from '../../../shared/services/timetable.service';
@@ -94,7 +94,7 @@ export class UpdateSessionsComponent implements OnInit {
       } else {
         dateStr = date.toISOString();
         timeStr = date.toTimeString().substr(0, 5);
-        endStr = this.timetableService.getTimeString(date, session.duration);
+        endStr = this.timetableService.getEndTimeString(date, session.duration);
       }
       if (!session.venue) {
         session.venue = {building: null, room: null};
@@ -111,7 +111,7 @@ export class UpdateSessionsComponent implements OnInit {
           subCode: new FormControl(session.venue.subCode, [Validators.required]),
         }),
         repeatType: new FormControl(session.repeatType, [Validators.required]),
-        repeatGap: new FormControl(session.repeatGap, [Validators.required]),
+        repeatGap: new FormControl(session.repeatGap, [Validators.required, Validators.min(1)]),
         sessionType: new FormControl(session.sessionType, [Validators.required]),
         startDate: new FormControl(dateStr, [Validators.required]),
         time: new FormControl(timeStr, [Validators.required]),
@@ -131,14 +131,14 @@ export class UpdateSessionsComponent implements OnInit {
         subCode: new FormControl('', [Validators.required]),
       }),
       repeatType: new FormControl('WEEKLY', [Validators.required]),
-      repeatGap: new FormControl('1', [Validators.required, Validators.min(1)]),
+      repeatGap: new FormControl(1, [Validators.required, Validators.min(1)]),
       sessionType: new FormControl('LECTURE', [Validators.required]),
       startDate: new FormControl(new Date(), [Validators.required]),
       time: new FormControl('', [Validators.required]),
       endTime: new FormControl('', [Validators.required]),
       cancellations: new FormControl([]),
     });
-    this.formSessions.controls.push(newSession);
+    this.formSessions.push(newSession);
   }
 
   removeSession(i: number) {
@@ -153,42 +153,6 @@ export class UpdateSessionsComponent implements OnInit {
 
   log(item: any) {
     console.log(item);
-  }
-
-  findInvalidControls(_input: AbstractControl, _invalidControls: AbstractControl[]): AbstractControl[] {
-    if (!_invalidControls) {
-      _invalidControls = [];
-    }
-    if (_input instanceof FormControl) {
-      if (_input.invalid) {
-        _invalidControls.push(_input);
-      }
-      return _invalidControls;
-    }
-
-    if (!(_input instanceof FormArray) && !(_input instanceof FormGroup)) {
-      return _invalidControls;
-    }
-
-    const controls = _input.controls;
-    // tslint:disable-next-line: forin
-    for (const name in controls) {
-      const control = controls[name];
-      if (control.invalid) {
-        _invalidControls.push(control);
-      }
-      switch (control.constructor.name) {
-        case 'FormArray':
-          (control as FormArray).controls.forEach(_control => _invalidControls = this.findInvalidControls(_control, _invalidControls));
-          break;
-
-        case 'FormGroup':
-          _invalidControls = this.findInvalidControls(control, _invalidControls);
-          break;
-      }
-    }
-
-    return _invalidControls;
   }
 
   isValid() {
@@ -231,7 +195,6 @@ export class UpdateSessionsComponent implements OnInit {
       session.duration = this.timetableService.timeBetween(session.time, session.endTime);
       delete session.endTime;
     });
-    console.log(newSessions);
     this.submitSessions.next(newSessions);
     this.form.markAsPristine();
   }

@@ -3,7 +3,7 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MatSnackBar} from '@angular/material';
 import {TimetableService} from '../../shared/services/timetable.service';
-import {BookableSession, Course} from '../../shared/services/models';
+import {Course} from '../../shared/services/models';
 import {UserService} from '../../shared/services/user.service';
 
 @Component({
@@ -103,8 +103,7 @@ export class ViewBookingsComponent implements OnInit {
       } else {
         dateStr = date.toISOString();
         timeStr = date.toTimeString().substr(0, 5);
-        console.log(timeStr);
-        endStr = this.timetableService.getTimeString(date, session.duration);
+        endStr = this.timetableService.getEndTimeString(date, session.duration);
       }
       if (!session.venue) {
         session.venue = {buildingCode: '', subCode: '', coordinates: null};
@@ -121,7 +120,7 @@ export class ViewBookingsComponent implements OnInit {
           subCode: new FormControl(session.venue.subCode, [Validators.required]),
         }),
         repeatType: new FormControl(session.repeatType, [Validators.required]),
-        repeatGap: new FormControl(session.repeatGap, [Validators.required]),
+        repeatGap: new FormControl(session.repeatGap, [Validators.required, Validators.min(1)]),
         sessionType: new FormControl(session.sessionType, [Validators.required]),
         startDate: new FormControl(dateStr, [Validators.required]),
         time: new FormControl(timeStr, [Validators.required]),
@@ -152,9 +151,7 @@ export class ViewBookingsComponent implements OnInit {
       slotGap: new FormControl(0, [Validators.required]),
       cancellations: new FormControl([]),
     });
-    console.log(newSession.value);
-    this.formSessions.controls.push(newSession);
-    console.log(this.formSessions.value);
+    this.formSessions.push(newSession);
   }
 
   removeSession(i: number) {
@@ -170,16 +167,10 @@ export class ViewBookingsComponent implements OnInit {
   submit() {
     const newSessions = this.form.value.sessions;
     newSessions.forEach((session: any) => {
-      console.log(session);
-      session.duration = this.timetableService.timeBetween(session.time, session.endTime);
-      delete session.endTime;
-      const date = new Date(session.startDate);
-      const dateString: string = this.timetableService.getDateString(date);
-      session.startDate = `${dateString} ${session.time}:00`;
-
-      // Don't send useless info
-      delete session.time;
-    });
+        session.duration = this.timetableService.timeBetween(session.time, session.endTime);
+        delete session.endTime;
+        console.log(session);
+      });
     console.log(newSessions);
     this.update.next(newSessions);
     this.form.markAsPristine();

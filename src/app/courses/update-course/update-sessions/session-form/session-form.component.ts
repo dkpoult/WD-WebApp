@@ -97,9 +97,7 @@ export class SessionFormComponent implements OnInit {
     this.form.get('date').setValue(v);
   }
 
-  dateClass = this.getDateClass;
-
-  getDateClass(d: Date) {
+  dateClass = (d: Date) => {
     const session = this.form.value;
     const classStrings = [];
     for (const c in session.cancellations) {
