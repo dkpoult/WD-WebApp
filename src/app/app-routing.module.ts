@@ -35,7 +35,7 @@ const routes: Routes = [
       }
     ]
   },
-  {path: 'timetable', component: TimetableComponent},
+  {path: 'timetable', canActivate: [AuthGuard], component: TimetableComponent},
   {
     path: 'map', children: [
       {path: '', component: MapComponent},

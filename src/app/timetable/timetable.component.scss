@@ -4,5 +4,35 @@ mat-card {
     .urgent {
         background: #cf4641;
     }
+}
+$fallsOnColor: #21978d;
+$cancelledColor: #a02b3a;
+$urgentColor: #ab563a;
+::ng-deep {
+  .fallsOn {
+    background: $fallsOnColor;
+    border-radius: 100%;
 
+    &.urgent {
+      background: $urgentColor;
+    }
+
+    &.cancelled {
+      background: $cancelledColor;
+      border-radius: 100%;
+
+      &.inPast {
+        background: transparentize($color: $cancelledColor, $amount: 0.7);
+      }
+    }
+
+    &:not(.cancelled).inPast {
+      background: transparentize($color: $fallsOnColor, $amount: 0.7)
+    }
+  }
+
+  :not(.fallsOn).cancelled {
+    background: transparentize($color: $cancelledColor, $amount: 0.6);
+    border-radius: 100%;
+  }
 }

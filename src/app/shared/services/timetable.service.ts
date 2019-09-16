@@ -9,8 +9,26 @@ export class TimetableService {
   constructor() {
   }
 
+  get today() {
+    const date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+  }
+
   get minutesToMillis() {
     return 60000;
+  }
+
+  zeroTime(date: Date) {
+    date = new Date(date);
+    date.setMilliseconds(0);
+    date.setSeconds(0);
+    date.setMinutes(0);
+    date.setHours(0);
+    return date;
   }
 
   getDateString(date) {

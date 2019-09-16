@@ -40,7 +40,6 @@ import { ChatMessageComponent } from './chat/chat-message/chat-message.component
 import { ViewSurveyComponent } from './chat/view-survey/view-survey.component';
 import { CreateSurveyComponent } from './chat/view-survey/create-survey/create-survey.component';
 import { ChartComponent } from './chat/view-survey/chart/chart.component';
-import { CalendarComponent } from './timetable/calendar/calendar.component';
 import { SessionFormComponent } from './courses/update-course/update-sessions/session-form/session-form.component';
 import { VenueInputComponent } from './courses/update-course/update-sessions/session-form/venue-input/venue-input.component';
 import { MapComponent } from './map/map.component';
@@ -91,7 +90,6 @@ export function initialiseApp(config: SharedService) {
     ViewSurveyComponent,
     CreateSurveyComponent,
     ChartComponent,
-    CalendarComponent,
     VenueInputComponent,
     MapComponent,
     ConfirmDialogComponent,
