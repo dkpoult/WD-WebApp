@@ -52,6 +52,10 @@ import { SearchBarComponent } from './widgets/search-bar/search-bar.component';
 import { IfChangesDirective } from './shared/directives.module';
 import { ViewUserComponent } from './user/view-user/view-user.component';
 import { MarkdownPipe } from './markdown.pipe';
+import { LoginComponent } from './main/login/login.component';
+import { MakeBookingComponent } from './bookings/make-booking/make-booking.component';
+import { ViewBookingsComponent } from './bookings/view-bookings/view-bookings.component';
+import { BookingsComponent } from './bookings/bookings.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -100,6 +104,10 @@ export function initialiseApp(config: SharedService) {
     UpdatePermissionsComponent,
     ViewUserComponent,
     MarkdownPipe,
+    LoginComponent,
+    MakeBookingComponent,
+    ViewBookingsComponent,
+    BookingsComponent,
   ],
   imports: [
     HttpClientModule,

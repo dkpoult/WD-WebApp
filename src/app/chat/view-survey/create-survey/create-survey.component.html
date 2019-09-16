@@ -1,43 +1,43 @@
 <section style="max-width: 500px;">
-  <h1 matDialogTitle>Create Survey</h1>
-  <form [formGroup]="form" (ngSubmit)="submit(form)">
-    <mat-dialog-content>
-      <mat-form-field>
-        <mat-label>Prompt</mat-label>
-        <input matInput formControlName="title" autocomplete="off">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Type</mat-label>
-        <mat-select formControlName="responseType" (valueChange)="handleTypeChange($event)">
-          <mat-option value="MC">Multiple Choice</mat-option>
-          <mat-option value="TEXT">Text</mat-option>
-          <mat-option value="NUMERIC">Numeric</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <div *ngIf="form.get('responseType').value === 'MC'" formArrayName="options">
-        <mat-label>
-          Options
-          <button class="add-btn" mat-icon-button type="button" (click)="addOption()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </mat-label>
-        <mat-form-field *ngFor="let option of options.controls; let i = index">
+    <h1 matDialogTitle>Create Survey</h1>
+    <form (ngSubmit)="submit(form)" [formGroup]="form">
+        <mat-dialog-content>
+            <mat-form-field>
+                <mat-label>Prompt</mat-label>
+                <input autocomplete="off" formControlName="title" matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Type</mat-label>
+                <mat-select (valueChange)="handleTypeChange($event)" formControlName="responseType">
+                    <mat-option value="MC">Multiple Choice</mat-option>
+                    <mat-option value="TEXT">Text</mat-option>
+                    <mat-option value="NUMERIC">Numeric</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div *ngIf="form.get('responseType').value === 'MC'" formArrayName="options">
+                <mat-label>
+                    Options
+                    <button (click)="addOption()" class="add-btn" mat-icon-button type="button">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </mat-label>
+                <mat-form-field *ngFor="let option of options.controls; let i = index">
           <span matPrefix>
-            {{ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i % 26] }}:&nbsp;
+            {{'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i % 26]}}:&nbsp;
           </span>
-          <button matSuffix mat-icon-button (click)="removeOption(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
-          <input matInput formControlName="{{i}}" autocomplete="off">
-        </mat-form-field>
-      </div>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-button [disabled]="hasErrors()" type="submit" mat-dialog>Create</button>
-      <span fxFlex></span>
-      <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
-    </mat-dialog-actions>
-  </form>
+                    <button (click)="removeOption(i)" mat-icon-button matSuffix>
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    <input autocomplete="off" formControlName="{{i}}" matInput>
+                </mat-form-field>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button [disabled]="hasErrors()" mat-button mat-dialog type="submit">Create</button>
+            <span fxFlex></span>
+            <button color="warn" mat-button mat-dialog-close type="button">Cancel</button>
+        </mat-dialog-actions>
+    </form>
 </section>
 
 <button (click)="log(form)">Test</button>

@@ -1,0 +1,28 @@
+<div *ngIf="!!course" class="container">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field id="lecturer">
+      <mat-label>Lecturer</mat-label>
+      <mat-select formControlName="lecturerPersonNumber">
+        <mat-option
+          [value]="course.lecturer.personNumber">{{course.lecturer.firstName}} {{course.lecturer.lastName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div *ngIf="!!lecturer">
+      <div fxFlex="30" id="date">
+        <mat-calendar (selectedChange)="selectDate($event)" [selected]="selectedDate"></mat-calendar>
+        <!-- TODO: Do DateClass -->
+      </div>
+      <div class="slots-container">
+        <mat-label>Pick a slot</mat-label>
+        <mat-radio-group class="slots" formControlName="slot">
+          <mat-radio-button *ngFor="let slot of slots" [value]="slot" [disabled]="slot.taken">
+            {{slot.startTime}} to {{slot.endTime}}
+<!--            {{ slot | json }}-->
+          </mat-radio-button>
+          <span class="no-content" *ngIf="slots.length === 0">There are valid slots to choose</span>
+        </mat-radio-group>
+      </div>
+    </div>
+    <button mat-button [disabled]="hasErrors()" type="submit">Submit</button>
+  </form>
+</div>

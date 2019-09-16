@@ -1,19 +1,19 @@
 <div class="container" fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="15px">
-    <mat-card class="question" *ngFor="let question of sortedQuestions">
+    <mat-card *ngFor="let question of sortedQuestions" class="question">
         <mat-card-title>{{question.content}}</mat-card-title>
         <mat-card-subtitle>{{question.personNumber}}</mat-card-subtitle>
         <mat-card-content>
             {{question.score}} point{{question.score == 1 ? '' : 's'}}
             <span fxFlex></span>
-            <button mat-icon-button [ngClass]="{'voted': question.voted===1}" (click)="upvoteQuestion(question.id)">
+            <button (click)="upvoteQuestion(question.id)" [ngClass]="{'voted': question.voted===1}" mat-icon-button>
                 <mat-icon>plus_one</mat-icon>
             </button>
-            <button mat-icon-button *ngIf="canDelete" (click)="deleteQuestion(question.id)">
+            <button (click)="deleteQuestion(question.id)" *ngIf="canDelete" mat-icon-button>
                 <mat-icon>delete</mat-icon>
             </button>
         </mat-card-content>
     </mat-card>
 </div>
-<button #fab mat-fab class="fab" matTooltip="Ask a Question" (click)="openAskQuestionDialog()">
+<button #fab (click)="openAskQuestionDialog()" class="fab" mat-fab matTooltip="Ask a Question">
     <mat-icon>add</mat-icon>
 </button>

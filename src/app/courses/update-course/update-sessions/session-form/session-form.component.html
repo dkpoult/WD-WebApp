@@ -1,10 +1,11 @@
 <form [formGroup]="form" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-  <mat-expansion-panel #panel (closed)="panelOpenState = true" (opened)="panelOpenState = false" [@growInOut] class="panel"
+  <mat-expansion-panel #panel (closed)="panelOpenState = true" (opened)="panelOpenState = false" [@growInOut]
+                       class="panel"
                        fxFlex>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        {{ titleCase(form.get('sessionType').value) }} in
-        {{ form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] + form.get('venue').value['subCode'] : "unspecified venue"}}
+        {{titleCase(form.get('sessionType').value)}} in
+        {{form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] + form.get('venue').value['subCode'] : "unspecified venue"}}
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-action-row fxLayoutAlign="start center">
@@ -16,15 +17,15 @@
     <!-- Content -->
     <div class="chips">
       <mat-chip-list formControlName="sessionType">
-        <mat-chip #chip="matChip" (click)="selectChip(chip)" *ngFor="let type of sessionTypes" value="{{ type.value }}">
-          {{ type.text }}
+        <mat-chip #chip="matChip" (click)="selectChip(chip)" *ngFor="let type of sessionTypes" value="{{type.value}}">
+          {{type.text}}
         </mat-chip>
       </mat-chip-list>
     </div>
     <form formGroupName="venue">
       <mat-autocomplete #buildingAuto="matAutocomplete">
         <mat-option *ngFor="let building of venues" [value]="building">
-          {{ building }}
+          {{building}}
         </mat-option>
       </mat-autocomplete>
       <div class="venue" fxLayout="col" fxLayoutAlign="start center" fxLayoutGap="23px">
@@ -58,20 +59,22 @@
       <mat-form-field id="repeatType">
         <mat-label>Repeats</mat-label>
         <mat-select formControlName="repeatType">
-          <mat-option *ngFor="let type of repeatTypes" [value]="type.value">{{ type.text }}</mat-option>
+          <mat-option *ngFor="let type of repeatTypes" [value]="type.value">{{type.text}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field *ngIf="form.get('repeatType').value !== 'ONCE'">
         <mat-label>Every</mat-label>
-        <span matSuffix>{{ getPeriod(form.get('repeatType').value, form.get('repeatGap').value) }}</span>
+        <span matSuffix>{{getPeriod(form.get('repeatType').value, form.get('repeatGap').value)}}</span>
         <input formControlName="repeatGap" matInput type="number">
       </mat-form-field>
     </div>
-    <div *ngIf="form.get('repeatType').value !== 'ONCE'" class="cancellations" fxLayout="column" fxLayoutAlign="start start"
+    <div *ngIf="form.get('repeatType').value !== 'ONCE'" class="cancellations" fxLayout="column"
+         fxLayoutAlign="start start"
          fxLayoutGap="5px">
       <div>
         <mat-label>Skip these dates</mat-label>
-        <input #hiddenDateInput (dateChange)="addCancellation($event.value)" [matDatepicker]="cancelDatePicker //noinspection InvalidExpressionResultType,InvalidExpressionResultType"
+        <input #hiddenDateInput (dateChange)="addCancellation($event.value)"
+               [matDatepicker]="cancelDatePicker //noinspection InvalidExpressionResultType,InvalidExpressionResultType"
                class="hiddenInPlace"
                disabled
                matInput>
@@ -81,7 +84,7 @@
       <mat-chip-list>
         <mat-chip (removed)="removeCancellation(i)" *ngFor="let cancellation of cancellations; let i = index"
                   [removable]="true">
-          {{ cancellation }}
+          {{cancellation}}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>

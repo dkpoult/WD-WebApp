@@ -21,17 +21,35 @@ export interface Venue {
   coordinates: any | undefined; // TODO: This should be an actual type
 }
 
+export enum SessionType {'LECTURE', 'LAB', 'TUTORIAL', 'TEST', 'CONSULTATION', 'MEETING'}
+
+export enum RepeatType {'DAILY', 'WEEKLY', 'MONTHLY', 'ONCE'}
+
 export interface Session {
   duration: number;
   cancellations: string | Date[];
   venue: Venue;
-  repeatType: string;
+  repeatType: string; // RepeatType;
   repeatGap: number;
-  sessionType: string;
-  nextDate: string | Date;
-  courseCode: string | undefined;
-  date: Date | string | undefined;
+  sessionType: SessionType | string;
+  startDate: string | Date;
+  endDate: string | Date | undefined;
   time: Date | string | undefined;
+  courseCode: string | undefined;
+  date: Date | string | undefined; // This is mine
+}
+
+export interface BookableSession extends Session {
+  slotCount: number;
+  slotGap: number;
+  lecturer: User | string;
+  bookings: Booking[];
+  id: number;
+}
+
+export interface Booking {
+  allocated: boolean; // Taken?
+  personNumber: string | null; // By whom?
 }
 
 export interface Announcement {
@@ -52,8 +70,14 @@ export interface Course {
   hasPassword: boolean;
   permissions: number | undefined;
 
-  sessions: Session[];
+  moodleId: number | undefined;
+
   announcements: Announcement[];
   forums: Forum[];
   questionForum: Forum;
+
+  sessions: Session[];
+  bookableSessions: {
+    [key: string]: BookableSession[]; // Maps lecturer to sessions
+  };
 }

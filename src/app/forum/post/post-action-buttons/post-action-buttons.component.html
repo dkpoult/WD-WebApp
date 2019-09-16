@@ -1,17 +1,18 @@
 <div>
-  <button mat-icon-button disableRipple [matTooltip]="upvoted ? 'Remove Upvote':'Upvote'" class="vote-button"
-    [@bounce]="upvoteState()" [ngClass]="{'upvoted': upvoted}" (click)="vote(1); $event.stopPropagation()">
-    <mat-icon>thumb_up</mat-icon>
-  </button>
-  <i class="score" *appIfChanges="score" [@fadeInOut] [ngClass]="{'downvoted': downvoted, 'upvoted': upvoted}">
-    {{ score }}
-  </i>
-  <button mat-icon-button disableRipple [matTooltip]="downvoted ? 'Remove Downvote':'Downvote'" class="vote-button"
-    [@bounce]="downvoteState()" [ngClass]="{'downvoted': downvoted}" (click)="vote(-1); $event.stopPropagation()">
-    <mat-icon>thumb_down</mat-icon>
-  </button>
-  <button class="reply-button" mat-icon-button matTooltip="Reply" (click)="reply(); $event.stopPropagation()">
-    <mat-icon>reply</mat-icon>
-  </button>
-  <ng-content class="other-button"></ng-content>
+    <button (click)="vote(1); $event.stopPropagation()" [@bounce]="upvoteState()" [matTooltip]="upvoted ? 'Remove Upvote':'Upvote'" [ngClass]="{'upvoted': upvoted}"
+            class="vote-button" disableRipple mat-icon-button>
+        <mat-icon>thumb_up</mat-icon>
+    </button>
+    <i *appIfChanges="score" [@fadeInOut] [ngClass]="{'downvoted': downvoted, 'upvoted': upvoted}" class="score">
+        {{score}}
+    </i>
+    <button (click)="vote(-1); $event.stopPropagation()" [@bounce]="downvoteState()" [matTooltip]="downvoted ? 'Remove Downvote':'Downvote'" [ngClass]="{'downvoted': downvoted}"
+            class="vote-button" disableRipple
+            mat-icon-button>
+        <mat-icon>thumb_down</mat-icon>
+    </button>
+    <button (click)="reply(); $event.stopPropagation()" class="reply-button" mat-icon-button matTooltip="Reply">
+        <mat-icon>reply</mat-icon>
+    </button>
+    <ng-content class="other-button"></ng-content>
 </div>

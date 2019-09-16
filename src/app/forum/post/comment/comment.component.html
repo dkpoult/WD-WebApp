@@ -1,20 +1,22 @@
 <mat-card class="comment">
-  <mat-card-subtitle>{{ comment.poster }}</mat-card-subtitle>
-  <mat-card-content><div>{{comment.body}}</div></mat-card-content>
+  <mat-card-subtitle>{{comment.poster}}</mat-card-subtitle>
+  <mat-card-content>
+    <div>{{comment.body}}</div>
+  </mat-card-content>
   <mat-card-actions>
-    <app-post-action-buttons [post]="comment" (changeVote)="changeVote.next($event)">
+    <app-post-action-buttons (changeVote)="changeVote.next($event)" [post]="comment">
       <!--* Move this to subtitle?-->
-      <button *ngIf="level === 0 && isLecturer" [@bounce]="isAnswer ? 'answer' : 'none'"
-        [ngClass]="{'answer': isAnswer}" mat-icon-button (click)="markAsAnswer()"
-        [matTooltip]="isAnswer ? 'This was marked as the correct answer' : 'Mark as Answer'">
-        <mat-icon>{{ isAnswer ? 'check_circle' : 'check_circle_outline' }}</mat-icon>
+      <button (click)="markAsAnswer()" *ngIf="level === 0 && isLecturer"
+              [@bounce]="isAnswer ? 'answer' : 'none'" [matTooltip]="isAnswer ? 'This was marked as the correct answer' : 'Mark as Answer'" [ngClass]="{'answer': isAnswer}"
+              mat-icon-button>
+        <mat-icon>{{isAnswer ? 'check_circle' : 'check_circle_outline'}}</mat-icon>
       </button>
-      <button *ngIf="level === 0 && isAnswer && !isLecturer" disableRipple [@bounce]="isAnswer ? 'answer' : 'none'"
-        [ngClass]="{'answer': isAnswer}" mat-icon-button matTooltip="This was marked as the correct answer">
-        <mat-icon>{{ isAnswer ? 'check_circle' : 'check_circle_outline' }}</mat-icon>
+      <button *ngIf="level === 0 && isAnswer && !isLecturer" [@bounce]="isAnswer ? 'answer' : 'none'" [ngClass]="{'answer': isAnswer}"
+              disableRipple mat-icon-button matTooltip="This was marked as the correct answer">
+        <mat-icon>{{isAnswer ? 'check_circle' : 'check_circle_outline'}}</mat-icon>
       </button>
     </app-post-action-buttons>
   </mat-card-actions>
-  <app-comment *ngFor="let comment of comment.comments" [postCode]="postCode" [level]="level + 1" [comment]="comment">
+  <app-comment *ngFor="let comment of comment.comments" [comment]="comment" [level]="level + 1" [postCode]="postCode">
   </app-comment>
 </mat-card>

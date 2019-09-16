@@ -126,7 +126,7 @@ export class SharedService {
     newSessions.forEach((session: any) => {
       const date = new Date(session.date);
       const dateString: string = this.timetableService.getDateString(date);
-      session.nextDate = `${dateString} ${session.time}:00`;
+      session.startDate = `${dateString} ${session.time}:00`;
 
       // Don't send useless info
       delete session.date;

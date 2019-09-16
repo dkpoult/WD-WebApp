@@ -1,0 +1,7 @@
+<!--<pre>{{course | json}}</pre>-->
+<div #lecturerView *ngIf="isLecturer; else studentView">
+  <app-view-bookings (update)="updateSessions($event)" [course]="course"></app-view-bookings>
+</div>
+<ng-template #studentView>
+  <app-make-booking (book)="bookSlot($event)" [course]="course"></app-make-booking>
+</ng-template>

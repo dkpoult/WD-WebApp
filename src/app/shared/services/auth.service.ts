@@ -3,9 +3,7 @@ import {User} from './models';
 import {HttpClient} from '@angular/common/http';
 import {API} from './api';
 import {UserService} from './user.service';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Router, UrlTree} from '@angular/router';
+import {of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +17,9 @@ export class AuthService {
   }
 
   public validateCurrentUser() {
+    if (!this.userService.loggedIn) {
+      return of({responseCode: 'failed_not_logged_in'});
+    }
     return this.validateUser(this.userService.currentUser);
   }
 

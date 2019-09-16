@@ -48,8 +48,8 @@ export class TimetableComponent implements OnInit {
         const today = new Date();
         response.courses.forEach(course => {
           course.sessions.forEach(session => {
-            session.date = new Date(session.nextDate);
-            session.nextDate = this.timetableService.getNextDate(session);
+            session.date = new Date(session.startDate);
+            session.startDate = this.timetableService.getNextDate(session);
           });
         });
         this.sessions = [];
@@ -65,7 +65,7 @@ export class TimetableComponent implements OnInit {
   }
 
   sameWeek(session) {
-    return this.timetableService.sameWeek(new Date(), session.nextDate);
+    return this.timetableService.sameWeek(new Date(), session.startDate);
   }
 
   urgentSession(session) {
@@ -75,7 +75,7 @@ export class TimetableComponent implements OnInit {
   }
 
   getEndTime(session): Date {
-    const date = session.nextDate as Date;
+    const date = session.startDate as Date;
     date.setTime(date.valueOf() + session.minutes * 1000 * 3600);
     return date;
   }

@@ -1,14 +1,15 @@
-<div id="fab-dismiss" *ngIf="opened" (click)="toggle()">
+<div (click)="toggle()" *ngIf="opened" id="fab-dismiss">
 </div>
 <div class="fab-container">
-  <button mat-fab class="fab-toggler" (click)="toggle()">
-    <mat-icon *ngIf="spin" [@fabToggler]="{value: opened ? 'active' : 'inactive'}">{{ icon }}</mat-icon>
-    <mat-icon *ngIf="!spin">{{ icon }}</mat-icon>
-  </button>
-  <div *ngIf=" opened" [@speedDialStagger]="actions.length">
-    <button *ngFor="let act of actions" mat-mini-fab class="fab-secondary" color="secondary" matTooltip="{{ act.text }}"
-      (click)="doAction(act)">
-      <mat-icon>{{ act.icon }}</mat-icon>
+    <button (click)="toggle()" class="fab-toggler" mat-fab>
+        <mat-icon *ngIf="spin" [@fabToggler]="{value: opened ? 'active' : 'inactive'}">{{icon}}</mat-icon>
+        <mat-icon *ngIf="!spin">{{icon}}</mat-icon>
     </button>
-  </div>
+    <div *ngIf=" opened" [@speedDialStagger]="actions.length">
+        <button (click)="doAction(act)" *ngFor="let act of actions" class="fab-secondary" color="secondary"
+                mat-mini-fab
+                matTooltip="{{act.text}}">
+            <mat-icon>{{act.icon}}</mat-icon>
+        </button>
+    </div>
 </div>

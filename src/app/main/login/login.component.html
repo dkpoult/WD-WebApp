@@ -1,0 +1,31 @@
+<section style="max-width: 300px;">
+  <h1 matDialogTitle>Log In</h1>
+  <form (ngSubmit)="submit(form)" [formGroup]="form">
+    <mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Person Number</mat-label>
+        <input autocomplete="off" formControlName="personNumber" matInput>
+        <mat-error>
+          Please enter a person number
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input [type]="hide ? 'password' : 'text'" autocomplete="off" formControlName="password" matInput>
+        <mat-icon (click)="hide = !hide" matSuffix matTooltip="Show/Hide Password" style="cursor: pointer;">
+          {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error>
+          Please enter a password
+        </mat-error>
+      </mat-form-field>
+      <mat-error *ngIf="loginFailed && form.pristine">
+        Invalid username or password
+      </mat-error>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <span fxFlex></span>
+      <button [disabled]="hasErrors()" mat-button mat-dialog type="submit">Log In</button>
+      <span fxFlex></span>
+    </mat-dialog-actions>
+  </form>
+</section>

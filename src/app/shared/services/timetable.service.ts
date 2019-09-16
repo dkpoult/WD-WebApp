@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimetableService {
 
-  constructor() { }
+  constructor() {
+  }
+
+  get minutesToMillis() { return 60000; }
 
   getDateString(date) {
     const year = date.getFullYear().toString();
@@ -84,7 +87,7 @@ export class TimetableService {
   }
 
   sessionFallsOn(session, date: Date): boolean {
-    const startDate: Date = new Date(session.date);
+    const startDate: Date = new Date(session.startDate);
     // Don't include times
     startDate.setHours(0);
     startDate.setMinutes(0);
@@ -114,6 +117,30 @@ export class TimetableService {
       ms += session.repeatGap * this.msToRepeatType(session.repeatType);
     }
     return ms === date.valueOf();
+  }
+
+  repeatsSince(startDate: Date, endDate: Date, repeatType: string, repeatGap: number) {
+    const date = startDate;
+    date.setMilliseconds(0);
+    date.setSeconds(0);
+    date.setMinutes(0);
+    date.setHours(0);
+    if (repeatType === 'ONCE') {
+      return 0;
+    } else if (repeatType === 'MONTHLY') {
+      let c = 0;
+      while (date.valueOf() < endDate.valueOf()) {
+        console.log(c, date);
+        date.setMonth(date.getMonth() + repeatGap);
+        c++;
+      }
+      return c;
+    }
+    if (repeatType === 'WEEKLY') {
+      repeatGap *= 7;
+    }
+    const diff = this.diffDays(date, endDate);
+    return Math.floor(diff / repeatGap);
   }
 
   getNextDate(session) {

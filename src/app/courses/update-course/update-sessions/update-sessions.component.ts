@@ -82,7 +82,7 @@ export class UpdateSessionsComponent implements OnInit {
     this.form = new FormGroup({});
     const sessions: FormGroup[] = [];
     this.sessions.forEach(session => {
-      const date = new Date(session.nextDate);
+      const date = new Date(session.startDate);
       let dateStr: string;
       let timeStr: string;
       let endStr: string;

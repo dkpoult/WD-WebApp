@@ -1,21 +1,21 @@
 <div *ngFor="let course of courses">
   <div *ngIf="course.sessions.length > 0">
     <mat-card class="course-group">
-      <mat-card-title>{{ course.courseCode }}</mat-card-title>
-      <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
+      <mat-card-title>{{course.courseCode}}</mat-card-title>
+      <mat-card-subtitle>{{course.courseName}}</mat-card-subtitle>
       <mat-card-content>
-        <mat-card [ngClass]="{'session': true, 'urgent': urgentSession(session)}"
-          *ngFor="let session of course.sessions">
+        <mat-card *ngFor="let session of course.sessions"
+                  [ngClass]="{'session': true, 'urgent': urgentSession(session)}">
           <mat-card-title fxLayout="row">
-            {{ session.sessionType }} @ {{ session.venue.buildingCode }}{{ session.venue.subCode }}
+            {{session.sessionType}} @ {{session.venue.buildingCode}}{{session.venue.subCode}}
             <span fxFlex></span>
-            <button mat-icon-button *ngIf="venueHasCoords(session.venue)" (click)="showInMap(session.venue)">
+            <button (click)="showInMap(session.venue)" *ngIf="venueHasCoords(session.venue)" mat-icon-button>
               <mat-icon>place</mat-icon>
             </button>
           </mat-card-title>
           <mat-card-subtitle>
-            {{ session.nextDate.toDateString() }} at {{ session.nextDate.toTimeString().substr(0, 5) }} for
-            {{ session.duration }} minutes
+            {{session.startDate.toDateString()}} at {{session.startDate.toTimeString().substr(0, 5)}} for
+            {{session.duration}} minutes
           </mat-card-subtitle>
         </mat-card>
       </mat-card-content>

@@ -13,36 +13,37 @@
     </div>
     <!-- ! Course List ! -->
     <div class="content-holder">
-<!--      <mat-card (click)="openDetailsDialog(course)" *ngFor="let course of filteredCourses"-->
-      <mat-card *ngFor="let course of filteredCourses" [@slideInOut] id="course-card"
-                [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" class="course">
+      <!--      <mat-card (click)="openDetailsDialog(course)" *ngFor="let course of filteredCourses"-->
+      <mat-card *ngFor="let course of filteredCourses" [@slideInOut] [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}"
+                class="course" id="course-card">
         <label *ngIf="!(isHandset$ | async)" class="course-label" for="course-card">
           <span *ngIf="isLecturer(course)">You are a lecturer for this course</span>
           <span *ngIf="isTutor(course)">You are a tutor for this course</span>
         </label>
-        <mat-card-title>{{ course.courseCode }}</mat-card-title>
-        <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
+        <mat-card-title>{{course.courseCode}}</mat-card-title>
+        <mat-card-subtitle>{{course.courseName}}</mat-card-subtitle>
         <mat-card-content class="description">
           <div>{{course.courseDescription}}</div>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-icon-button matTooltip="Chat" routerLink="{{ course.courseCode }}/chat">
+          <button mat-icon-button matTooltip="Chat" routerLink="{{course.courseCode}}/chat">
             <mat-icon>chat</mat-icon>
           </button>
-          <button mat-icon-button matTooltip="Forum" routerLink="{{ course.courseCode }}/forum">
+          <button mat-icon-button matTooltip="Forum" routerLink="{{course.courseCode}}/forum">
             <mat-icon>forum</mat-icon>
           </button>
           <button mat-icon-button matTooltip="Announcements"
-                  routerLink="{{ course.courseCode }}/announcements">
+                  routerLink="{{course.courseCode}}/announcements">
             <mat-icon matBadge="" matBadgeColor="warn" matBadgeDescription="Unread Notifications">
               announcement
             </mat-icon>
           </button>
-          <button mat-icon-button matTooltip="Make a Booking">
+          <button [matTooltip]="isLecturer(course) ? 'View Your Bookings' : 'Make a Booking'" mat-icon-button
+                  routerLink="{{course.courseCode}}/bookings">
             <mat-icon>book</mat-icon>
           </button>
           <button *ngIf="canEdit(course)" mat-icon-button matTooltip="Edit"
-                  routerLink="{{ course.courseCode }}/edit">
+                  routerLink="{{course.courseCode}}/edit">
             <mat-icon>edit</mat-icon>
           </button>
           <button (click)="syncWithMoodle(course.courseCode, course); $event.stopPropagation()"
