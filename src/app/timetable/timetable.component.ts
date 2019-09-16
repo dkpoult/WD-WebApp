@@ -1,9 +1,9 @@
-import {VenueService} from '../shared/venue.service';
-import {Component, OnInit} from '@angular/core';
-import {SharedService} from '../shared/services/shared.service';
-import {TimetableService} from '../shared/services/timetable.service';
-import {Router} from '@angular/router';
-import {Course, Session, Venue} from '../shared/services/models';
+import { VenueService } from '../shared/venue.service';
+import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../shared/services/shared.service';
+import { TimetableService } from '../shared/services/timetable.service';
+import { Router } from '@angular/router';
+import { Course, Session, Venue } from '../shared/services/models';
 
 @Component({
   selector: 'app-timetable',
@@ -81,8 +81,9 @@ export class TimetableComponent implements OnInit {
   }
 
   venueHasCoords(venue) {
+    if (!this.venues) { return false; }
     const dbVenue = this.venues.find(v => v.buildingCode === venue.buildingCode);
-    return !!dbVenue.coordinates;
+    return !!dbVenue && !!dbVenue.coordinates;
   }
 
   showInMap(venue) {
