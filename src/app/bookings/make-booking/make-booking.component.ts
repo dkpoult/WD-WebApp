@@ -46,32 +46,35 @@ export class MakeBookingComponent implements OnInit {
   selectDate(date: Date) {
     // For every bookableSession for the selected lecturer
     this.sessions = [];
-    for (const session of this.course.bookableSessions[this.lecturer]) {
-      const startDate = new Date(session.startDate);
-      if (this.timetableService.sessionFallsOn(session, date)) {
-        this.sessions.push(session);
+    for (const s in this.course.bookableSessions[this.lecturer]) {
+      if (this.course.bookableSessions[this.lecturer].hasOwnProperty(s)) {
+        const session = this.course.bookableSessions[this.lecturer][s];
+        const startDate = new Date(session.startDate);
+        if (this.timetableService.sessionFallsOn(session, date)) {
+          this.sessions.push(session);
+        }
       }
     }
     this.selectedDate = date;
     // update slots
     const slots = [];
     for (const session of this.sessions) {
-        for (let s = 0; s < session.slotCount; s++) { // This is not the right loop, there should be _another_ above it
-          const repeats = this.timetableService.repeatsSince(new Date(session.startDate), date, session.repeatType, session.repeatGap);
-          const b = repeats.toString(10);
-          const booking = session.bookings[b] ?
-                          session.bookings[b][s] : null;
-          if (this.getSlotDuration(session) > 0) {
-            slots.push({
-              startTime: this.getSlotStartTime(session, s),
-              endTime: this.getSlotEndTime(session, s),
-              taken: !!booking && booking.allocated,
-              sessionId: session.id,
-              slotIndex: s,
-              repeatIndex: repeats
-            });
-          }
+      for (let s = 0; s < session.slotCount; s++) { // This is not the right loop, there should be _another_ above it
+        const repeats = this.timetableService.repeatsSince(new Date(session.startDate), date, session.repeatType, session.repeatGap);
+        const b = repeats.toString(10);
+        const booking = session.bookings[b] ?
+          session.bookings[b][s] : null;
+        if (this.getSlotDuration(session) > 0) {
+          slots.push({
+            startTime: this.getSlotStartTime(session, s),
+            endTime: this.getSlotEndTime(session, s),
+            taken: !!booking && booking.allocated,
+            sessionId: session.id,
+            slotIndex: s,
+            repeatIndex: repeats
+          });
         }
+      }
     }
     this.slots = slots;
     this.form.controls.slot.setValue(null);

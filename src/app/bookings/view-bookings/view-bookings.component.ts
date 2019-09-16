@@ -103,6 +103,7 @@ export class ViewBookingsComponent implements OnInit {
       } else {
         dateStr = date.toISOString();
         timeStr = date.toTimeString().substr(0, 5);
+        console.log(timeStr);
         endStr = this.timetableService.getTimeString(date, session.duration);
       }
       if (!session.venue) {
@@ -142,7 +143,7 @@ export class ViewBookingsComponent implements OnInit {
         subCode: new FormControl('', [Validators.required]),
       }),
       repeatType: new FormControl('WEEKLY', [Validators.required]),
-      repeatGap: new FormControl('1', [Validators.required, Validators.min(1)]),
+      repeatGap: new FormControl(1, [Validators.required, Validators.min(1)]),
       sessionType: new FormControl('CONSULTATION', [Validators.required]),
       startDate: new FormControl(new Date(), [Validators.required]),
       time: new FormControl('', [Validators.required]),
