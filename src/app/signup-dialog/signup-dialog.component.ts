@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
-import { SharedService } from '../shared/shared.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material';
+import {SharedService} from '../shared/services/shared.service';
+import {Router} from '@angular/router';
+import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-signup-dialog',
@@ -19,8 +20,10 @@ export class SignupDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<SignupDialogComponent>,
     private sharedService: SharedService,
+    private userService: UserService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -42,7 +45,7 @@ export class SignupDialogComponent implements OnInit {
       switch (response.responseCode) {
         case 'successful':
           this.noUser = false;
-          this.sharedService.loginUser(user.personNumber, response.userToken, response.preferences);
+          this.userService.loginUser(user.personNumber, response.userToken, response.preferences);
           this.router.navigateByUrl('/courses');
           this.dialogRef.close(true);
           break;

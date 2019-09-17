@@ -1,68 +1,66 @@
+<!-- ! Search Bar ! -->
+<app-search-bar (searchTerm)="searchTerm = $event" [options]="toggleOptions"></app-search-bar>
 <div *ngIf="!gotCourses; else elseTemplate">
-    <mat-spinner class="spinner"></mat-spinner>
+  <mat-spinner class="spinner"></mat-spinner>
 </div>
 <ng-template #elseTemplate>
-    <div *ngIf="courses.length === 0; else coursesTemplate" class="no-course" [@fade]>
-        There are no courses to display. Please enrol in a course or create a new one
+  <div *ngIf="courses.length === 0; else coursesTemplate" [@fadeInOut] class="no-content">
+    There are no courses to display. Please enrol in a course or create a new one
+  </div>
+  <ng-template #coursesTemplate>
+    <div *ngIf="filteredCourses.length === 0" [@fadeInOut] class="course no-content">
+      No courses match your search
     </div>
-    <ng-template #coursesTemplate>
-        <!-- ! Search Bar ! -->
-        <div class="search-form" fxLayout="row" fxLayoutAlign="start start">
-            <input type="search" [(ngModel)]="searchTerm" placeholder="Search" class="search-input">
-            <mat-icon class="search-icon">search</mat-icon>
-            <div class="search-option">
-                <div>
-                    <input name="type" type="checkbox" [(ngModel)]="lectureOnly" id="type-lecture">
-                    <label for="type-lecture">
-                        <mat-icon>school</mat-icon>
-                        <span>Lecturer</span>
-                    </label>
-                </div>
-                <div>
-                    <input name="type" type="checkbox" [(ngModel)]="tutorOnly" id="type-tutor">
-                    <label for="type-tutor">
-                        <mat-icon>person</mat-icon>
-                        <span>Tutor</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <!-- ! Course List ! -->
-        <div *ngIf="filteredCourses.length === 0" class="course no-courses" [@fade]>
-            No courses match your search
-        </div>
-        <mat-card *ngFor="let course of filteredCourses" class="course"
-            [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}" [@inOutAnimation]>
-            <mat-card-title>{{ course.courseCode }}</mat-card-title>
-            <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
-            <mat-card-content>{{ course.courseDescription }}</mat-card-content>
-            <mat-card-actions>
-                <button mat-icon-button matTooltip="Chat" routerLink="{{ course.courseCode }}/chat">
-                    <mat-icon>chat</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="Forum" routerLink="{{ course.courseCode }}/forum">
-                    <mat-icon>forum</mat-icon>
-                </button>
-                <button mat-icon-button matTooltip="Announcements" routerLink="{{ course.courseCode }}/announcements">
-                    <mat-icon matBadge="" matBadgeColor="warn" matBadgeDescription="Unread Notifications">
-                        announcement
-                    </mat-icon>
-                </button>
-                <button *ngIf="isLecturer(course)" mat-icon-button matTooltip="Edit"
-                    routerLink="{{ course.courseCode }}/edit">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button *ngIf="isLecturer(course)" [disabled]="!isMoodleCourse(course)" mat-icon-button #spinButton
-                    matTooltip="Fetch Moodle Data" (click)="syncWithMoodle(course.courseCode, course, spinButton)">
-                    <mat-icon>cached</mat-icon>
-                </button>
-                <!--! For when muting courses is a thing-->
-                <!-- <button mat-icon-button>
-                                <mat-icon>notifications</mat-icon>
-                            </button> -->
-            </mat-card-actions>
-        </mat-card>
-    </ng-template>
+    <!-- ! Course List ! -->
+    <div class="content-holder">
+      <!--      <mat-card (click)="openDetailsDialog(course)" *ngFor="let course of filteredCourses"-->
+      <mat-card *ngFor="let course of filteredCourses" [@slideInOut] [ngClass]="{'lectured': isLecturer(course), 'tutored': isTutor(course)}"
+                class="course" id="course-card">
+        <label *ngIf="!(isHandset$ | async)" class="course-label" for="course-card">
+          <span *ngIf="isLecturer(course)">You are a lecturer for this course</span>
+          <span *ngIf="isTutor(course)">You are a tutor for this course</span>
+        </label>
+        <mat-card-title>{{course.courseCode}}</mat-card-title>
+        <mat-card-subtitle>{{course.courseName}}</mat-card-subtitle>
+        <mat-card-content class="description">
+          <div>{{course.courseDescription}}</div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button matTooltip="Chat" routerLink="{{course.courseCode}}/chat">
+            <mat-icon>chat</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Forum" routerLink="{{course.courseCode}}/forum">
+            <mat-icon>forum</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Announcements"
+                  routerLink="{{course.courseCode}}/announcements">
+            <mat-icon matBadge="" matBadgeColor="warn" matBadgeDescription="Unread Notifications">
+              announcement
+            </mat-icon>
+          </button>
+          <button [matTooltip]="isLecturer(course) ? 'View Your Bookings' : 'Make a Booking'" mat-icon-button
+                  routerLink="{{course.courseCode}}/bookings">
+            <mat-icon>book</mat-icon>
+          </button>
+          <button *ngIf="canEdit(course)" mat-icon-button matTooltip="Edit"
+                  routerLink="{{course.courseCode}}/edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="syncWithMoodle(course.courseCode, course); $event.stopPropagation()"
+                  *ngIf="isLecturer(course)" [@spin]="spin"
+                  [disabled]="!isMoodleCourse(course)" mat-icon-button
+                  matTooltip="Fetch Moodle Data">
+            <mat-icon>cached</mat-icon>
+          </button>
+          <!--! For when muting courses is a thing-->
+          <!-- <button mat-icon-button matTooltip="Mute Notifications">
+                      <mat-icon>notifications</mat-icon>
+          </button> -->
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </ng-template>
 </ng-template>
-<app-speed-dial-fab #fab class="speed-dial" [icon]="'list'" [actions]="fabActions" (clicked)="doAction($event)">
+<app-speed-dial-fab #fab (clicked)="doAction($event)" [actions]="fabActions" [spin]="false" class="speed-dial"
+                    icon="list">
 </app-speed-dial-fab>

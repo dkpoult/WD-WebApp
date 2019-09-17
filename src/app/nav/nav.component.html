@@ -1,71 +1,83 @@
 <mat-sidenav-container class="sidenav-container">
-  <!--Sidenav for mobile-->
-  <mat-sidenav #drawer class="drawer" fixedInViewport="true" [attr.role]="'dialog'" [mode]="'over'"
-    fxShow="isHandset$ | async" [opened]="(!isHandset$ | async)">
-    <!--Menu items if logged out-->
-    <mat-nav-list *ngIf="!loggedIn()">
-      <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedOut" (click)="drawer.close()">
-        <a routerLink="{{ menuItem.path }}">{{ menuItem.text }}</a>
-      </mat-list-item>
-      <!--Login/Signup buttons-->
-      <div fxLayoutAlign="space-between start" fxAlign="end">
-        <button fxFlex="50" mat-raised-button (click)="openLoginDialog()">Log In</button>
-        <button fxFlex="50" mat-raised-button color="accent" (click)="openSignupDialog()">Link
-          Account</button>
-      </div>
-    </mat-nav-list>
-    <!--Menu items if logged in-->
-    <mat-nav-list *ngIf="loggedIn()">
-      <mat-list-item mat-button *ngFor="let menuItem of menuItemsLoggedIn" (click)="drawer.close()">
-        <a routerLink="{{ menuItem.path }}">{{ menuItem.text }}</a>
-      </mat-list-item>
-      <!--Sign out button-->
-      <div fxLayoutAlign="space-between start" fxAlign="end">
-        <button fxFlex mat-raised-button color="accent" (click)="signOut(); drawer.close()">Sign Out</button>
-      </div>
-    </mat-nav-list>
-    <!--Menu items all the time-->
-    <mat-nav-list>
-      <mat-slide-toggle #darkMode [checked]="isDarkMode$ | async" (change)="toggleDarkMode($event.checked)">
-        <mat-icon>brightness_3</mat-icon>
-      </mat-slide-toggle>
-    </mat-nav-list>
-  </mat-sidenav>
-  <!--Toolbar at the top-->
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <!--Hamburger button-->
-      <button type="button" aria-label="Open side nav" mat-icon-button (click)="drawer.open()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav open icon">menu</mat-icon>
-      </button>
-      <a mat-button routerLink="">WitsDaily</a>
-      <span fxFlex></span>
-      <!--Menu items all the time-->
-      <mat-nav-list [class.hidden]="isHandset$ | async">
-        <mat-slide-toggle #darkMode [checked]="isDarkMode$ | async" (change)="toggleDarkMode($event.checked)">
-          <mat-icon>brightness_3</mat-icon>
-        </mat-slide-toggle>
-      </mat-nav-list>
-      <div class="toolbar" [class.hidden]="isHandset$ | async">
+    <!--Sidenav for mobile-->
+    <mat-sidenav #drawer [attr.role]="'dialog'" [mode]="'over'" [opened]="(!isHandset$ | async)" class="drawer"
+                 fixedInViewport="true" fxShow="isHandset$ | async">
         <!--Menu items if logged out-->
-        <div *ngIf="!loggedIn()">
-          <a mat-button *ngFor="let menuItem of menuItemsLoggedOut" routerLink="{{ menuItem.path }}">
-            {{ menuItem.text }}
-          </a>
-          <button mat-button (click)="openLoginDialog()">Log In</button>
-          <button mat-raised-button color="accent" (click)="openSignupDialog()">Link Account</button>
-        </div>
+        <mat-nav-list *ngIf="!loggedIn()">
+            <mat-list-item (click)="drawer.close()" *ngFor="let menuItem of menuItemsLoggedOut" mat-button>
+                <a routerLink="{{menuItem.path}}">{{menuItem.text}}</a>
+            </mat-list-item>
+            <!--Login/Signup buttons-->
+            <div fxAlign="end" fxLayoutAlign="space-between start">
+                <button (click)="openLoginDialog()" fxFlex="50" mat-raised-button>
+                    <mat-icon>input</mat-icon>
+                    Log In
+                </button>
+                <button (click)="openSignupDialog()" color="accent" fxFlex="50" mat-raised-button>Link
+                    Account
+                </button>
+            </div>
+        </mat-nav-list>
         <!--Menu items if logged in-->
-        <div *ngIf="loggedIn()">
-          <a mat-button *ngFor="let menuItem of menuItemsLoggedIn" routerLink="{{ menuItem.path }}">
-            {{ menuItem.text }}
-          </a>
-          <button mat-raised-button color="accent" (click)="signOut()">Sign Out</button>
-        </div>
-      </div>
-    </mat-toolbar>
-    <!--Any component we navigate to will show here-->
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
+        <mat-nav-list *ngIf="loggedIn()">
+            <mat-list-item (click)="drawer.close()" *ngFor="let menuItem of menuItemsLoggedIn" mat-button>
+                <a routerLink="{{menuItem.path}}">{{menuItem.text}}</a>
+            </mat-list-item>
+            <!--Sign out button-->
+            <div fxAlign="end" fxLayoutAlign="space-between start">
+                <button (click)="signOut(); drawer.close()" color="accent" fxFlex mat-raised-button>
+                    Log Out
+                    <mat-icon>exit_to_app</mat-icon>
+                </button>
+            </div>
+        </mat-nav-list>
+        <!--Menu items all the time-->
+        <mat-nav-list>
+            <mat-slide-toggle #darkMode (change)="toggleDarkMode($event.checked)" [checked]="isDarkMode$ | async">
+                <mat-icon>brightness_3</mat-icon>
+            </mat-slide-toggle>
+        </mat-nav-list>
+    </mat-sidenav>
+    <!--Toolbar at the top-->
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <!--Hamburger button-->
+            <button (click)="drawer.open()" *ngIf="isHandset$ | async" aria-label="Open side nav" mat-icon-button
+                    type="button">
+                <mat-icon aria-label="Side nav open icon">menu</mat-icon>
+            </button>
+            <a mat-button routerLink="">WitsDaily</a>
+            <span fxFlex></span>
+            <!--Menu items all the time-->
+            <mat-nav-list [class.hidden]="isHandset$ | async">
+                <mat-slide-toggle #darkMode (change)="toggleDarkMode($event.checked)" [checked]="isDarkMode$ | async">
+                    <mat-icon>brightness_3</mat-icon>
+                </mat-slide-toggle>
+            </mat-nav-list>
+            <div [class.hidden]="isHandset$ | async" class="toolbar">
+                <!--Menu items if logged out-->
+                <div *ngIf="!loggedIn()">
+                    <a *ngFor="let menuItem of menuItemsLoggedOut" mat-button routerLink="{{menuItem.path}}">
+                        {{menuItem.text}}
+                    </a>
+                    <button (click)="openLoginDialog()" mat-button>
+                        <mat-icon>input</mat-icon>
+                        Log In
+                    </button>
+                    <button (click)="openSignupDialog()" color="accent" mat-raised-button>Link Account</button>
+                </div>
+                <!--Menu items if logged in-->
+                <div *ngIf="loggedIn()">
+                    <a *ngFor="let menuItem of menuItemsLoggedIn" mat-button routerLink="{{menuItem.path}}">
+                        {{menuItem.text}}
+                    </a>
+                    <button (click)="signOut()" color="accent" mat-raised-button>
+                        Log Out
+                        <mat-icon>exit_to_app</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-toolbar>
+        <ng-content class="scrollable-content"></ng-content>
+    </mat-sidenav-content>
 </mat-sidenav-container>

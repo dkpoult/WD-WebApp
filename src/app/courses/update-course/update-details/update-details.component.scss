@@ -1,0 +1,19 @@
+@import 'src/assets/mixins';
+
+.details-container {
+  @include card(1);
+  margin: 15px;
+  padding: 15px;
+
+  &:focus-within {
+    @include card(2);
+  }
+}
+
+::ng-deep {
+
+  input.mat-input-element,
+  span.mat-form-field-label-wrapper label.mat-form-field-label {
+    height: 100%;
+  }
+}

@@ -1,12 +1,19 @@
 .sidenav-container {
   height: 100%;
+  overflow-y: hidden;
 }
 
 .sidenav .mat-toolbar {
   background: inherit;
 }
 
+.scrollable-content {
+  overflow-y: auto;
+}
+
 .mat-toolbar.mat-primary {
+  max-height: 64px;
+  min-height: 64px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -21,6 +28,8 @@ mat-sidenav {
   display: none;
 }
 
-[mat-button], [mat-raised-button], [mat-flat-button] {
+[mat-button],
+[mat-raised-button],
+[mat-flat-button] {
   margin: 2px;
 }

@@ -1,10 +1,9 @@
-import { SharedService } from './../shared/shared.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { switchMap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { CreatePostComponent } from '../post/create-post/create-post.component';
+import {SharedService} from '../shared/services/shared.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {switchMap} from 'rxjs/operators';
+import {MatDialog, MatDialogRef} from '@angular/material';
+import {CreatePostComponent} from '../forum/post/create-post/create-post.component';
 
 @Component({
   selector: 'app-forum',
@@ -18,22 +17,23 @@ export class ForumComponent implements OnInit {
   course: string;
 
   gotPosts = false;
-  posts: Array<any>;
+  posts: any[];
 
   constructor(
     private sharedService: SharedService,
     private route: ActivatedRoute,
     private dialog: MatDialog
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
-        this.course = result;
-        this.getPosts();
-      });
+      this.course = result;
+      this.getPosts();
+    });
   }
 
   getPosts() {
@@ -48,7 +48,7 @@ export class ForumComponent implements OnInit {
   }
 
   openCreatePostDialog() {
-    this.createPostDialogRef = this.dialog.open(CreatePostComponent, { data: this.course });
+    this.createPostDialogRef = this.dialog.open(CreatePostComponent, {data: this.course});
     this.createPostDialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.getPosts();

@@ -1,0 +1,15 @@
+<div class="search-form">
+    <input #searchInput (input)="searchTerm.next(searchInput.value)" class="search-input" placeholder="Search"
+           type="search">
+    <mat-icon class="search-icon">search</mat-icon>
+    <div (mousedown)="searchBarClick(searchInput, $event)" class="search-option">
+        <div *ngFor="let option of options;"
+             [attr.style]="sanitizer.bypassSecurityTrustStyle('--activeColor: ' + option.color)">
+            <input [(ngModel)]="option.checked" id="filter-{{option.hint}}" name=" filter" type="checkbox">
+            <label for="filter-{{option.hint}}">
+                <mat-icon>{{option.icon}}</mat-icon>
+                <span>{{option.hint}}</span>
+            </label>
+        </div>
+    </div>
+</div>

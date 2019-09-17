@@ -1,0 +1,11 @@
+<section *ngIf="gotPost">
+  <div class="post">
+    <h1>{{post.title}}</h1>
+    <div>{{post.body}}</div>
+    <app-post-action-buttons [post]="post"></app-post-action-buttons>
+    <!-- TODO: Make permissions dynamic -->
+    <app-comment (changeVote)="sortComments()" (newAnswer)="markNewAnswer($event)" *ngFor="let comment of post.comments"
+                 [comment]="comment" [isAnswer]="isAnswer(comment)" [permissions]="32" [postCode]="post.code">
+    </app-comment>
+  </div>
+</section>

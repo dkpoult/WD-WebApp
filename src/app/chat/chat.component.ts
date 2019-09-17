@@ -1,11 +1,12 @@
-import { PermissionService } from './../shared/permission.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SharedService } from '../shared/shared.service';
-import { switchMap, startWith } from 'rxjs/operators';
-import { SocketService } from '../shared/socket.service';
-import { isNullOrUndefined } from 'util';
-import { interval, Subscription, Subject } from 'rxjs';
+import {PermissionService} from '../shared/services/permission.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {SharedService} from '../shared/services/shared.service';
+import {startWith, switchMap} from 'rxjs/operators';
+import {SocketService} from '../shared/services/socket.service';
+import {isNullOrUndefined} from 'util';
+import {interval, Subject, Subscription} from 'rxjs';
+import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -18,33 +19,41 @@ export class ChatComponent implements OnInit {
   @ViewChild('switchButton') switchButton: any;
 
   unansweredSurvey = false;
-  private _survey;
-  get survey() { return this._survey; }
-  set survey(value) { this.surveySubject.next(value); this._survey = value; }
-  private surveySubject = new Subject<any>();
-  survey$ = this.surveySubject.asObservable();
-
-  get currentUser() { return this.sharedService.currentUser; }
-
   currentTabIndex = 0;
-
   pollingInterval = 5000;
   pollingData: Subscription;
-
   tutorMode = false;
-
-  liveQuestions: Array<any>;
-  messagesTutor: Array<any>;
-  messagesStudent: Array<any>;
+  liveQuestions: any[];
+  messagesTutor: any[];
+  messagesStudent: any[];
   unreadMessages = 0;
   course: any;
+  private surveySubject = new Subject<any>();
+  survey$ = this.surveySubject.asObservable();
 
   constructor(
     private route: ActivatedRoute,
     private sharedService: SharedService,
+    private userService: UserService,
     private socketService: SocketService,
     private permissionService: PermissionService
-  ) { }
+  ) {
+  }
+
+  private _survey;
+
+  get survey() {
+    return this._survey;
+  }
+
+  set survey(value) {
+    this.surveySubject.next(value);
+    this._survey = value;
+  }
+
+  get currentUser() {
+    return this.userService.currentUser;
+  }
 
   ngOnInit() {
     this.messagesStudent = [];
@@ -54,44 +63,44 @@ export class ChatComponent implements OnInit {
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
-        this.sharedService.getCourse(result).subscribe((response: any) => {
-          this.course = response.course;
-          // Can only do this after we have course
-          if (this.isModerator()) {
-            this.sharedService.getMessages(result, true).subscribe((res: any) => {
-              switch (res.responseCode) {
-                case 'successful':
-                  const temp = res.messages.reverse();
-                  temp.forEach(message => {
-                    this.handleMessage(message, this.messagesTutor);
-                  });
-                  break;
-              }
-            });
-            this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
-              this.handleMessage(message, this.messagesTutor);
-            });
-          }
-        });
-        this.sharedService.getSurvey(result).subscribe((response: any) => {
-          this.survey = response.survey;
-          // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
-        });
-        // Get previous messages
-        this.sharedService.getMessages(result, false).subscribe((res: any) => {
-          switch (res.responseCode) {
-            case 'successful':
-              const temp = res.messages.reverse();
-              temp.forEach(message => {
-                this.handleMessage(message, this.messagesStudent);
-              });
-              break;
-          }
-        });
-        this.socketService.subscribeToCourse(result).subscribe((message: any) => {
-          this.handleMessage(message, this.messagesStudent);
-        });
+      this.sharedService.getCourse(result).subscribe((response: any) => {
+        this.course = response.course;
+        // Can only do this after we have course
+        if (this.isModerator()) {
+          this.sharedService.getMessages(result, true).subscribe((res: any) => {
+            switch (res.responseCode) {
+              case 'successful':
+                const temp = res.messages.reverse();
+                temp.forEach(message => {
+                  this.handleMessage(message, true);
+                });
+                break;
+            }
+          });
+          this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
+            this.handleMessage(message, true);
+          });
+        }
       });
+      this.sharedService.getSurvey(result).subscribe((response: any) => {
+        this.survey = response.survey;
+        // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
+      });
+      // Get previous messages
+      this.sharedService.getMessages(result, false).subscribe((res: any) => {
+        switch (res.responseCode) {
+          case 'successful':
+            const temp = res.messages.reverse();
+            temp.forEach(message => {
+              this.handleMessage(message, false);
+            });
+            break;
+        }
+      });
+      this.socketService.subscribeToCourse(result).subscribe((message: any) => {
+        this.handleMessage(message, false);
+      });
+    });
   }
 
   tabChange(event) {
@@ -112,11 +121,12 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  handleMessage(message: any, array: Array<any>) {
+  handleMessage(message: any, tutorMode: boolean) {
     // this.autoscroll.nativeElement.scrollTop = this.autoscroll.nativeElement.scrollHeight;
+    const array = tutorMode ? this.messagesTutor : this.messagesStudent;
     switch (message.messageType) {
       case 'DELETE':
-        this.removeMessage(parseInt(message.content, 10), array);
+        this.removeMessage(parseInt(message.content, 10), tutorMode);
         break;
       case 'SURVEY':
         console.log('Received survey:', message);
@@ -146,7 +156,7 @@ export class ChatComponent implements OnInit {
     const question = this.liveQuestions.find((value) => value.id === id);
     const vote = (question.voted === 1) ? 0 : 1; // 0 if it was 1, 1 if it was 0
     question.voted = vote;
-    const content = { id, vote };
+    const content = {id, vote};
     this.socketService.voteQuestion(content);
   }
 
@@ -193,20 +203,22 @@ export class ChatComponent implements OnInit {
   }
 
   // remove it from our local list of messages
-  removeMessage(id: number, array?: Array<any>) {
-    if (!isNullOrUndefined(array)) {
-      array = array.filter((value) => value.id !== id); // Will remove messages
+  removeMessage(id: number, tutorMode: boolean) {
+    if (tutorMode) {
+      this.messagesTutor = this.messagesTutor.filter((value) => value.id !== id); // Will remove messages
+    } else {
+      this.messagesStudent = this.messagesStudent.filter((value) => value.id !== id);
     }
     this.liveQuestions = this.liveQuestions.filter((value) => value.id !== id); // Will remove questions
   }
 
   // send delete message to everyone
   deleteMessage(id: number) {
-    this.socketService.deleteMessage(id); // delete it (outgoing only)
+    this.socketService.deleteMessage(id, this.tutorMode); // delete it (outgoing only)
   }
 
   deleteQuestion(id: number) {
-    this.removeMessage(id); // local  side
+    this.removeMessage(id, false); // local  side
     this.deleteMessage(id); // server side
   }
 

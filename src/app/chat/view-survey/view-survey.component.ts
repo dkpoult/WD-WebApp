@@ -1,11 +1,11 @@
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { SurveyService } from './../../shared/survey.service';
-import { SharedService } from '../../shared/shared.service';
+import { SurveyService } from '../../shared/services/survey.service';
+import { SharedService } from '../../shared/services/shared.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { CreateSurveyComponent } from './create-survey/create-survey.component';
 import { isNullOrUndefined } from 'util';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PermissionService } from 'src/app/shared/permission.service';
+import { PermissionService } from 'src/app/shared/services/permission.service';
 
 @Component({
   selector: 'app-view-survey',

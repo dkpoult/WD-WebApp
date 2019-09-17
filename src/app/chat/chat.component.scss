@@ -1,16 +1,52 @@
-.tabs {
-    height: 100%;
-    width: 100%;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    position: relative;
+:host {
+    box-sizing: border-box;
+    display: block;
+    height: calc(100% - 64px);
 }
 
-.chat-container {
-    // position: sticky;
-    border: 5px solid orangered;
+#wrapper {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#tab-group {
+    height: 100%;
+}
+
+::ng-deep#tab-group mat-tab-body {
+    flex-grow: 1;
+}
+
+.message-container {
+    height: calc(100% - 1cm - 32px);
+    top: calc(48px + 64px);
+    overflow-y: auto;
+}
+
+.input-container {
+    width: 100%;
+    padding: 15px;
+
+    ::ng-deep:not(.dark) & {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
+
+    ::ng-deep.dark & {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .message-input {
+        height: 1cm;
+        max-height: 5em;
+        border: none;
+        background: white !important;
+        border-radius: 2em;
+        padding: 10px 5px;
+        background: transparent;
+        outline: 0;
+        resize: none;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
 }
 
 .questions-container {
@@ -18,54 +54,6 @@
     right: 0;
     top: 0;
     bottom: 0;
-}
-
-.message-container {
-    overflow-y: auto;
-    height: 100%;
-
-    ::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #888;
-
-        &:hover {
-            background: #555;
-        }
-    }
-}
-
-.input {
-    position: sticky;
-    bottom: 0;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.12);
-    // background: mat-color($wd-accent);
-
-    .send {
-        color: black;
-    }
-}
-
-.messageInput {
-    height: 1cm;
-    max-height: 5em;
-    border: none;
-    background: white !important;
-    border-radius: 2em;
-    padding: 10px 5px;
-    background: transparent;
-    outline: 0;
-    resize: none;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .animate mat-icon {

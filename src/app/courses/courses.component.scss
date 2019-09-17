@@ -1,201 +1,75 @@
-@import '../../assets/theming/colors';
+@import 'src/assets/colors';
+@import 'src/assets/mixins';
+
+$border-width: 10px;
+$course-width: 75%;
 
 .course {
-    margin: 20px auto;
-    max-width: 80%;
-    transition: all 0.2s ease;
-}
+  margin: 20px auto;
+  max-width: $course-width;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  border-left: $border-width solid transparent;
 
-.no-courses {
+  .description {
+
+  }
+
+  &:not(div):hover {
+    @include card(2);
+    transform: scale(1.025);
+    z-index: 0;
+  }
+
+  // Hoverable region
+  .course-label {
+    width: calc(100% + #{$border-width});
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    left: -$border-width;
+    top: 0;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  }
 }
 
-mat-card:hover {
-    transform: scale(1.05);
+app-search-bar {
+  --max-width: #{$course-width};
 }
 
 .speed-dial {
-    position: fixed;
-    right: 15px;
-    bottom: 15px;
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
 }
 
 .lectured {
-    border: 3px solid $lecturerColor;
+  border-color: $darkLecturerColor;
 
-    // background: $lecturerColor;
+  .course-label {
+    @include popupLabel($darkLecturerColor, left);
+  }
 }
 
 .tutored {
-    border: 3px solid $tutorColor;
+  border-color: $darkTutorColor;
 
-    // background: $tutorColor
+  .course-label {
+    @include popupLabel($darkTutorColor, left);
+  }
 }
 
 .animate mat-icon {
-    animation: rotate 0.6s ease-in-out 0s;
+  animation: rotate 0.6s ease-in-out 0s;
 }
 
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
 
-    to {
-        transform: rotate(-180deg);
-    }
-}
-
-// ! Search Bar
-$selectedColor: #df2727;
-
-.search-form {
-    opacity: 0.7;
-    position: relative;
-
-    margin-left: 10%;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-
-    max-width: 90%;
-    width: 175px;
-    height: 40px;
-    border-radius: 40px;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-    background: #fff;
-    transition: all 0.3s ease;
-
-    &:focus-within {
-        width: 350px;
-        opacity: 1;
-    }
-
-    .search-input {
-        position: absolute;
-        top: 10px;
-        left: 38px;
-        font-size: 14px;
-        background: none;
-        color: #5a6674;
-        width: 70%;
-        height: 20px;
-        border: none;
-        appearance: none;
-        outline: none;
-
-        &::-webkit-search-cancel-button {
-            appearance: none;
-        }
-    }
-
-    .search-icon {
-        position: absolute;
-        top: 10px;
-        left: 15px;
-        height: 20px;
-        width: 20px;
-        padding: 0;
-        margin: 0;
-        color: #5a6674;
-        cursor: default;
-    }
-
-    .search-option {
-        position: absolute;
-        text-align: right;
-        top: 10px;
-        right: 15px;
-
-        // Each option itself
-        div {
-            position: relative;
-            display: inline-block;
-            margin: 0 1px;
-            cursor: pointer;
-
-            input {
-                position: absolute;
-                top: 0;
-                left: 0;
-                opacity: 0.01;
-                cursor: pointer;
-            }
-
-            // The label
-            span {
-                position: absolute;
-                display: block;
-                text-align: center;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 0;
-                background: #929AA3;
-                color: #fff;
-                font-size: 9px;
-                letter-spacing: 1px;
-                line-height: 1;
-                text-transform: uppercase;
-                padding: 4px 7px;
-                border-radius: 12px;
-                top: -18px;
-                transition: all .2s ease-in-out;
-
-                // The little arrow
-                &::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -3px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    border-top: 4px solid #929AA3;
-                    border-left: 4px solid transparent;
-                    border-right: 4px solid transparent;
-                    transition: all .2s ease-in-out;
-                }
-            }
-
-            &:hover span {
-                opacity: 1;
-                top: -21px;
-            }
-
-            label {
-                display: block;
-                cursor: pointer;
-            }
-
-            mat-icon {
-                height: 20px;
-                width: 20px;
-                color: #5a6674;
-                opacity: 0.6;
-                transition: all .2s ease-in-out;
-                pointer-events: none;
-            }
-
-            &:hover mat-icon {
-                opacity: 1;
-            }
-
-            // Red icon when selected
-            input:checked+label mat-icon {
-                color: $selectedColor;
-                opacity: .9;
-            }
-
-            // Red label when selected
-            input:checked+label span {
-                background: $selectedColor;
-
-                &::after {
-                    border-top-color: $selectedColor;
-                }
-            }
-        }
-
-
-    }
+  to {
+    transform: rotate(-180deg);
+  }
 }

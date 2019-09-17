@@ -1,3 +1,7 @@
+import { UpdatePermissionsComponent } from './courses/update-course/update-permissions/update-permissions.component';
+import { UpdateSessionsComponent } from './courses/update-course/update-sessions/update-sessions.component';
+import { UpdateDetailsComponent } from './courses/update-course/update-details/update-details.component';
+import { UpdateCourseComponent } from './courses/update-course/update-course.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,7 +16,7 @@ import { AgmCoreModule } from '@agm/core';
 import { NavComponent } from './nav/nav.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignupDialogComponent } from './signup-dialog/signup-dialog.component';
-import { SharedService } from './shared/shared.service';
+import { SharedService } from './shared/services/shared.service';
 import { FeaturesComponent } from './features/features.component';
 import { CoursesComponent } from './courses/courses.component';
 import { MainComponent } from './main/main.component';
@@ -23,33 +27,42 @@ import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component
 import { EnrolComponent } from './courses/enrol/enrol.component';
 import { ForumComponent } from './forum/forum.component';
 import { ConfirmEnrolmentComponent } from './courses/enrol/confirm-enrolment/confirm-enrolment.component';
-import { CreatePostComponent } from './post/create-post/create-post.component';
-import { PostComponent } from './post/post.component';
-import { CommentComponent } from './post/comment/comment.component';
-import { PostActionButtonsComponent } from './post/post-action-buttons/post-action-buttons.component';
-import { CreateCommentComponent } from './post/create-comment/create-comment.component';
+import { CreatePostComponent } from './forum/post/create-post/create-post.component';
+import { PostComponent } from './forum/post/post.component';
+import { CommentComponent } from './forum/post/comment/comment.component';
+import { PostActionButtonsComponent } from './forum/post/post-action-buttons/post-action-buttons.component';
+import { CreateCommentComponent } from './forum/post/create-comment/create-comment.component';
 import { AnnouncementsComponent } from './announcements/announcements.component';
 import { MakeAnnouncementComponent } from './announcements/make-announcement/make-announcement.component';
-import { EditCourseComponent } from './courses/edit-course/edit-course.component';
 import { TimetableComponent } from './timetable/timetable.component';
-import { EditSessionComponent } from './courses/edit-course/edit-session/edit-session.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
 import { ViewSurveyComponent } from './chat/view-survey/view-survey.component';
 import { CreateSurveyComponent } from './chat/view-survey/create-survey/create-survey.component';
 import { ChartComponent } from './chat/view-survey/chart/chart.component';
-import { CalendarComponent } from './timetable/calendar/calendar.component';
-import { VenueInputComponent } from './courses/edit-course/edit-session/venue-input/venue-input.component';
+import { SessionFormComponent } from './courses/update-course/update-sessions/session-form/session-form.component';
+import { VenueInputComponent } from './courses/update-course/update-sessions/session-form/venue-input/venue-input.component';
 import { MapComponent } from './map/map.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { LiveQuestionsComponent } from './chat/live-questions/live-questions.component';
 import { AskQuestionComponent } from './chat/live-questions/ask-question/ask-question.component';
+import { ViewCourseComponent } from './courses/view-course/view-course.component';
+import { SearchBarComponent } from './widgets/search-bar/search-bar.component';
+import { IfChangesDirective } from './shared/directives.module';
+import { ViewUserComponent } from './user/view-user/view-user.component';
+import { MarkdownPipe } from './markdown.pipe';
+import { LoginComponent } from './main/login/login.component';
+import { MakeBookingComponent } from './bookings/make-booking/make-booking.component';
+import { ViewBookingsComponent } from './bookings/view-bookings/view-bookings.component';
+import { BookingsComponent } from './bookings/bookings.component';
+import { BookableSessionFormComponent } from './bookings/view-bookings/bookable-session-form/bookable-session-form.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
 }
 @NgModule({
   declarations: [
+    IfChangesDirective,
     AppComponent,
     NavComponent,
     LoginDialogComponent,
@@ -70,20 +83,31 @@ export function initialiseApp(config: SharedService) {
     CreateCommentComponent,
     AnnouncementsComponent,
     MakeAnnouncementComponent,
-    EditCourseComponent,
     TimetableComponent,
-    EditSessionComponent,
+    SessionFormComponent,
     ChatComponent,
     ChatMessageComponent,
     ViewSurveyComponent,
     CreateSurveyComponent,
     ChartComponent,
-    CalendarComponent,
     VenueInputComponent,
     MapComponent,
     ConfirmDialogComponent,
     LiveQuestionsComponent,
     AskQuestionComponent,
+    ViewCourseComponent,
+    SearchBarComponent,
+    UpdateCourseComponent,
+    UpdateDetailsComponent,
+    UpdateSessionsComponent,
+    UpdatePermissionsComponent,
+    ViewUserComponent,
+    MarkdownPipe,
+    LoginComponent,
+    MakeBookingComponent,
+    ViewBookingsComponent,
+    BookingsComponent,
+    BookableSessionFormComponent,
   ],
   imports: [
     HttpClientModule,
@@ -123,6 +147,7 @@ export function initialiseApp(config: SharedService) {
     CreateSurveyComponent,
     ConfirmDialogComponent,
     AskQuestionComponent,
+    ViewCourseComponent
   ]
 })
 export class AppModule { }

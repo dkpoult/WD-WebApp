@@ -1,0 +1,13 @@
+@import 'src/assets/mixins';
+.slots-container {
+  //@include card(2);
+  .slots {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+}
+
+.container {
+  margin: 15px;
+}

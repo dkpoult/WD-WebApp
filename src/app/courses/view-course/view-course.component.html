@@ -1,0 +1,15 @@
+<section style="padding: 15px;">
+    <div matDialogTitle>
+        <div class="mat-h1">{{course.courseCode}}</div>
+        <div class="mat-subheading-1">{{course.courseName}}</div>
+    </div>
+    <mat-dialog-content>
+        <div><strong>Lecturer:</strong> {{course.lecturer.lastName}}, {{course.lecturer.firstName}}</div>
+        <div><strong>Description:</strong> {{course.courseDescription}}</div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <span fxFlex></span>
+        <button (click)="close()" color="warn" mat-button type="button">Close</button>
+        <span fxFlex></span>
+    </mat-dialog-actions>
+</section>

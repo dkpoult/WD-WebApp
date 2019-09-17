@@ -1,19 +1,19 @@
 <section style="width: 500px; min-height: 200px">
-  <h1 mat-dialog-title>Enrol In A Course</h1>
-  <div *ngIf="!gotCourses; else elseTemplate">
-    <mat-spinner class="spinner"></mat-spinner>
-  </div>
-  <ng-template #elseTemplate>
-    <mat-dialog-content>
-      <mat-error *ngIf="courses.length == 0">There are no available courses</mat-error>
-      <mat-card mat-ripple *ngFor="let course of courses" (click)="openConfirmDialog(course)">
-        <mat-card-title>{{ course.courseCode }}</mat-card-title>
-        <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
-        <mat-card-content>{{ course.courseDescription }}</mat-card-content>
-      </mat-card>
-    </mat-dialog-content>
-  </ng-template>
-  <mat-dialog-actions>
-    <button mat-button type="button" mat-dialog-close color="warn">Cancel</button>
-  </mat-dialog-actions>
+    <h1 matDialogTitle>Enrol In A Course</h1>
+    <div *ngIf="!gotCourses; else elseTemplate">
+        <mat-spinner class="spinner"></mat-spinner>
+    </div>
+    <ng-template #elseTemplate>
+        <mat-dialog-content>
+            <mat-error *ngIf="courses.length == 0">There are no available courses</mat-error>
+            <mat-card (click)="openConfirmDialog(course)" *ngFor="let course of courses" mat-ripple>
+                <mat-card-title>{{course.courseCode}}</mat-card-title>
+                <mat-card-subtitle>{{course.courseName}}</mat-card-subtitle>
+                <mat-card-content>{{course.courseDescription}}</mat-card-content>
+            </mat-card>
+        </mat-dialog-content>
+    </ng-template>
+    <mat-dialog-actions>
+        <button color="warn" mat-button mat-dialog-close type="button">Cancel</button>
+    </mat-dialog-actions>
 </section>

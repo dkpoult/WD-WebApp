@@ -1,9 +1,9 @@
 <div class="container">
-  <mat-dialog-content>
-    <p>{{ message }}</p>
-  </mat-dialog-content>
-  <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
-    <button mat-button color="warn" (click)="close(true)">Yes</button>
-    <button mat-button (click)="close(false)">Cancel</button>
-  </mat-dialog-actions>
+    <mat-dialog-content>
+        <p>{{message}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center">
+        <button (click)="close(true)" color="warn" mat-button>Yes</button>
+        <button (click)="close(false)" mat-button>Cancel</button>
+    </mat-dialog-actions>
 </div>

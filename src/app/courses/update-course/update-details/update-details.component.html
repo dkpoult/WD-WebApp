@@ -1,0 +1,28 @@
+<form (ngSubmit)="submit()" [formGroup]="form" class="details-container">
+    <mat-form-field>
+        <mat-label>Course Code</mat-label>
+        <input disabled="true" matInput value="{{course.courseCode}}">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Course Name</mat-label>
+        <input autocomplete="off" formControlName="courseName" matInput>
+        <mat-error>
+            Please enter a course name
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Course Description</mat-label>
+        <mat-hint>(Optional)</mat-hint>
+        <textarea formControlName="courseDescription" matInput></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Enrolment Key</mat-label>
+        <mat-hint>(Optional)</mat-hint>
+        <input autocomplete="off" formControlName="password" matInput>
+    </mat-form-field>
+    <mat-checkbox #clear (change)="setClearPassword(clear.checked); form.markAsDirty()" *ngIf="course.hasPassword" [@fadeInOut]
+                  [checked]="clearPassword">
+        Clear Enrolment Key
+    </mat-checkbox>
+</form>
+<button (click)="submit()" [disabled]="!canSubmit()" mat-button>Submit</button>

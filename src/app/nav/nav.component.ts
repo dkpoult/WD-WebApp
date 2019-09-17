@@ -1,13 +1,13 @@
-import { ConfirmDialogComponent } from './../confirm-dialog/confirm-dialog.component';
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { MatDialog, MatDialogRef, MatSidenav, MatSlideToggle } from '@angular/material';
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component';
-import { SharedService } from '../shared/shared.service';
-import { Router } from '@angular/router';
-import { ThemeService } from '../shared/theme.service';
-import { isNullOrUndefined } from 'util';
+import {ConfirmDialogComponent} from './../confirm-dialog/confirm-dialog.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs';
+import {MatDialog, MatDialogRef, MatSidenav, MatSlideToggle} from '@angular/material';
+import {LoginDialogComponent} from '../login-dialog/login-dialog.component';
+import {SignupDialogComponent} from '../signup-dialog/signup-dialog.component';
+import {SharedService} from '../shared/services/shared.service';
+import {Router} from '@angular/router';
+import {ThemeService} from '../shared/services/theme.service';
+import {UserService} from '../shared/services/user.service';
 
 export interface MenuItem {
   path: string;
@@ -29,30 +29,36 @@ export class NavComponent implements OnInit {
 
   @ViewChild('drawer') drawer: MatSidenav;
   @ViewChild('darkMode') lightSwitch: MatSlideToggle;
+  // Remember to add to app-routing.module.ts too
+  menuItemsLoggedIn: MenuItem[] = [
+    {path: 'courses/', text: 'Courses'},
+    {path: 'timetable/', text: 'Timetable'},
+    {path: 'map/', text: 'Map'}
+  ];
 
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
-  menuItemsLoggedIn: Array<MenuItem> = [
-    { path: 'courses/', text: 'Courses' },
-    { path: 'timetable/', text: 'Timetable' },
-    { path: 'map/', text: 'Map' }
+  menuItemsLoggedOut: MenuItem[] = [
+    // { path: 'features/', text: 'Features' },
+    {path: 'map/', text: 'Map'}
   ];
 
   // Add menu items here for when NOT logged in
-  // Remember to add to app-routing.module.ts too
-  menuItemsLoggedOut: Array<MenuItem> = [
-    // { path: 'features/', text: 'Features' },
-    { path: 'map/', text: 'Map' }
-  ];
-
   isDarkMode$: Observable<boolean>;
 
   constructor(
     private sharedService: SharedService,
+    private userService: UserService,
     private dialog: MatDialog,
     private router: Router,
     private theme: ThemeService,
-  ) { }
+  ) {
+  }
+
+  //
+  // get user() {
+  //   return this.userService.currentUser;
+  // }
 
   ngOnInit(): void {
     this.isDarkMode$ = this.theme.isDarkMode$;
@@ -66,6 +72,7 @@ export class NavComponent implements OnInit {
       }
     });
   }
+
   openSignupDialog() {
     this.signupDialogRef = this.dialog.open(SignupDialogComponent);
   }
@@ -77,19 +84,19 @@ export class NavComponent implements OnInit {
     this.confirmDialogRef.afterClosed().subscribe((response: boolean) => {
       if (response) {
         this.router.navigateByUrl('');
-        this.sharedService.signOut();
+        this.userService.signOut();
       }
     });
   }
 
   loggedIn() {
-    return this.sharedService.isLoggedIn();
+    return this.userService.loggedIn;
   }
 
   toggleDarkMode(checked: boolean) {
     this.theme.setDarkMode(checked);
-    if (this.sharedService.isLoggedIn()) {
-      this.sharedService.updatePreferences('darkMode', checked);
+    if (this.userService.loggedIn) {
+      this.userService.updatePreferences('darkMode', checked);
     }
   }
 }

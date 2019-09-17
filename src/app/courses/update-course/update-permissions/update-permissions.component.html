@@ -1,0 +1,44 @@
+<form *ngIf="gotPermissions" [formGroup]="form" class="table-container">
+    <table [dataSource]="users" mat-table>
+
+        <!-- ! Person Number Column ! -->
+        <ng-container matColumnDef="personNumber">
+            <th *matHeaderCellDef mat-header-cell>Person</th>
+            <td *matCellDef="let user" mat-cell>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px">
+                    {{user.personNumber}}
+                    <div class="privelages">
+                        <!-- <mat-icon [@fadeSlideInOut] class="lecturer" *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)" -->
+                        <mat-icon (click)="togglePermission(user, 'EDIT_PERMISSIONS')" [@fadeSlideInOut] [class.active]="hasPermission('EDIT_PERMISSIONS', user.permissions)"
+                                  class="lecturer"
+                                  matTooltip="Is marked as a lecturer">
+                            school
+                        </mat-icon>
+                        <!-- <mat-icon [@fadeSlideInOut] class="tutor" *ngIf="hasPermission('MODERATE', user.permissions)" -->
+                        <mat-icon (click)="togglePermission(user, 'MODERATE')" [@fadeSlideInOut] [class.active]="hasPermission('MODERATE', user.permissions)"
+                                  class="tutor"
+                                  matTooltip="Is marked as a tutor">
+                            person
+                        </mat-icon>
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
+        <!-- ! Permission Columns ! -->
+        <ng-container *ngFor="let permission of permissions" matColumnDef="{{permission.identifier}}">
+            <th *matHeaderCellDef class="perm-header" mat-header-cell> {{getDisplayString(permission.identifier)}}
+            </th>
+            <td *matCellDef="let user" mat-cell>
+                <mat-checkbox (change)="togglePermission(user, permission.identifier)"
+                              [checked]="hasPermission(permission.identifier, user.permissions)">
+                </mat-checkbox>
+            </td>
+        </ng-container>
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</form>
+<button (click)="submit()" [disabled]="!canSubmit()" mat-button>Submit</button>

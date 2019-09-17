@@ -1,25 +1,30 @@
-<div *ngFor="let course of courses">
-  <div *ngIf="course.sessions.length > 0">
-    <mat-card class="course-group">
-      <mat-card-title>{{ course.courseCode }}</mat-card-title>
-      <mat-card-subtitle>{{ course.courseName }}</mat-card-subtitle>
-      <mat-card-content>
-        <mat-card [ngClass]="{'session': true, 'urgent': urgentSession(session)}"
-          *ngFor="let session of course.sessions">
-          <mat-card-title fxLayout="row">
-            {{ session.sessionType }} @ {{ session.venue.buildingCode }}{{ session.venue.subCode }}
-            <span fxFlex></span>
-            <button mat-icon-button *ngIf="venueHasCoords(session.venue)" (click)="showInMap(session.venue)">
-              <mat-icon>place</mat-icon>
-            </button>
-          </mat-card-title>
-          <mat-card-subtitle>
-            {{ session.nextDate.toDateString() }} at {{ session.nextDate.toTimeString().substr(0, 5) }} for
-            {{ session.duration }} minutes
-          </mat-card-subtitle>
-        </mat-card>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<mat-calendar (selectedChange)="changeSelected($event)" *ngIf="gotCourses" [dateClass]="timetableClass"
+              [selected]="selectedDate"
+              fxFlex="40"></mat-calendar>
+<div *ngIf="selectedDate" fxFlex="60">
+  <span *ngIf="selectedSessions.length == 0"
+        class="no-content">There are no sessions on {{timetableService.getDateString(selectedDate)}}</span>
+  <mat-card *ngFor="let session of selectedSessions"
+            [ngClass]="{'session': true, 'urgent': urgentSession(session)}">
+    <mat-card-title>{{session.courseCode}}</mat-card-title>
+    <mat-card-subtitle fxLayout="row">
+      {{session.sessionType}} @ {{session.venue.buildingCode}}{{session.venue.subCode}}
+      <span fxFlex></span>
+      <button (click)="showInMap(session.venue)" *ngIf="venueHasCoords(session.venue)" mat-icon-button>
+        <mat-icon>place</mat-icon>
+      </button>
+    </mat-card-subtitle>
+    <mat-card-content>
+      {{session.date.toDateString()}} at {{session.date.toTimeString().substr(0, 5)}} for
+      {{session.duration}} minutes
+      <br>
+      <mat-chip-list *ngIf="session.bookings">
+        <mat-chip *ngFor="let booking of bookingsFor(session); let i=index;">
+          <span *ngIf="booking.personNumber">
+            {{booking.personNumber}} @ {{getSlotStartTime(session, i)}}
+          </span>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-card-content>
+  </mat-card>
 </div>
-<!-- <app-calendar *ngIf="sessions && sessions.length > 0" [sessions]="sessions" [scale]="'Week'"></app-calendar> -->

@@ -1,0 +1,51 @@
+.session-card {
+    mat-form-field {
+        padding: 5px;
+        width: auto;
+    }
+}
+
+.chips {
+    padding-bottom: 15px;
+}
+
+.mat-chip:hover {
+    cursor: pointer;
+}
+
+.add-btn {
+    bottom: 2px;
+}
+
+.hiddenInPlace {
+    width: 0;
+    height: 0;
+}
+
+$fallsOnColor: #21978d;
+$cancelledColor: #a02b3a;
+
+::ng-deep {
+    .fallsOn {
+        background: $fallsOnColor;
+        border-radius: 100%;
+
+        &.cancelled {
+            background: $cancelledColor;
+            border-radius: 100%;
+
+            &.inPast {
+                background: transparentize($color: $cancelledColor, $amount: 0.7);
+            }
+        }
+
+        &:not(.cancelled).inPast {
+            background: transparentize($color: $fallsOnColor, $amount: 0.7)
+        }
+    }
+
+    :not(.fallsOn).cancelled {
+        background: transparentize($color: $cancelledColor, $amount: 0.6);
+        border-radius: 100%;
+    }
+}

@@ -6,6 +6,9 @@
         'tutor': message.tag === 'tutor'
     }" *ngIf="message.messageType === 'CHAT'">
         <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div *ngIf="canDelete" class="options delete-button" (click)="deleteThis()">
+                <mat-icon>delete</mat-icon>
+            </div>
             <div class="name">
                 {{message.personNumber}}
             </div>
@@ -13,7 +16,7 @@
             <div class="time">{{message.time}}</div>
         </div>
         <mat-divider></mat-divider>
-        <p>
+        <p class="message">
             {{message.content}}
         </p>
     </div>
