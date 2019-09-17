@@ -1,10 +1,10 @@
-import {VenueService} from '../shared/venue.service';
-import {Component, OnInit} from '@angular/core';
-import {SharedService} from '../shared/services/shared.service';
-import {TimetableService} from '../shared/services/timetable.service';
-import {Router} from '@angular/router';
-import {Course, Session, Venue} from '../shared/services/models';
-import {UserService} from '../shared/services/user.service';
+import { VenueService } from '../shared/venue.service';
+import { Component, OnInit } from '@angular/core';
+import { SharedService } from '../shared/services/shared.service';
+import { TimetableService } from '../shared/services/timetable.service';
+import { Router } from '@angular/router';
+import { Course, Session, Venue } from '../shared/services/models';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-timetable',
@@ -60,7 +60,7 @@ export class TimetableComponent implements OnInit {
       }
     });
     return classList.join(' ');
-  };
+  }
 
   log(object: any) {
     console.log(object);
