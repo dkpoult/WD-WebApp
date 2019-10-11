@@ -15,16 +15,20 @@
       </button>
     </mat-card-subtitle>
     <mat-card-content>
-      {{session.date.toDateString()}} at {{session.date.toTimeString().substr(0, 5)}} for
-      {{session.duration}} minutes
-      <br>
-      <mat-chip-list *ngIf="session.bookings">
-        <mat-chip *ngFor="let booking of bookingsFor(session); let i=index;">
+      <i>
+        {{session.date.toDateString()}} at {{session.date.toTimeString().substr(0, 5)}} for
+        {{session.duration}} minutes
+      </i>
+      <div *ngIf="session.bookings" fxFlexAlign="row">
+        <div>Bookings:</div>
+        <mat-chip-list>
+          <mat-chip *ngFor="let booking of bookingsFor(session); let i=index;">
           <span *ngIf="booking.personNumber">
             {{booking.personNumber}} @ {{getSlotStartTime(session, i)}}
           </span>
-        </mat-chip>
-      </mat-chip-list>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

@@ -29,15 +29,16 @@ export class NavComponent implements OnInit {
 
   @ViewChild('drawer') drawer: MatSidenav;
   @ViewChild('darkMode') lightSwitch: MatSlideToggle;
-  // Remember to add to app-routing.module.ts too
-  menuItemsLoggedIn: MenuItem[] = [
-    {path: 'courses/', text: 'Courses'},
-    {path: 'timetable/', text: 'Timetable'},
-    {path: 'map/', text: 'Map'}
-  ];
 
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
+  menuItemsLoggedIn: MenuItem[] = [
+    {path: 'admin/', text: 'Admin'},
+    {path: 'courses/', text: 'Courses'},
+    {path: 'timetable/', text: 'Timetable'},
+    {path: 'map/', text: 'Map'},
+  ];
+  // Add menu items here for when not logged in
   menuItemsLoggedOut: MenuItem[] = [
     // { path: 'features/', text: 'Features' },
     {path: 'map/', text: 'Map'}

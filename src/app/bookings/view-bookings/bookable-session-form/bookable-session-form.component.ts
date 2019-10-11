@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {MatChip, MatExpansionPanel} from '@angular/material';
-import {VenueService} from '../../../shared/venue.service';
+import {VenueService} from '../../../shared/services/venue.service';
 import {TimetableService} from '../../../shared/services/timetable.service';
 
 @Component({
@@ -75,6 +75,25 @@ export class BookableSessionFormComponent implements OnInit {
     {value: 'MEETING', text: 'Meeting'},
   ];
 
+  constructor(private venueService: VenueService, private timetableService: TimetableService) {
+  }
+
+  get cancellations(): string[] {
+    return this.form.get('cancellations').value;
+  }
+
+  set cancellations(v: string[]) {
+    this.form.get('cancellations').setValue(v);
+  }
+
+  get startDate() {
+    return this.form.get('date').value;
+  }
+
+  set startDate(v) {
+    this.form.get('date').setValue(v);
+  }
+
   dateClass = (d: Date) => {
     const session = this.form.value;
     const classStrings = [];
@@ -96,26 +115,7 @@ export class BookableSessionFormComponent implements OnInit {
     }
 
     return classStrings.join(' ');
-  }
-
-  constructor(private venueService: VenueService, private timetableService: TimetableService) {
-  }
-
-  get cancellations(): string[] {
-    return this.form.get('cancellations').value;
-  }
-
-  set cancellations(v: string[]) {
-    this.form.get('cancellations').setValue(v);
-  }
-
-  get startDate() {
-    return this.form.get('date').value;
-  }
-
-  set startDate(v) {
-    this.form.get('date').setValue(v);
-  }
+  };
 
   ngOnInit() {
     this.venues = [];

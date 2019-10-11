@@ -1,10 +1,10 @@
-import { isNullOrUndefined } from 'util';
-import { TimetableService } from '../shared/services/timetable.service';
-import { VenueService } from '../shared/venue.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { coerceNumberProperty } from '@angular/cdk/coercion';
+import {isNullOrUndefined} from 'util';
+import {TimetableService} from '../shared/services/timetable.service';
+import {VenueService} from '../shared/services/venue.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
+import {coerceNumberProperty} from '@angular/cdk/coercion';
 
 @Component({
   selector: 'app-map',
@@ -22,7 +22,8 @@ export class MapComponent implements OnInit {
     private venueService: VenueService,
     private timetableService: TimetableService,
     private route: ActivatedRoute
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     let building = null;
@@ -30,8 +31,8 @@ export class MapComponent implements OnInit {
       switchMap((params: ParamMap) =>
         params.getAll('building')
       )).subscribe((result: any) => {
-        building = result;
-      });
+      building = result;
+    });
     // TODO: Make this not retarded. Should not be a subscription. Spaghetti alert
     this.venueService.updateVenues().subscribe((result: any) => {
       switch (result.responseCode) {

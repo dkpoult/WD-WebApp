@@ -27,7 +27,7 @@ import {
   MatChipsModule,
   MatSnackBarModule,
   MatTableModule,
-  MatPaginatorModule,
+  MatPaginatorModule, MatTreeModule,
 } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 /**
@@ -61,7 +61,8 @@ const MATERIAL_MODULES = [
   MatChipsModule,
   MatSnackBarModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatTreeModule
 ];
 
 @NgModule({

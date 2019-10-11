@@ -1,7 +1,7 @@
 import {FormGroup} from '@angular/forms';
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatChip, MatExpansionPanel} from '@angular/material';
-import {VenueService} from 'src/app/shared/venue.service';
+import {VenueService} from 'src/app/shared/services/venue.service';
 import {TimetableService} from 'src/app/shared/services/timetable.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 
@@ -118,7 +118,7 @@ export class SessionFormComponent implements OnInit {
     }
 
     return classStrings.join(' ');
-  }
+  };
 
   ngOnInit() {
     this.venues = [];

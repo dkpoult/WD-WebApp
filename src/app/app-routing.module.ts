@@ -12,6 +12,7 @@ import {UpdateCourseComponent} from './courses/update-course/update-course.compo
 import {AuthGuard} from './shared/guards/auth-guard.service';
 import {LoginComponent} from './main/login/login.component';
 import {BookingsComponent} from './bookings/bookings.component';
+import {AdminPanelComponent} from './admin-panel/admin-panel.component';
 
 const routes: Routes = [
   {path: '', component: MainComponent},
@@ -42,6 +43,7 @@ const routes: Routes = [
       {path: ':building', component: MapComponent}
     ]
   },
+  {path: 'admin', canActivate: [AuthGuard], component: AdminPanelComponent},
   {path: '**', component: MainComponent, redirectTo: ''}
 ];
 

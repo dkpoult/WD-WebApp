@@ -56,6 +56,8 @@ import { MakeBookingComponent } from './bookings/make-booking/make-booking.compo
 import { ViewBookingsComponent } from './bookings/view-bookings/view-bookings.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { BookableSessionFormComponent } from './bookings/view-bookings/bookable-session-form/bookable-session-form.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { VenuesComponent } from './admin-panel/venues/venues.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -108,6 +110,8 @@ export function initialiseApp(config: SharedService) {
     ViewBookingsComponent,
     BookingsComponent,
     BookableSessionFormComponent,
+    AdminPanelComponent,
+    VenuesComponent,
   ],
   imports: [
     HttpClientModule,

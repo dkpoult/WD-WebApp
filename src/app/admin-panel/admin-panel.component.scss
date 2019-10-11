@@ -1,0 +1,9 @@
+.no-content {
+  position: fixed;
+}
+
+::ng-deep {
+  .mat-tab-group {
+    height: calc(100% - 64px);
+  }
+}
