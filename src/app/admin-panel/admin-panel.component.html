@@ -6,7 +6,7 @@
     <span class="no-content">Coming soon!</span>
   </mat-tab>
   <mat-tab label="Global Permissions">
-    <div class="no-content">Coming soon!</div>
+    <app-update-permissions [showIcons]="false" [users]="allUsers" (submitPermissions)="submitPermissions($event)"></app-update-permissions>
   </mat-tab>
 </mat-tab-group>
 <!--<button (click)="test()">Test</button>-->

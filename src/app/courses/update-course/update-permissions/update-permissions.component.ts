@@ -1,5 +1,5 @@
 import {FormArray, FormControl} from '@angular/forms';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, DoCheck, EventEmitter, Input, IterableDiffer, IterableDiffers, OnInit, Output} from '@angular/core';
 import {PermissionService} from 'src/app/shared/services/permission.service';
 import {animate, sequence, style, transition, trigger} from '@angular/animations';
 
@@ -43,10 +43,12 @@ import {animate, sequence, style, transition, trigger} from '@angular/animations
     ),
   ]
 })
-export class UpdatePermissionsComponent implements OnInit {
+export class UpdatePermissionsComponent implements OnInit, DoCheck {
 
   @Output() submitPermissions = new EventEmitter<any>();
   @Input() users: any[] = [];
+
+  @Input() showIcons = true;
 
   form: FormArray;
 
@@ -56,13 +58,24 @@ export class UpdatePermissionsComponent implements OnInit {
     'personNumber',
   ];
 
+  iterableDiffer: IterableDiffer<any>;
+
   constructor(
     private permissionService: PermissionService,
+    private _iterableDiffers: IterableDiffers
   ) {
+    this.iterableDiffer = this._iterableDiffers.find([]).create(null);
   }
 
   get gotPermissions() {
     return !!this.permissions;
+  }
+
+  ngDoCheck() {
+    const changes = this.iterableDiffer.diff(this.users);
+    if (changes) {
+      this.refreshForm();
+    }
   }
 
   ngOnInit() {
@@ -76,9 +89,7 @@ export class UpdatePermissionsComponent implements OnInit {
       });
     });
     this.permissionService.updateLookups();
-
-    const permissions: FormControl[] = this.users.map(e => new FormControl(e));
-    this.form = new FormArray(permissions);
+    this.refreshForm();
   }
 
   hasPermission(identifier: string, permissions: number) {
@@ -118,6 +129,11 @@ export class UpdatePermissionsComponent implements OnInit {
 
   log(message) {
     console.log(message);
+  }
+
+  refreshForm() {
+    const permissions: FormControl[] = this.users.map(e => new FormControl(e));
+    this.form = new FormArray(permissions);
   }
 
   submit() {
