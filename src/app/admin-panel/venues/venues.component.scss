@@ -1,7 +1,17 @@
+@import 'src/assets/mixins';
+
 .container {
   height: 100%;
 }
+.form {
+  @include card(1);
+  margin: 15px;
+  padding: 15px;
 
+  &:focus-within {
+    @include card(2);
+  }
+}
 #list {
   border-right: 1px solid grey;
 }
@@ -12,6 +22,10 @@
   align-content: center;
   align-items: center;
   min-height: 2em;
+}
+
+#add-btn {
+  width: 100%;
 }
 
 .tree-invisible {

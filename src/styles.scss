@@ -71,6 +71,10 @@ mat-tab-group mat-tab-body {
   flex-grow: 1;
 }
 
+.mat-small {
+  min-width: 1%;
+}
+
 // ! Temp fix for animating accordion
 .ng-animating mat-expansion-panel-header {
   height: 48px;

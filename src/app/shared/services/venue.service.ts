@@ -1,14 +1,18 @@
 import {SharedService} from './shared.service';
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {interval, Subject, Subscription} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {API} from './api';
 import {UserService} from './user.service';
+import {startWith, switchMap} from 'rxjs/operators';
+import {forEach} from '@angular/router/src/utils/collection';
 
 export interface VenueNode {
   code: string;
+  hasImage: boolean;
   rooms?: VenueNode[];
   parent?: VenueNode;
+  coordinates?: number[];
 }
 
 @Injectable({
@@ -18,9 +22,10 @@ export class VenueService {
 
   venues: any[];
   currentUser = this.userService.currentUser;
+  pollingInterval = 15000;
   private newVenuesSubject = new Subject<any>();
   newVenues$ = this.newVenuesSubject.asObservable();
-  private  venueTreeSubject = new Subject<VenueNode[]>();
+  private venueTreeSubject = new Subject<VenueNode[]>();
   venueTree$ = this.venueTreeSubject.asObservable();
 
   constructor(
@@ -28,6 +33,22 @@ export class VenueService {
     private userService: UserService,
     private http: HttpClient,
   ) {
+  }
+
+  set venueTree(v) {
+    console.log('Setting', v);
+    this.venueTreeSubject.next(v);
+  }
+
+  insertVenue(v) {
+    if (v.rooms) {
+      v.rooms.forEach(r => {
+        this.venues.push({buildingCode: v.buildingCode, subCode: r, hasImage: false});
+      });
+    }
+    const t = this.getVenueTree();
+    console.log('Tree:', t);
+    this.venueTreeSubject.next(t);
   }
 
   updateVenues() {
@@ -52,17 +73,43 @@ export class VenueService {
     return this.sharedService.getVenues();
   }
 
-  addVenue(buildingCode: string, subCode: string) {
+  addVenue(buildingCode: string, subCode: string, coordinates: number[]) {
     const body = {
-      venue: {
-        buildingCode,
-        subCode,
-        coordinates: '+32.30642, -122.61458', // TODO: This is dummy coords
-      },
+      buildingCode,
+      subCode,
+      coordinates: coordinates.join(','),
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${API.apiRoot}/venue/add_venue`, body);
+    const req = this.http.post(`${API.apiRoot}/venue/add_venue`, body);
+    req.subscribe();
+    return req;
+  }
+
+  editVenue(buildingCode: string, subCode: string,
+            coordinates: number[] | undefined, newBuildingCode: string | undefined, newSubCode: string | undefined) {
+    const body = {
+      buildingCode,
+      subCode,
+      coordinates: coordinates.join(','),
+      newBuildingCode: newBuildingCode === buildingCode ? undefined : newBuildingCode,
+      newSubCode: newSubCode === subCode ? undefined : newSubCode,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
+    };
+    const req = this.http.post(`${API.apiRoot}/venue/update_venue`, body);
+    req.subscribe();
+    return req;
+  }
+
+  deleteVenue(buildingCode: string, subCode: string) {
+    const body = {
+      buildingCode,
+      subCode,
+      personNumber: this.currentUser.personNumber,
+      userToken: this.currentUser.userToken
+    };
+    return this.http.post(`${API.apiRoot}/venue/remove_venue`, body);
   }
 
   private getVenueTree(): VenueNode[] {
@@ -75,11 +122,11 @@ export class VenueService {
       let p = venues.find(v => v.code === venue.buildingCode);
       // and add the subCode to the room list
       if (!p) {
-        p = {code: venue.buildingCode, rooms: []};
+        p = {code: venue.buildingCode, hasImage: false, coordinates: venue.coordinates, rooms: []};
         venues.push(p);
       }
-      p.rooms.push({code: venue.subCode, parent: p});
-      p.rooms.sort((a, b) => (a.code > b.code) ? 1 : (a.code < b.code) ? -1 : 0);
+      p.rooms.push({code: venue.subCode, hasImage: venue.hasImage, parent: p});
+      // p.rooms.sort((a, b) => (a.code > b.code) ? 1 : (a.code < b.code) ? -1 : 0);
     });
     return venues;
   }

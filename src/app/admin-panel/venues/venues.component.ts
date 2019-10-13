@@ -21,25 +21,26 @@ export class VenuesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.TREE_DATA.subscribe(t => {
+      if (!this.selectedNode) {
+        return;
+      }
+      console.log(t);
+      this.selectedNode = t.find(e => e.code === this.selectedNode.code);
+    });
   }
 
-  select(item) {
-    this.selectedNode = item;
+  newBuilding(building) {
+    console.log(building);
+    this.select(building);
+  }
+
+  select(node) {
+    this.selectedNode = node;
   }
 
   selected(node: VenueNode) {
     return this.selectedNode === node;
-  }
-
-  childSelected(node: VenueNode) {
-    if (!node.rooms) {
-      return false;
-    }
-    for (const child of node.rooms) {
-      if (this.selectedNode === child) {
-        return true;
-      }
-    }
   }
 
   hasChild = (_: number, node: VenueNode) => !!node.rooms && node.rooms.length > 0;

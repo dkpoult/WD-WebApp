@@ -58,6 +58,9 @@ import { BookingsComponent } from './bookings/bookings.component';
 import { BookableSessionFormComponent } from './bookings/view-bookings/bookable-session-form/bookable-session-form.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { VenuesComponent } from './admin-panel/venues/venues.component';
+import { ViewVenueComponent } from './admin-panel/venues/view-venue/view-venue.component';
+import { NewBuildingComponent } from './admin-panel/venues/new-building/new-building.component';
+import { FilterPipe } from './filter.pipe';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -112,6 +115,9 @@ export function initialiseApp(config: SharedService) {
     BookableSessionFormComponent,
     AdminPanelComponent,
     VenuesComponent,
+    ViewVenueComponent,
+    NewBuildingComponent,
+    FilterPipe,
   ],
   imports: [
     HttpClientModule,

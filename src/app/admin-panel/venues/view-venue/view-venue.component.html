@@ -1,0 +1,63 @@
+<div class="container">
+  <form (ngSubmit)="submit()" [formGroup]="form">
+    <div fxLayout="row" fxLayoutGap="2em">
+      <div fxFlex fxLayout="column" id="venues">
+        <mat-form-field id="building">
+          <mat-label>Building Code</mat-label>
+          <input autocomplete="off" formControlName="buildingCode" matInput>
+        </mat-form-field>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span>Rooms</span>
+          <button mat-icon-button (click)="addRoom()" class="mat-small" type="button">+</button>
+        </div>
+        <ul>
+          <li *ngFor="let room of formRooms.controls | filter:filterDeleted; let i = index">
+            <mat-form-field>
+              <mat-label>Code</mat-label>
+              <input [formControl]="room.get('newCode')" autocomplete="off" matInput>
+              <mat-error>
+                Please enter a room code
+              </mat-error>
+              <mat-icon (click)="deleteRoom(i)" class="delete-btn" matSuffix>delete</mat-icon>
+            </mat-form-field>
+          </li>
+        </ul>
+      </div>
+      <mat-tab-group mat-stretch-tabs animationDuration="0">
+        <mat-tab label="Map">
+          <div fxFlex fxLayout="column">
+            <div class="square">
+              <div fxFlex class="map">
+                <agm-map [latitude]="lat" [longitude]="lng"
+                         [zoom]="zoom" (mapClick)="setCoords($event.coords)" fxLayoutAlign="center center">
+                  <agm-marker [latitude]="latControl.value" [longitude]="lngControl.value" (drag)="setCoords($event.coords)"
+                              [markerDraggable]="true"></agm-marker>
+                </agm-map>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="10px" class="input-container">
+              <mat-form-field id="lat">
+                <mat-label>Latitude</mat-label>
+                <input matInput [formControl]="latControl" autocomplete="off">
+              </mat-form-field>
+              <mat-form-field id="lng">
+                <mat-label>Longitude</mat-label>
+                <input matInput [formControl]="lngControl" autocomplete="off">
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab *ngIf="venue.hasImage" label="Floor Plan">
+          <div fxFlex fxLayout="column">
+            <div class="square">
+              <div fxFlex class="map">
+                <img src="{{imageURL}}" alt="Floor Plan">
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <button [disabled]="!canSubmit()" mat-button type="submit">Submit</button>
+  </form>
+</div>
