@@ -48,7 +48,7 @@ export class UpdateCourseComponent implements OnInit {
   }
 
   getPermissions() {
-    this.permissionService.getAllPermissions(this.courseCode).subscribe((response: any) => {
+    this.permissionService.getAllPermissions(`c${this.courseCode}`).subscribe((response: any) => {
       switch (response.responseCode) {
         case 'successful':
           const perms = response.allPermissions;
@@ -96,7 +96,7 @@ export class UpdateCourseComponent implements OnInit {
 
   submitPermissions(permissions) {
     permissions.forEach(user => {
-      this.permissionService.setPermissions(user.personNumber, user.permissions, this.course.courseCode).subscribe();
+      this.permissionService.setPermissions(user.personNumber, user.permissions, `c${this.course.courseCode}`).subscribe();
     });
   }
 
