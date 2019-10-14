@@ -1,0 +1,13 @@
+@import "src/assets/mixins";
+
+.container {
+  @include card(1);
+  margin: 15px;
+  padding: 15px;
+
+  height: 50%;
+
+  &:focus-within {
+    @include card(2);
+  }
+}
