@@ -12,12 +12,14 @@
     @include card(2);
   }
 }
+
 #list {
   border-right: 1px solid grey;
   overflow-y: auto;
 }
 
 .toolbar-header {
+  position: sticky;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -29,22 +31,6 @@
   width: 100%;
 }
 
-.tree-invisible {
-  display: none;
-}
-
-.mat-tree {
-  background: none;
-}
-
-.tree ul,
-.tree li {
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-  box-sizing: content-box;
-}
-
-.selected>li {
+.selected {
   @include card(1);
 }

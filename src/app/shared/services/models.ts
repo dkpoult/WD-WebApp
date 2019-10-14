@@ -1,3 +1,11 @@
+export interface ScriptableEvent {
+  eventCode: string;
+  eventName: string;
+  eventDescription: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface User {
   personNumber: string;
   userToken: string | undefined;
@@ -27,7 +35,7 @@ export enum RepeatType {'DAILY', 'WEEKLY', 'MONTHLY', 'ONCE'}
 
 export interface Session {
   duration: number;
-  cancellations: (string| Date)[];
+  cancellations: (string | Date)[];
   venue: Venue;
   repeatType: string; // RepeatType;
   repeatGap: number;

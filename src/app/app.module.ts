@@ -61,6 +61,8 @@ import { VenuesComponent } from './admin-panel/venues/venues.component';
 import { ViewVenueComponent } from './admin-panel/venues/view-venue/view-venue.component';
 import { NewBuildingComponent } from './admin-panel/venues/new-building/new-building.component';
 import { FilterPipe } from './filter.pipe';
+import { EventsComponent } from './admin-panel/events/events.component';
+import { ViewEventComponent } from './admin-panel/events/view-event/view-event.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -118,6 +120,8 @@ export function initialiseApp(config: SharedService) {
     ViewVenueComponent,
     NewBuildingComponent,
     FilterPipe,
+    EventsComponent,
+    ViewEventComponent,
   ],
   imports: [
     HttpClientModule,

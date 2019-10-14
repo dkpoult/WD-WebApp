@@ -1,0 +1,18 @@
+<div class="container" fxLayout="row">
+  <div fxFlex="20" id="list">
+    <div class="toolbar-header">
+      <span>Select an Event</span>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-list>
+      <mat-list-item *ngFor="let event of events$ | async" (click)="select(event)" [class.selected]="selected(event)">{{event.eventName}}</mat-list-item>
+    </mat-list>
+    <button id="add-btn" (click)="select(null)" mat-raised-button>Add New Event</button>
+  </div>
+  <div fxFlex id="view">
+    <div>
+      <app-view-event (deleted)="select(null)" [event]="selectedEvent"></app-view-event>
+    </div>
+  </div>
+  <!--  <div fxFlex="15" id="toolbox" style="border: 2px solid blue"></div>-->
+</div>

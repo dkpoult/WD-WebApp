@@ -1,9 +1,9 @@
 <mat-tab-group mat-stretch-tabs animationDuration="0ms">
+  <mat-tab label="Events">
+    <app-events></app-events>
+  </mat-tab>
   <mat-tab label="Venues">
     <app-venues></app-venues>
-  </mat-tab>
-  <mat-tab label="Events">
-    <span class="no-content">Coming soon!</span>
   </mat-tab>
   <mat-tab label="Global Permissions">
     <app-update-permissions [showIcons]="false" [users]="allUsers" (submitPermissions)="submitPermissions($event)"></app-update-permissions>
