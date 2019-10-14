@@ -25,13 +25,11 @@ export class VenuesComponent implements OnInit {
       if (!this.selectedNode) {
         return;
       }
-      console.log(t);
       this.selectedNode = t.find(e => e.code === this.selectedNode.code);
     });
   }
 
   newBuilding(building) {
-    console.log(building);
     this.select(building);
   }
 

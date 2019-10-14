@@ -120,13 +120,22 @@ export class ViewVenueComponent implements OnInit {
   }
 
   deleteRoom(i: number) {
-    // this.venueService.deleteVenue(room.parent.code, room.code);
     this.form.markAsDirty();
     const removed = this.formRooms.at(i);
-    const snackBarRef = this.snackBar.open(`Removed room ${removed.value.newCode}`, 'Undo', {duration: 2000});
-    snackBarRef.onAction().subscribe(() => {
-      this.formRooms.insert(i, removed);
-    });
-    this.formRooms.removeAt(i);
+    if (removed.value.oldCode) {
+      // Just mark it as delete
+      removed.get('delete').setValue(true);
+      const snackBarRef = this.snackBar.open(`Removed room ${removed.value.newCode}`, 'Undo', {duration: 2000});
+      snackBarRef.onAction().subscribe(() => {
+        removed.get('delete').setValue(false);
+      });
+    } else {
+      // Remove it from the form
+      const snackBarRef = this.snackBar.open(`Removed room ${removed.value.newCode}`, 'Undo', {duration: 2000});
+      snackBarRef.onAction().subscribe(() => {
+        this.formRooms.insert(i, removed);
+      });
+      this.formRooms.removeAt(i);
+    }
   }
 }

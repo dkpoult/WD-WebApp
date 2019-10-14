@@ -4,8 +4,6 @@ import {interval, Subject, Subscription} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {API} from './api';
 import {UserService} from './user.service';
-import {startWith, switchMap} from 'rxjs/operators';
-import {forEach} from '@angular/router/src/utils/collection';
 
 export interface VenueNode {
   code: string;
@@ -109,7 +107,9 @@ export class VenueService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${API.apiRoot}/venue/remove_venue`, body);
+    const req = this.http.post(`${API.apiRoot}/venue/remove_venue`, body);
+    req.subscribe();
+    return req;
   }
 
   private getVenueTree(): VenueNode[] {
@@ -126,7 +126,6 @@ export class VenueService {
         venues.push(p);
       }
       p.rooms.push({code: venue.subCode, hasImage: venue.hasImage, parent: p});
-      // p.rooms.sort((a, b) => (a.code > b.code) ? 1 : (a.code < b.code) ? -1 : 0);
     });
     return venues;
   }
