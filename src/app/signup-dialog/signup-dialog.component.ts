@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
-import {SharedService} from '../shared/services/shared.service';
-import {Router} from '@angular/router';
-import {UserService} from '../shared/services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+import { SharedService } from '../shared/services/shared.service';
+import { Router } from '@angular/router';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-signup-dialog',
@@ -16,6 +16,7 @@ export class SignupDialogComponent implements OnInit {
 
   form: FormGroup;
   noUser = false;
+  alreadyExists = false;
 
   constructor(
     private dialogRef: MatDialogRef<SignupDialogComponent>,
@@ -48,6 +49,11 @@ export class SignupDialogComponent implements OnInit {
           this.userService.loginUser(user.personNumber, response.userToken, response.preferences);
           this.router.navigateByUrl('/courses');
           this.dialogRef.close(true);
+          break;
+        case 'failed_already_exists':
+          this.noUser = true;
+          this.alreadyExists = true;
+          this.form.markAsPristine();
           break;
         default:
           this.noUser = true;

@@ -16,7 +16,9 @@
   border-right: 1px solid grey;
   overflow-y: auto;
 }
-
+#view {
+  overflow-y: auto;
+}
 .toolbar-header {
   display: flex;
   justify-content: center;
