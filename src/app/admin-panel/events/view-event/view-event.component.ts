@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {VenueNode} from '../../../shared/services/venue.service';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ScriptableEvent} from '../../../shared/services/models';
-import {EventService} from '../../../shared/services/event.service';
-import {TimetableService} from '../../../shared/services/timetable.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { VenueNode } from '../../../shared/services/venue.service';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ScriptableEvent } from '../../../shared/services/models';
+import { EventService } from '../../../shared/services/event.service';
+import { TimetableService } from '../../../shared/services/timetable.service';
 
 @Component({
   selector: 'app-view-event',
@@ -14,7 +14,7 @@ export class ViewEventComponent implements OnInit {
 
   form: FormGroup;
 
-  @Output() deleted = new EventEmitter<void>();
+  @Output() selectEvent = new EventEmitter<ScriptableEvent>();
 
   constructor(
     private eventService: EventService,
@@ -30,6 +30,10 @@ export class ViewEventComponent implements OnInit {
 
   @Input() set event(value: ScriptableEvent) {
     if (!value) {
+      if (this.form) {
+        this.form.reset();
+      }
+
       this._event = null;
       this.form = new FormGroup({
         eventCode: new FormControl('', [Validators.required]),
@@ -70,11 +74,12 @@ export class ViewEventComponent implements OnInit {
       this.eventService.createEvent(event);
     }
     this.form.markAsPristine();
+    this.selectEvent.next(event);
   }
 
   delete() {
     this.eventService.removeEvent(this.event);
-    this.deleted.emit();
+    this.selectEvent.next(null);
   }
 
 }

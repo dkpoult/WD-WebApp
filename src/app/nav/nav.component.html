@@ -1,11 +1,12 @@
 <mat-sidenav-container class="sidenav-container">
     <!--Sidenav for mobile-->
     <mat-sidenav #drawer [attr.role]="'dialog'" [mode]="'over'" [opened]="(!isHandset$ | async)" class="drawer"
-                 fixedInViewport="true" fxShow="isHandset$ | async">
+        fixedInViewport="true" fxShow="isHandset$ | async">
         <!--Menu items if logged out-->
         <mat-nav-list *ngIf="!loggedIn()">
-            <mat-list-item (click)="drawer.close()" *ngFor="let menuItem of menuItemsLoggedOut" mat-button>
-                <a routerLink="{{menuItem.path}}">{{menuItem.text}}</a>
+            <mat-list-item (click)="drawer.close()" routerLink="{{menuItem.path}}"
+                *ngFor="let menuItem of menuItemsLoggedOut" mat-button>
+                <a>{{menuItem.text}}</a>
             </mat-list-item>
             <!--Login/Signup buttons-->
             <div fxAlign="end" fxLayoutAlign="space-between start">
@@ -20,8 +21,9 @@
         </mat-nav-list>
         <!--Menu items if logged in-->
         <mat-nav-list *ngIf="loggedIn()">
-            <mat-list-item (click)="drawer.close()" *ngFor="let menuItem of menuItemsLoggedIn" mat-button>
-                <a routerLink="{{menuItem.path}}">{{menuItem.text}}</a>
+            <mat-list-item (click)="drawer.close()" routerLink="{{menuItem.path}}"
+                *ngFor="let menuItem of menuItemsLoggedIn" mat-button>
+                <a>{{menuItem.text}}</a>
             </mat-list-item>
             <!--Sign out button-->
             <div fxAlign="end" fxLayoutAlign="space-between start">
@@ -43,7 +45,7 @@
         <mat-toolbar color="primary">
             <!--Hamburger button-->
             <button (click)="drawer.open()" *ngIf="isHandset$ | async" aria-label="Open side nav" mat-icon-button
-                    type="button">
+                type="button">
                 <mat-icon aria-label="Side nav open icon">menu</mat-icon>
             </button>
             <a mat-button routerLink="">WitsDaily</a>
