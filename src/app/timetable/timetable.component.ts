@@ -1,4 +1,4 @@
-import { VenueService } from '../shared/venue.service';
+import { VenueService } from '../shared/services/venue.service';
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../shared/services/shared.service';
 import { TimetableService } from '../shared/services/timetable.service';
@@ -23,6 +23,8 @@ export class TimetableComponent implements OnInit {
   newVenues$ = this.venueService.newVenues$;
 
   selectedDate: Date;
+
+  public getDateString = this.timetableService.getDateString;
 
   constructor(
     private sharedService: SharedService,
@@ -60,7 +62,7 @@ export class TimetableComponent implements OnInit {
       }
     });
     return classList.join(' ');
-  }
+  };
 
   log(object: any) {
     console.log(object);

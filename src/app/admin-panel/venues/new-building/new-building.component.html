@@ -1,0 +1,55 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div fxLayout="row" fxLayoutGap="2em">
+    <div fxFlex fxLayout="column">
+      <mat-form-field id="buildingCode">
+        <mat-label>Building Code</mat-label>
+        <input matInput formControlName="buildingCode" autocomplete="off">
+        <mat-error *ngIf="form.get('buildingCode').hasError('required')">
+          Please enter a building code
+        </mat-error>
+        <mat-error *ngIf="form.get('buildingCode').hasError('taken')">
+          That building already exists
+        </mat-error>
+      </mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button mat-icon-button (click)="addRoom()" class="mat-small" type="button">+</button>
+        <span>Rooms</span>
+        <button mat-icon-button (click)="removeRoom()" class="mat-small" type="button">-</button>
+      </div>
+      <div *ngFor="let room of rooms.controls">
+        <mat-form-field>
+          <mat-label>Room Code</mat-label>
+          <input matInput [formControl]="room" autocomplete="off">
+          <mat-error>
+            Please enter a room code
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-error *ngIf="rooms.hasError('required')">
+        You must add at least one room
+      </mat-error>
+    </div>
+    <div fxLayout="column" fxFlex="40">
+      <div class="square">
+        <div fxFlex class="map">
+          <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapClick)="setCoords($event.coords)"
+                   fxLayoutAlign="center center">
+            <agm-marker [latitude]="latControl.value" [longitude]="lngControl.value" (drag)="setCoords($event.coords)"
+                        [markerDraggable]="true"></agm-marker>
+          </agm-map>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="10px" class="input-container">
+        <mat-form-field id="lat">
+          <mat-label>Latitude</mat-label>
+          <input matInput [formControl]="latControl" autocomplete="off">
+        </mat-form-field>
+        <mat-form-field id="lng">
+          <mat-label>Longitude</mat-label>
+          <input matInput [formControl]="lngControl" autocomplete="off">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <button mat-button [disabled]="!canSubmit()" type="submit" (click)="submit()">Submit</button>
+</form>

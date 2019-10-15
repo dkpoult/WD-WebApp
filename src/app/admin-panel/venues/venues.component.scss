@@ -1,0 +1,53 @@
+@import 'src/assets/mixins';
+
+.container {
+  height: 100%;
+}
+.form {
+  @include card(1);
+  margin: 15px;
+  padding: 15px;
+
+  &:focus-within {
+    @include card(2);
+  }
+}
+#list {
+  border-right: 1px solid grey;
+  overflow-y: auto;
+}
+#view {
+  overflow-y: auto;
+}
+.toolbar-header {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  min-height: 2em;
+}
+
+#add-btn {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.tree-invisible {
+  display: none;
+}
+
+.mat-tree {
+  background: none;
+}
+
+.tree ul,
+.tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+  box-sizing: content-box;
+}
+
+.selected>li {
+  @include card(1);
+}

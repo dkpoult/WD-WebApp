@@ -19,8 +19,11 @@
           Please enter a password
         </mat-error>
       </mat-form-field>
-      <mat-error *ngIf="noUser && form.pristine">
+      <mat-error *ngIf="!alreadyExists && noUser && form.pristine">
         Invalid username or password
+      </mat-error>
+      <mat-error *ngIf="alreadyExists && noUser && form.pristine">
+        User already linked
       </mat-error>
     </mat-dialog-content>
     <mat-dialog-actions>

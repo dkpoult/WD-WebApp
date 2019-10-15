@@ -1,0 +1,37 @@
+.mat-raised-button.mat-small {
+  min-width: 1%;
+}
+
+.input-container {
+  margin-top: 15px;
+}
+
+.square {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+}
+
+
+.map {
+  border: 1px solid;
+
+  agm-map {
+    height: 100%;
+    width: 100%;
+  }
+}

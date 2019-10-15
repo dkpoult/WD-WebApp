@@ -1,0 +1,41 @@
+@import 'src/assets/mixins';
+
+.container {
+  height: 100%;
+}
+.form {
+  @include card(1);
+  margin: 15px;
+  padding: 15px;
+
+  &:focus-within {
+    @include card(2);
+  }
+}
+
+#list {
+  border-right: 1px solid grey;
+  overflow-y: auto;
+}
+
+#view {
+  overflow-y: auto;
+}
+
+.toolbar-header {
+  position: sticky;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  min-height: 2em;
+}
+
+#add-btn {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.selected {
+  @include card(1);
+}

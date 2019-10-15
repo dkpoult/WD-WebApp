@@ -1,13 +1,13 @@
-import {ConfirmDialogComponent} from './../confirm-dialog/confirm-dialog.component';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
-import {MatDialog, MatDialogRef, MatSidenav, MatSlideToggle} from '@angular/material';
-import {LoginDialogComponent} from '../login-dialog/login-dialog.component';
-import {SignupDialogComponent} from '../signup-dialog/signup-dialog.component';
-import {SharedService} from '../shared/services/shared.service';
-import {Router} from '@angular/router';
-import {ThemeService} from '../shared/services/theme.service';
-import {UserService} from '../shared/services/user.service';
+import { ConfirmDialogComponent } from './../confirm-dialog/confirm-dialog.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MatDialog, MatDialogRef, MatSidenav, MatSlideToggle } from '@angular/material';
+import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
+import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component';
+import { SharedService } from '../shared/services/shared.service';
+import { Router } from '@angular/router';
+import { ThemeService } from '../shared/services/theme.service';
+import { UserService } from '../shared/services/user.service';
 
 export interface MenuItem {
   path: string;
@@ -29,18 +29,19 @@ export class NavComponent implements OnInit {
 
   @ViewChild('drawer') drawer: MatSidenav;
   @ViewChild('darkMode') lightSwitch: MatSlideToggle;
-  // Remember to add to app-routing.module.ts too
-  menuItemsLoggedIn: MenuItem[] = [
-    {path: 'courses/', text: 'Courses'},
-    {path: 'timetable/', text: 'Timetable'},
-    {path: 'map/', text: 'Map'}
-  ];
 
   // Add menu items here for when logged in
   // Remember to add to app-routing.module.ts too
+  menuItemsLoggedIn: MenuItem[] = [
+    { path: 'admin/', text: 'Admin' },
+    { path: 'courses/', text: 'Courses' },
+    { path: 'timetable/', text: 'Timetable' },
+    { path: 'map/', text: 'Map' },
+  ];
+  // Add menu items here for when not logged in
   menuItemsLoggedOut: MenuItem[] = [
     // { path: 'features/', text: 'Features' },
-    {path: 'map/', text: 'Map'}
+    { path: 'map/', text: 'Map' }
   ];
 
   // Add menu items here for when NOT logged in

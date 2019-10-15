@@ -8,9 +8,6 @@
         <mat-error *ngIf="form.controls['code'].hasError('required')">
           Please enter a course code
         </mat-error>
-        <mat-error *ngIf="form.controls['code'].hasError('minlength') || form.controls['code'].hasError('maxlength')">
-          Course code must be 8 characters long
-        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Course Name</mat-label>

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
-import {SharedService} from '../../shared/services/shared.service';
-import {UserService} from '../../shared/services/user.service';
-import {Router} from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+import { SharedService } from '../../shared/services/shared.service';
+import { UserService } from '../../shared/services/user.service';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -20,15 +21,25 @@ export class LoginComponent implements OnInit {
   constructor(
     private sharedService: SharedService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
+
+  redirect = 'courses';
 
   ngOnInit() {
     this.form = new FormGroup({
       personNumber: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     });
+    this.route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        params.getAll('redirect')
+      ))
+      .subscribe((result: any) => {
+        this.redirect = atob(result);
+      });
   }
 
   hasErrors() {
@@ -45,7 +56,7 @@ export class LoginComponent implements OnInit {
         case 'successful':
           this.loginFailed = false;
           this.userService.loginUser(user.personNumber, response.userToken, response.preferences);
-          this.router.navigateByUrl('/courses');
+          this.router.navigateByUrl(this.redirect);
           break;
         default:
           this.loginFailed = true;

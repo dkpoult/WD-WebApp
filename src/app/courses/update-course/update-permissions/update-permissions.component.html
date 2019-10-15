@@ -7,7 +7,7 @@
             <td *matCellDef="let user" mat-cell>
                 <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px">
                     {{user.personNumber}}
-                    <div class="privelages">
+                    <div class="privelages" *ngIf="showIcons">
                         <!-- <mat-icon [@fadeSlideInOut] class="lecturer" *ngIf="hasPermission('EDIT_PERMISSIONS', user.permissions)" -->
                         <mat-icon (click)="togglePermission(user, 'EDIT_PERMISSIONS')" [@fadeSlideInOut] [class.active]="hasPermission('EDIT_PERMISSIONS', user.permissions)"
                                   class="lecturer"

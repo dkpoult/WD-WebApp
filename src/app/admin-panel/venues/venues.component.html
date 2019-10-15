@@ -1,0 +1,54 @@
+<div class="container" fxLayout="row">
+  <div fxFlex="20" id="list">
+    <div class="toolbar-header">
+      <span>Select a Venue</span>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="venue-tree">
+      <mat-tree [dataSource]="TREE_DATA" [treeControl]="treeControl" class="tree">
+        <!-- This is the tree node template for leaf nodes -->
+        <mat-tree-node (click)="select(node.parent)" *matTreeNodeDef="let node"
+                       matTreeNodeToggle>
+          <li class="mat-tree-node">
+            <!-- use a disabled button to provide padding for tree leaf -->
+            <button disabled mat-icon-button>-</button>
+            {{node.code}}
+          </li>
+        </mat-tree-node>
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-nested-tree-node (click)="select(node)" *matTreeNodeDef="let node; when: hasChild"
+                              [class.selected]="selected(node)">
+          <!--[class.selected]="selected(node) || childSelected(node)"-->
+          <li>
+            <div class="mat-tree-node">
+              <button [attr.aria-label]="'toggle ' + node.code" mat-icon-button
+                      matTreeNodeToggle>
+                <!--TODO: Add animations to this change-->
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+              </button>
+              {{node.code}}
+            </div>
+            <ul [class.tree-invisible]="!treeControl.isExpanded(node)">
+              <ng-container matTreeNodeOutlet></ng-container>
+            </ul>
+          </li>
+        </mat-nested-tree-node>
+      </mat-tree>
+      <button (click)="select(null)" id="add-btn" mat-raised-button>Add New Building</button>
+    </div>
+  </div>
+  <div fxFlex id="view">
+    <div *ngIf="selectedNode; else addBuilding">
+      <app-view-venue [venue]="selectedNode"></app-view-venue>
+    </div>
+    <ng-template #addBuilding>
+      <div class="form">
+        <h2>Add a Building</h2>
+        <app-new-building (new)="newBuilding($event)"></app-new-building>
+      </div>
+    </ng-template>
+  </div>
+  <!--  <div fxFlex="15" id="toolbox" style="border: 2px solid blue"></div>-->
+</div>

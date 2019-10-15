@@ -37,24 +37,24 @@ export class PermissionService {
     });
   }
 
-  setPermissions(personNumber: string, permissions: number, courseCode: string) {
+  setPermissions(personNumber: string, permissions: number, context: string) {
     const user = this.userService.currentUser;
     const body = {
       personNumber: user.personNumber,
       userToken: user.userToken,
       targetPersonNumber: personNumber,
-      contextCode: `c${courseCode}`,
+      contextCode: context,
       permissions,
     };
     return this.http.post(`${API.apiRoot}/permission/set_permissions`, body);
   }
 
-  getAllPermissions(courseCode: string): Observable<any> {
+  getAllPermissions(context: string): Observable<any> {
     const user = this.userService.currentUser;
     const body = {
       personNumber: user.personNumber,
       userToken: user.userToken,
-      contextCode: `c${courseCode}`
+      contextCode: context
     };
 
     return this.http.post(`${API.apiRoot}/permission/get_all_permissions`, body);
