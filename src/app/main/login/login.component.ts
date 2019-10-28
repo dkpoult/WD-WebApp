@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
-import { SharedService } from '../../shared/services/shared.service';
-import { UserService } from '../../shared/services/user.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material';
+import {SharedService} from '../../shared/services/shared.service';
+import {UserService} from '../../shared/services/user.service';
+import {Router, ActivatedRoute, ParamMap} from '@angular/router';
+import {switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
 
   form: FormGroup;
   loginFailed = false;
+  redirect = 'courses';
 
   constructor(
     private sharedService: SharedService,
@@ -26,20 +27,17 @@ export class LoginComponent implements OnInit {
   ) {
   }
 
-  redirect = 'courses';
-
   ngOnInit() {
     this.form = new FormGroup({
       personNumber: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     });
-    this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        params.getAll('redirect')
-      ))
-      .subscribe((result: any) => {
-        this.redirect = atob(result);
-      });
+
+    this.route.queryParams.subscribe(params => {
+      const dest = decodeURIComponent(params.redirect);
+      console.log(dest); // Print the parameter to the console.
+      this.redirect = dest;
+    });
   }
 
   hasErrors() {

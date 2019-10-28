@@ -21,7 +21,9 @@ export class AuthGuard implements CanActivate, CanActivateChild {
           if (result.responseCode === 'successful') {
             return true;
           } else {
-            return this.router.createUrlTree(['login', destination]);
+            const tree = this.router.createUrlTree(['login']);
+            tree.queryParams = {redirect: destination};
+            return tree;
           }
         }
         )
@@ -31,13 +33,14 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.validate(btoa(state.url));
+    new UrlTree();
+    return this.validate(encodeURIComponent(state.url));
   }
 
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.validate(btoa(state.url));
+    return this.validate(encodeURIComponent(state.url));
   }
 
 }
