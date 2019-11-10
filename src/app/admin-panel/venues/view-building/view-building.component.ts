@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {VenueNode, VenueService} from '../../../shared/services/venue.service';
-import {API} from '../../../shared/services/api';
 import {AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 import {coerceNumberProperty} from '@angular/cdk/coercion';
@@ -69,7 +68,7 @@ export class ViewBuildingComponent implements OnInit {
       this.formFloors.push(new FormGroup({
         floorName: new FormControl(f.name, [Validators.required]),
         delete: new FormControl(false),
-        old: new FormControl(true),
+        node: new FormControl(true),
       }));
     }
   }

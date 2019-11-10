@@ -24,27 +24,31 @@ export class VenuesComponent implements OnInit {
           name: building.buildingName,
           code: building.buildingCode,
           coordinates: !!building.coordinates ? building.coordinates : undefined,
-          hasImage: building.hasImage,
           children: building.floors ? building.floors.map(floor => {
-            const b = {
+            const b: any = {
               level: i++,
               nodeType: 'floor',
               name: floor.floorName,
+              hasImage: floor.hasImage,
               children: floor.venues ? floor.venues.map(venue => {
                 return {
                   nodeType: 'venue',
                   name: venue.venueName,
                   code: venue.venueCode,
                   hasImage: venue.hasImage,
-                  coordinates: venue.coordinates ? venue.coordinates : undefined
+                  coordinates: venue.coordinates ? venue.coordinates : undefined,
+                  attributes: venue.attributes,
                 };
               }) : [],
             };
-            b.children.push({nodeType: 'new', parent: b});
+            // b.children.push({nodeType: 'new', parent: b});
             return b;
           }) : [],
         };
-        a.children.push({nodeType: 'new', parent: a});
+        a.children.push({nodeType: 'new'});
+        for (const child of a.children) {
+          child.parent = a;
+        }
         return a;
       });
     })

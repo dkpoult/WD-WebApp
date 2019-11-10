@@ -7,9 +7,9 @@
     <div class="venue-tree">
       <mat-tree [dataSource]="TREE_DATA" [treeControl]="treeControl" class="tree">
         <!-- This is the tree node template for leaf nodes -->
-        <mat-tree-node (click)="select(node)" *matTreeNodeDef="let node"
+        <mat-tree-node *matTreeNodeDef="let node"
                        [class.selected]="selected(node)"
-                       matTreeNodeToggle (click)="select(node)">
+                       matTreeNodeToggle>
           <li class="mat-tree-node">
             <!-- use a disabled button to provide padding for tree leaf -->
             <button disabled mat-icon-button>-</button>

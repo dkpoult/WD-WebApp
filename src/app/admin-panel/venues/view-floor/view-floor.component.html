@@ -1,16 +1,6 @@
 <form (ngSubmit)="submit()" [formGroup]="form">
   <div fxLayout="row" fxLayoutGap="2em">
     <div fxFlex fxLayout="column">
-      <mat-form-field id="floorCode">
-        <mat-label>Floor Code</mat-label>
-        <input autocomplete="off" formControlName="newFloorCode" matInput>
-        <mat-error *ngIf="form.get('newFloorCode').hasError('required')">
-          Please enter a floor code
-        </mat-error>
-        <mat-error *ngIf="form.get('newFloorCode').hasError('taken')">
-          That floor already exists
-        </mat-error>
-      </mat-form-field>
       <mat-form-field id="floorName">
         <mat-label>Floor Name</mat-label>
         <input autocomplete="off" formControlName="floorName" matInput>
@@ -22,42 +12,144 @@
         <button (click)="addVenue()" class="mat-small" mat-icon-button type="button">+</button>
         <span>Venues</span>
       </div>
-      <div *ngFor="let venue of formVenues.controls | filter:filterDeleted;">
-        <mat-form-field>
-          <mat-label>Venue Name</mat-label>
-          <input [formControl]="venueName(venue)" autocomplete="off" matInput>
-          <mat-icon (click)="deleteVenue(venue)" matSuffix>delete</mat-icon>
-          <mat-error>
-            Please enter a venue name
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <mat-error *ngIf="formVenues.hasError('required')">
-        You must add at least one venue
-      </mat-error>
-      <mat-hint *ngIf="venueCount > 0">You can add rooms later</mat-hint>
-    </div>
-    <mat-tab-group mat-stretch-tabs animationDuration="0">
-      <mat-tab label="Map">
-        <div fxLayout="column">
-          <div class="square">
-            <div class="map" fxFlex>
-              <agm-map (mapClick)="setCoords($event.coords)" [latitude]="lat" [longitude]="lng" [zoom]="zoom"
-                       fxLayoutAlign="center center">
-                <agm-marker (drag)="setCoords($event.coords)" [latitude]="latControl.value" [longitude]="lngControl.value"
-                            [markerDraggable]="true"></agm-marker>
-              </agm-map>
+      <mat-accordion [multi]="false">
+        <mat-expansion-panel *ngFor="let venue of formVenues.controls | filter:filterDeleted;"
+                             (closed)="panelOpenState = true"
+                             (opened)="panelOpenState = false"
+                             class="panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{getFullCode(venue)}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-action-row fxLayoutAlign="start center">
+            <mat-chip-list>
+              <mat-chip (click)="deleteVenue(venue)" color="warn" selected>
+                <mat-icon>delete</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </mat-action-row>
+          <!-- Content -->
+          <h4>Details</h4>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+            <mat-form-field fxFlex>
+              <mat-label>Venue Code</mat-label>
+              <input matInput [formControl]="venue.get('venueCode')">
+              <mat-error>
+                Please enter a venue code
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <mat-label>Venue Name</mat-label>
+              <input matInput [formControl]="venue.get('venueName')">
+              <mat-error>
+                Please enter a venue name
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <mat-divider></mat-divider>
+          <h4>Attributes</h4>
+          <div *ngFor="let att of attributes(venue).controls;"
+                fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+            <mat-form-field fxFlex>
+              <mat-label>Attribute Name</mat-label>
+              <input matInput [formControl]="att.get('name')">
+              <strong matSuffix>:</strong>
+              <mat-error>
+                Please enter an attribute name
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <mat-label>Attribute Value</mat-label>
+              <input matInput [formControl]="att.get('value')">
+              <mat-error>
+                Please enter an attribute value
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <button type="button" mat-raised-button (click)="addAttribute(venue)"
+                  style="
+                  margin-left: 50%;
+                  transform: translateX(-50%);
+                  margin-bottom: 20px">
+            <mat-icon>add</mat-icon>
+            Add Attribute
+          </button>
+          <mat-divider></mat-divider>
+          <h4>Miscellaneous</h4>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="coords" fxFlex fxLayout="row" fxLayoutAlign="baseline center">
+              <mat-form-field fxFlex>
+                <mat-label>x</mat-label>
+                <input matInput [formControl]="venue.get('coordinates').get('x')">
+                <strong matSuffix>,</strong>
+                <mat-error>
+                  Please enter an x-coordinate
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field fxFlex>
+                <mat-label>y</mat-label>
+                <input matInput [formControl]="venue.get('coordinates').get('y')">
+                <mat-error>
+                  Please enter a y-coordinate
+                </mat-error>
+              </mat-form-field>
+              <mat-icon matTooltip="Show on Floor Plan" (click)="findPin(venue.value.coordinates)">my_location</mat-icon>
+            </div>
+            <div class="image" fxFlex>
+              <label for="image">
+                <input
+                  type="file"
+                  id="image"
+                  (change)="onFileChange(venue, $event.target['files'])"
+                  multiple="false"
+                  accept="image/png"
+                  style="display:none;"/>
+                <img *ngIf="venue.value.node?.hasImage"
+                     alt="Venue Image"
+                     [src]="getImage(floorNode.parent.code, floorNode.level, venue.value.node.code)">
+                <span class="no-image" *ngIf="venue.value.node && !venue.value.node.hasImage">
+                This venue has no image
+                <br>
+                <input type="file"
+                       multiple="false"
+                       accept="image/png"
+                       (change)="onFileChange(venue, $event.target['files'])">
+              </span>
+              </label>
             </div>
           </div>
-          <div class="input-container" fxLayout="row" fxLayoutGap="10px">
-            <mat-form-field id="lat">
-              <mat-label>Latitude</mat-label>
-              <input [formControl]="latControl" autocomplete="off" matInput>
-            </mat-form-field>
-            <mat-form-field id="lng">
-              <mat-label>Longitude</mat-label>
-              <input [formControl]="lngControl" autocomplete="off" matInput>
-            </mat-form-field>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <mat-tab-group fxFlex mat-stretch-tabs animationDuration="0">
+      <mat-tab label="Floor Plan">
+        <div fxLayout="column">
+          <div class="square">
+            <div class="floor-plan" fxFlex>
+              <div class="image" fxFlex>
+                <label for="floor-plan">
+                  <input
+                    type="file"
+                    id="floor-plan"
+                    (change)="onFileChange(null, $event.target['files'])"
+                    multiple="false"
+                    accept="image/png"
+                    style="display:none;"/>
+                  <img *ngIf="floorNode.hasImage"
+                       alt="Venue Image"
+                       [src]="getImage(floorNode.parent.code, floorNode.level)">
+                </label>
+              </div>
+              <span class="no-image" *ngIf="!floorNode?.hasImage">
+                This floor has no floor plan
+                <br>
+                <input type="file"
+                       multiple="false"
+                       accept="image/png"
+                       (change)="onFileChange(null, $event.target['files'])">
+              </span>
+            </div>
           </div>
         </div>
       </mat-tab>
