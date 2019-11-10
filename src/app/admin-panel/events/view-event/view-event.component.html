@@ -38,6 +38,7 @@
         <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
+<!--    <app-edit-flow></app-edit-flow>-->
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <button fxFlex [disabled]="!canSubmit()" mat-button type="submit">Submit</button>
       <button fxFlex mat-icon-button *ngIf="event" (click)="delete()" color="warn"><mat-icon>delete</mat-icon></button>

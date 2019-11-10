@@ -4,8 +4,9 @@ import {Subject} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {API} from './api';
 import {UserService} from './user.service';
-import {Building} from './models';
-import {HttpParamsOptions} from '@angular/common/http/src/params';
+import {Building, Venue} from './models';
+import {map} from 'rxjs/operators';
+import {forEach} from '@angular/router/src/utils/collection';
 
 export interface VenueNode {
   code: string;
@@ -23,11 +24,29 @@ export interface VenueNode {
   providedIn: 'root'
 })
 export class VenueService {
-
   venues: any[];
   currentUser = this.userService.currentUser;
   private newVenuesSubject = new Subject<any>();
   newVenues$ = this.newVenuesSubject.asObservable();
+  venue$ = this.newVenues$.pipe(map((v: Building[]) => {
+    // New venues converted to old style venues
+    const oldVenues: Venue[] = [];
+    console.log('New style:', v);
+    for (const building of v) {
+      const buildingCode = building.buildingCode;
+      for (const floor of building.floors) {
+        for (const venue of floor.venues) {
+          oldVenues.push({
+            buildingCode,
+            subCode: venue.venueCode,
+            coordinates: [building.coordinates.lat, building.coordinates.lng]
+          });
+        }
+      }
+    }
+    console.log('Old-style venues:', oldVenues);
+    return oldVenues;
+  }));
   private requestNum = 0;
 
   constructor(
@@ -38,6 +57,7 @@ export class VenueService {
   }
 
   insertBuilding(v) {
+    this.venue$.subscribe(console.log);
     this.venues.push(v);
     this.newVenuesSubject.next(this.venues);
   }

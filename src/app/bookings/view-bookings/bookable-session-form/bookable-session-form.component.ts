@@ -129,7 +129,7 @@ export class BookableSessionFormComponent implements OnInit {
 
   ngOnInit() {
     this.venues = [];
-    this.venueService.newVenues$.subscribe((venues: any) => {
+    this.venueService.venue$.subscribe((venues: any) => {
       this.venues = venues.map(e => e.buildingCode);
     });
     this.venueService.refreshVenues();
