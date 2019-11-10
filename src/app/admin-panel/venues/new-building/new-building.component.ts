@@ -17,15 +17,15 @@ export class NewBuildingComponent implements OnInit {
 
   @Output() new = new EventEmitter();
 
-  roomCount = 1;
+  floorCount = 1;
 
   constructor(
     private venueService: VenueService,
   ) {
   }
 
-  get rooms() {
-    return (this.form.get('rooms') as FormArray);
+  get floors() {
+    return (this.form.get('floors') as FormArray);
   }
 
   get latControl() {
@@ -36,7 +36,7 @@ export class NewBuildingComponent implements OnInit {
     return (this.form.get('coordinates').get('lng') as FormControl);
   }
 
-  uniqueNameValidator(): ValidatorFn {
+  uniqueCodeValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       let taken = false;
       const code = (control.value as string).toLowerCase();
@@ -56,9 +56,11 @@ export class NewBuildingComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.venueService.refreshVenues();
     this.form = new FormGroup({
-      buildingCode: new FormControl('', [Validators.required, this.uniqueNameValidator()]),
-      rooms: new FormArray([
+      buildingCode: new FormControl('', [Validators.required, this.uniqueCodeValidator()]),
+      buildingName: new FormControl('', [Validators.required]),
+      floors: new FormArray([
         new FormControl('1', [Validators.required])
       ], [Validators.required]),
       coordinates: new FormGroup({
@@ -76,15 +78,15 @@ export class NewBuildingComponent implements OnInit {
     this.form.get('coordinates').setValue(item);
   }
 
-  addRoom() {
-    this.rooms.push(new FormControl(++this.roomCount, [Validators.required]));
+  addFloor() {
+    this.floors.push(new FormControl(++this.floorCount, [Validators.required]));
   }
 
-  removeRoom() {
-    if (this.roomCount === 0) {
+  removeFloor() {
+    if (this.floorCount === 0) {
       return;
     }
-    this.rooms.removeAt(--this.roomCount);
+    this.floors.removeAt(--this.floorCount);
   }
 
   canSubmit() {
@@ -93,10 +95,7 @@ export class NewBuildingComponent implements OnInit {
 
   submit() {
     const b = this.form.value;
-    b.rooms.forEach(r => {
-      this.venueService.addVenue(b.buildingCode, r, [b.coordinates.lat, b.coordinates.lng]);
-    });
-    this.venueService.insertVenue(b);
+    this.venueService.addBuilding(b);
     this.form.markAsPristine();
     this.new.emit(b);
   }

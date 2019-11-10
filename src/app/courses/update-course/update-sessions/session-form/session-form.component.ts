@@ -125,7 +125,7 @@ export class SessionFormComponent implements OnInit {
     this.venueService.newVenues$.subscribe((venues: any) => {
       this.venues = venues.map(e => e.buildingCode);
     });
-    this.venueService.updateVenues();
+    this.venueService.refreshVenues();
   }
 
   removeSession() {

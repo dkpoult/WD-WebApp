@@ -5,7 +5,7 @@
     </button>
     <mat-accordion [multi]="false">
       <app-bookable-session-form *ngFor="let session of formSessions.controls; let i = index" [form]="formSessions.controls[i]"
-                        (remove)="removeSession(i)">
+                        (remove)="removeSession(i)" [id]="getId(i)">
       </app-bookable-session-form>
     </mat-accordion>
   </form>
@@ -17,3 +17,4 @@
   </div>
 </div>
 <button mat-button [disabled]="hasErrors()" (click)="submit()">Submit</button>
+<pre>{{course.bookableSessions[personNumber] | json}}</pre>

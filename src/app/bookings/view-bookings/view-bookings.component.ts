@@ -75,6 +75,10 @@ export class ViewBookingsComponent implements OnInit {
   ) {
   }
 
+  get personNumber() {
+    return this.userService.currentUser.personNumber;
+  }
+
   get formSessions() {
     return (this.form.get('sessions') as FormArray);
   }
@@ -152,6 +156,10 @@ export class ViewBookingsComponent implements OnInit {
       cancellations: new FormControl([]),
     });
     this.formSessions.push(newSession);
+  }
+
+  getId(i: number) {
+    return this.course.bookableSessions[this.personNumber][i].id;
   }
 
   removeSession(i: number) {

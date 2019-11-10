@@ -27,7 +27,48 @@ export interface Venue {
   buildingCode: string;
   subCode: string;
   coordinates: any | undefined; // TODO: This should be an actual type
+  // venueCode: string;
+  // venueName: string;
+  // hasImage: boolean; // .png
+  // coordinates: {
+  //   x: number,
+  //   y: number,
+  // };
+  // attributes: {
+  //   [key: string]: any
+  // };
 }
+
+
+export interface Building {
+  buildingCode: string;
+  buildingName: string;
+  coordinates: {
+    lat: number,
+    lng: number,
+  };
+  floors: [
+    {
+      hasImage: boolean,
+      floorName: string,
+      venues: [
+        {
+          venueCode: string,
+          venueName: string,
+          hasImage: boolean, // .png
+          coordinates: {
+            x: number,
+            y: number,
+          },
+          attributes: {
+            [key: string]: any
+          },
+        }
+      ] | [],
+    }
+  ];
+}
+
 
 export enum SessionType {'LECTURE', 'LAB', 'TUTORIAL', 'TEST', 'CONSULTATION', 'MEETING'}
 

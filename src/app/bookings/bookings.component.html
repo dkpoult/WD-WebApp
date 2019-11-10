@@ -1,7 +1,9 @@
-<!--<pre>{{course | json}}</pre>-->
 <div #lecturerView *ngIf="isLecturer; else studentView">
+  <!--  TODO: Generate a link to _this_ session. Ask what date it should be for. Create object -->
+  <!--  TODO: Use this? https://www.npmjs.com/package/jsurl -->
   <app-view-bookings (update)="updateSessions($event)" [course]="course"></app-view-bookings>
 </div>
 <ng-template #studentView>
+  <!--  TODO: Should students also be able to generate URIs? -->
   <app-make-booking (book)="bookSlot($event)" [course]="course"></app-make-booking>
 </ng-template>

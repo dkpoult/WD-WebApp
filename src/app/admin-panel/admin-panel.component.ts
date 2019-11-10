@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {VenueNode, VenueService} from '../shared/services/venue.service';
-import { PermissionService } from '../shared/services/permission.service';
+import {Component, OnInit} from '@angular/core';
+import {VenueService} from '../shared/services/venue.service';
+import {PermissionService} from '../shared/services/permission.service';
 
 @Component({
   selector: 'app-admin-panel',
@@ -14,10 +14,11 @@ export class AdminPanelComponent implements OnInit {
   constructor(
     private venueService: VenueService,
     private permissionService: PermissionService,
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
-    this.venueService.updateVenues();
+    this.venueService.refreshVenues();
     this.permissionService.getAllPermissions(`g`).subscribe((response: any) => {
       switch (response.responseCode) {
         case 'successful':

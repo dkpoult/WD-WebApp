@@ -1,0 +1,67 @@
+<form (ngSubmit)="submit()" [formGroup]="form">
+  <div fxLayout="row" fxLayoutGap="2em">
+    <div fxFlex fxLayout="column">
+      <mat-form-field id="buildingCode">
+        <mat-label>Building Code</mat-label>
+        <input autocomplete="off" formControlName="newBuildingCode" matInput>
+        <mat-error *ngIf="form.get('newBuildingCode').hasError('required')">
+          Please enter a building code
+        </mat-error>
+        <mat-error *ngIf="form.get('newBuildingCode').hasError('taken')">
+          That building already exists
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field id="buildingName">
+        <mat-label>Building Name</mat-label>
+        <input autocomplete="off" formControlName="buildingName" matInput>
+        <mat-error *ngIf="form.get('buildingName') && form.get('buildingName').hasError('required')">
+          Please enter a building name
+        </mat-error>
+      </mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button (click)="addFloor()" class="mat-small" mat-icon-button type="button">+</button>
+        <span>Floors</span>
+      </div>
+      <div *ngFor="let floor of formFloors.controls | filter:filterDeleted;">
+        <mat-form-field>
+          <mat-label>Floor Name</mat-label>
+          <input [formControl]="floorName(floor)" autocomplete="off" matInput>
+          <mat-icon (click)="deleteFloor(floor)" matSuffix>delete</mat-icon>
+          <mat-error>
+            Please enter a floor name
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-error *ngIf="formFloors.hasError('required')">
+        You must add at least one floor
+      </mat-error>
+      <mat-hint *ngIf="floorCount > 0">You can add rooms later</mat-hint>
+    </div>
+    <mat-tab-group mat-stretch-tabs animationDuration="0">
+      <mat-tab label="Map">
+        <div fxLayout="column">
+          <div class="square">
+            <div class="map" fxFlex>
+              <agm-map (mapClick)="setCoords($event.coords)" [latitude]="lat" [longitude]="lng" [zoom]="zoom"
+                       fxLayoutAlign="center center">
+                <agm-marker (drag)="setCoords($event.coords)" [latitude]="latControl.value" [longitude]="lngControl.value"
+                            [markerDraggable]="true"></agm-marker>
+              </agm-map>
+            </div>
+          </div>
+          <div class="input-container" fxLayout="row" fxLayoutGap="10px">
+            <mat-form-field id="lat">
+              <mat-label>Latitude</mat-label>
+              <input [formControl]="latControl" autocomplete="off" matInput>
+            </mat-form-field>
+            <mat-form-field id="lng">
+              <mat-label>Longitude</mat-label>
+              <input [formControl]="lngControl" autocomplete="off" matInput>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <button (click)="submit()" [disabled]="!canSubmit()" mat-button type="submit">Submit</button>
+</form>

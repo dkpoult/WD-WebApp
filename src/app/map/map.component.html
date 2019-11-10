@@ -1,7 +1,9 @@
 <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" fxLayoutAlign="center center">
-  <agm-marker *ngFor="let v of venues" [latitude]="v.coordinates[0]" [longitude]="v.coordinates[1]">
+  <agm-marker *ngFor="let v of filteredVenues" [latitude]="v.coordinates.lat" [longitude]="v.coordinates.lng">
     <agm-info-window>
-      <strong>{{v.buildingCode}}</strong>
+      <strong>{{v.buildingName}}</strong>
+      <br>
+<!--      <span>{{v.floors.length}} floors</span>-->
     </agm-info-window>
   </agm-marker>
 </agm-map>

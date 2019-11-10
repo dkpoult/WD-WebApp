@@ -8,11 +8,13 @@
         {{form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] + form.get('venue').value['subCode'] : "unspecified venue"}}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <mat-action-row fxLayoutAlign="start center">
-      <!-- <span fxFlex></span> -->
-      <mat-chip (click)="removeSession()" color="warn" selected>
+    <mat-action-row fxLayoutAlign="start center" fxLayoutGap="10px">
+      <mat-chip matTooltip="Remove Session" (click)="removeSession()" color="warn" selected>
         <mat-icon>delete</mat-icon>
       </mat-chip>
+<!--      <mat-chip matTooltip="Sharable Link"(click)="generateURI()" color="primary" selected>-->
+<!--        <mat-icon>share</mat-icon>-->
+<!--      </mat-chip>-->
     </mat-action-row>
     <!-- Content -->
     <div class="chips">

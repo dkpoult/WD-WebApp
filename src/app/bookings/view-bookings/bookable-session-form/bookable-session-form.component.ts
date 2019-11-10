@@ -4,6 +4,7 @@ import {FormGroup} from '@angular/forms';
 import {MatChip, MatExpansionPanel} from '@angular/material';
 import {VenueService} from '../../../shared/services/venue.service';
 import {TimetableService} from '../../../shared/services/timetable.service';
+import {UserService} from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-bookable-session-form',
@@ -62,6 +63,7 @@ export class BookableSessionFormComponent implements OnInit {
   @ViewChild('cancelDatePicker') cancelDatePicker;
   @ViewChild('panel') panel: MatExpansionPanel;
 
+  @Input() id = -1;
   panelOpenState: boolean;
   venues;
   repeatTypes = [
@@ -75,7 +77,15 @@ export class BookableSessionFormComponent implements OnInit {
     {value: 'MEETING', text: 'Meeting'},
   ];
 
-  constructor(private venueService: VenueService, private timetableService: TimetableService) {
+  constructor(
+    private venueService: VenueService,
+    private timetableService: TimetableService,
+    private userService: UserService
+  ) {
+  }
+
+  get personNumber() {
+    return this.userService.currentUser.personNumber;
   }
 
   get cancellations(): string[] {
@@ -122,11 +132,16 @@ export class BookableSessionFormComponent implements OnInit {
     this.venueService.newVenues$.subscribe((venues: any) => {
       this.venues = venues.map(e => e.buildingCode);
     });
-    this.venueService.updateVenues();
+    this.venueService.refreshVenues();
   }
 
   removeSession() {
     this.remove.emit();
+  }
+
+  generateURI() {
+    const obj = {lecturer: this.personNumber, id: this.id, date: new Date().valueOf()};
+    return `${encodeURIComponent(JSON.stringify(obj))}`;
   }
 
   getPeriod(type: string, num: number) {

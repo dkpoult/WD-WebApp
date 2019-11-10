@@ -7,48 +7,69 @@
     <div class="venue-tree">
       <mat-tree [dataSource]="TREE_DATA" [treeControl]="treeControl" class="tree">
         <!-- This is the tree node template for leaf nodes -->
-        <mat-tree-node (click)="select(node.parent)" *matTreeNodeDef="let node"
-                       matTreeNodeToggle>
+        <mat-tree-node (click)="select(node)" *matTreeNodeDef="let node"
+                       [class.selected]="selected(node)"
+                       matTreeNodeToggle (click)="select(node)">
           <li class="mat-tree-node">
             <!-- use a disabled button to provide padding for tree leaf -->
             <button disabled mat-icon-button>-</button>
-            {{node.code}}
+            {{node.name}}
           </li>
         </mat-tree-node>
         <!-- This is the tree node template for expandable nodes -->
-        <mat-nested-tree-node (click)="select(node)" *matTreeNodeDef="let node; when: hasChild"
+        <mat-nested-tree-node (click)="select(node)" *matTreeNodeDef="let node; when: canExpand"
                               [class.selected]="selected(node)">
-          <!--[class.selected]="selected(node) || childSelected(node)"-->
           <li>
             <div class="mat-tree-node">
               <button [attr.aria-label]="'toggle ' + node.code" mat-icon-button
-                      matTreeNodeToggle>
-                <!--TODO: Add animations to this change-->
+                      matTreeNodeToggle (click)="select(node)">
                 <mat-icon class="mat-icon-rtl-mirror">
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                 </mat-icon>
               </button>
-              {{node.code}}
+              {{node.name}}
             </div>
             <ul [class.tree-invisible]="!treeControl.isExpanded(node)">
               <ng-container matTreeNodeOutlet></ng-container>
             </ul>
           </li>
         </mat-nested-tree-node>
+        <!-- This is the tree node template for new floor/venue nodes -->
+        <mat-tree-node *matTreeNodeDef="let node; when: isNew"
+                       [class.selected]="selected(node)"
+                       matTreeNodeToggle>
+          <li class="mat-tree-node">
+            <!-- use a disabled button to provide padding for tree leaf -->
+            <button disabled mat-icon-button>+</button>
+            <div id="new-floor" *ngIf="node.parent.nodeType === 'building'; else newVenue">
+                <input #floorName (keyup.enter)="addFloor(node.parent, floorName.value)" autocomplete="off" matInput placeholder="New floor...">
+                <button matSuffix (click)="addFloor(node.parent, floorName.value)" *ngIf="!!floorName.value" mat-icon-button>
+                  <mat-icon>add</mat-icon>
+                </button>
+            </div>
+            <ng-template #newVenue>
+                <input #venueName (keyup.enter)="addVenue(node.parent, venueName.value)" autocomplete="off" matInput placeholder="New venue...">
+                <button matSuffix (click)="addVenue(node.parent, venueName.value)" *ngIf="!!venueName.value" mat-icon-button>
+                  <mat-icon>add</mat-icon>
+                </button>
+            </ng-template>
+          </li>
+        </mat-tree-node>
       </mat-tree>
       <button (click)="select(null)" id="add-btn" mat-raised-button>Add New Building</button>
     </div>
   </div>
   <div fxFlex id="view">
-    <div *ngIf="selectedNode; else addBuilding">
-      <app-view-venue [venue]="selectedNode"></app-view-venue>
+    <div *ngIf="selectedNode && selectedNode.nodeType === 'building';">
+      <app-view-building [buildingNode]="selectedNode"></app-view-building>
     </div>
-    <ng-template #addBuilding>
-      <div class="form">
+    <div *ngIf="selectedNode && selectedNode.nodeType === 'floor';">
+      <app-view-floor [floorNode]="selectedNode"></app-view-floor>
+    </div>
+    <div *ngIf="!selectedNode || selectedNode.nodeType === 'new';">
         <h2>Add a Building</h2>
         <app-new-building (new)="newBuilding($event)"></app-new-building>
-      </div>
-    </ng-template>
+    </div>
   </div>
   <!--  <div fxFlex="15" id="toolbox" style="border: 2px solid blue"></div>-->
 </div>

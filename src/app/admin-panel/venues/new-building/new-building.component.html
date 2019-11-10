@@ -1,9 +1,9 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form (ngSubmit)="submit()" [formGroup]="form">
   <div fxLayout="row" fxLayoutGap="2em">
     <div fxFlex fxLayout="column">
       <mat-form-field id="buildingCode">
         <mat-label>Building Code</mat-label>
-        <input matInput formControlName="buildingCode" autocomplete="off">
+        <input autocomplete="off" formControlName="buildingCode" matInput>
         <mat-error *ngIf="form.get('buildingCode').hasError('required')">
           Please enter a building code
         </mat-error>
@@ -11,45 +11,51 @@
           That building already exists
         </mat-error>
       </mat-form-field>
+      <mat-form-field id="buildingName">
+        <mat-label>Building Name</mat-label>
+        <input autocomplete="off" formControlName="buildingName" matInput>
+      </mat-form-field>
       <div fxLayout="row" fxLayoutAlign="start center">
-        <button mat-icon-button (click)="addRoom()" class="mat-small" type="button">+</button>
-        <span>Rooms</span>
-        <button mat-icon-button (click)="removeRoom()" class="mat-small" type="button">-</button>
+        <button (click)="addFloor()" class="mat-small" mat-icon-button type="button">+</button>
+        <span>Floors</span>
+        <button (click)="removeFloor()" *ngIf="floorCount > 0" class="mat-small" mat-icon-button type="button">-
+        </button>
       </div>
-      <div *ngFor="let room of rooms.controls">
+      <div *ngFor="let floor of floors.controls">
         <mat-form-field>
-          <mat-label>Room Code</mat-label>
-          <input matInput [formControl]="room" autocomplete="off">
+          <mat-label>Floor Name</mat-label>
+          <input [formControl]="floor" autocomplete="off" matInput>
           <mat-error>
-            Please enter a room code
+            Please enter a floor name
           </mat-error>
         </mat-form-field>
       </div>
-      <mat-error *ngIf="rooms.hasError('required')">
-        You must add at least one room
+      <mat-error *ngIf="floors.hasError('required')">
+        You must add at least one floor
       </mat-error>
+      <mat-hint *ngIf="floorCount > 0">You can add rooms later</mat-hint>
     </div>
-    <div fxLayout="column" fxFlex="40">
+    <div fxFlex="40" fxLayout="column">
       <div class="square">
-        <div fxFlex class="map">
-          <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapClick)="setCoords($event.coords)"
+        <div class="map" fxFlex>
+          <agm-map (mapClick)="setCoords($event.coords)" [latitude]="lat" [longitude]="lng" [zoom]="zoom"
                    fxLayoutAlign="center center">
-            <agm-marker [latitude]="latControl.value" [longitude]="lngControl.value" (drag)="setCoords($event.coords)"
+            <agm-marker (drag)="setCoords($event.coords)" [latitude]="latControl.value" [longitude]="lngControl.value"
                         [markerDraggable]="true"></agm-marker>
           </agm-map>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutGap="10px" class="input-container">
+      <div class="input-container" fxLayout="row" fxLayoutGap="10px">
         <mat-form-field id="lat">
           <mat-label>Latitude</mat-label>
-          <input matInput [formControl]="latControl" autocomplete="off">
+          <input [formControl]="latControl" autocomplete="off" matInput>
         </mat-form-field>
         <mat-form-field id="lng">
           <mat-label>Longitude</mat-label>
-          <input matInput [formControl]="lngControl" autocomplete="off">
+          <input [formControl]="lngControl" autocomplete="off" matInput>
         </mat-form-field>
       </div>
     </div>
   </div>
-  <button mat-button [disabled]="!canSubmit()" type="submit" (click)="submit()">Submit</button>
+  <button (click)="submit()" [disabled]="!canSubmit()" mat-button type="submit">Submit</button>
 </form>

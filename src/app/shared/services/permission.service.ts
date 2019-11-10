@@ -69,18 +69,25 @@ export class PermissionService {
     return permissions | this.lookup[identifier];
   }
 
-  removePermission(permissions: number, identifier: string) {
+  togglePermission(permissions: number, identifier: string) {
     return permissions ^ this.lookup[identifier];
   }
 
-  isLecturer(value: any): boolean {
+  isAdmin(value: number | {permissions: number}): boolean {
+    if (typeof (value) === 'number') {
+      return this.hasPermission('EDIT_PERMISSIONS', value) || this.hasPermission('EDIT', value);
+    }
+    return this.hasPermission('EDIT_PERMISSIONS', value.permissions) || this.hasPermission('EDIT', value.permissions);
+  }
+
+  isLecturer(value: number | {permissions: number}): boolean {
     if (typeof (value) === 'number') {
       return this.hasPermission('EDIT_PERMISSIONS', value);
     }
     return this.hasPermission('EDIT_PERMISSIONS', value.permissions);
   }
 
-  isTutor(value: any): boolean {
+  isTutor(value: number | {permissions: number}): boolean {
     if (typeof (value) === 'number') {
       return this.hasPermission('MODERATE', value);
     }
