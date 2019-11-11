@@ -57,3 +57,25 @@ img {
   display: block;
   transform: translateX(-50%);
 }
+
+.map {
+  display: block;
+  position: relative;
+  align-content: center;
+  justify-content: center;
+  img {
+    width: 100%;
+  }
+}
+
+.marker {
+  display: block;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+}
+
+.hidden {
+  display: none;
+}

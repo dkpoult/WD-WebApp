@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {VenueNode, VenueService} from '../../../shared/services/venue.service';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material';
-import {coerceNumberProperty} from '@angular/cdk/coercion';
-import {API} from '../../../shared/services/api';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { VenueNode, VenueService } from '../../../shared/services/venue.service';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import { coerceNumberProperty } from '@angular/cdk/coercion';
+import { API } from '../../../shared/services/api';
 
 export function toTitleCase(str: string) {
   return str.replace(/([a-z])([A-Z])/g, '$1 $2')
@@ -29,6 +29,8 @@ export class ViewFloorComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) {
   }
+
+  mapVenue: VenueNode;
 
   get lat(): number {
     return coerceNumberProperty(this.floorNode.coordinates.lat);
@@ -113,12 +115,6 @@ export class ViewFloorComponent implements OnInit {
   ngOnInit() {
   }
 
-  setCoords(item) {
-    this.latControl.setValue(item.lat);
-    this.lngControl.setValue(item.lng);
-    this.form.markAsDirty();
-  }
-
   submit() {
     const value = this.form.value;
     const buildingCode = this.floorNode.parent.code;
@@ -131,7 +127,7 @@ export class ViewFloorComponent implements OnInit {
         for (const att of venue.attributes) {
           attributes[toCamelCase(att.name)] = att.value;
         }
-        venue = {attributes, coordinates: venue.coordinates, venueName: venue.venueName, venueCode: venue.venueCode};
+        venue = { attributes, coordinates: venue.coordinates, venueName: venue.venueName, venueCode: venue.venueCode };
         this.venueService.addVenue(buildingCode, floor, venue);
       } else {
         const venueCode = venue.node.code;
@@ -142,7 +138,7 @@ export class ViewFloorComponent implements OnInit {
           for (const att of venue.attributes) {
             attributes[toCamelCase(att.name)] = att.value;
           }
-          venue = {attributes, coordinates: venue.coordinates, venueName: venue.venueName, newVenueCode: venue.venueCode};
+          venue = { attributes, coordinates: venue.coordinates, venueName: venue.venueName, newVenueCode: venue.venueCode };
           this.venueService.updateVenue(buildingCode, floor, venueCode, venue);
         }
       }
@@ -180,14 +176,14 @@ export class ViewFloorComponent implements OnInit {
     if (removed.value.node) {
       // Just mark it as delete
       removed.get('delete').setValue(true);
-      const snackBarRef = this.snackBar.open(`Removed ${removed.value.venueName}`, 'Undo', {duration: 15000});
+      const snackBarRef = this.snackBar.open(`Removed ${removed.value.venueName}`, 'Undo', { duration: 15000 });
       snackBarRef.onAction().subscribe(() => {
         removed.get('delete').setValue(false);
       });
     } else {
       const i = this.formVenues.controls.findIndex(e => e.value.venueName === removed.value.venueName);
       // Remove it from the form
-      const snackBarRef = this.snackBar.open(`Removed ${removed.value.venueName}`, 'Undo', {duration: 15000});
+      const snackBarRef = this.snackBar.open(`Removed ${removed.value.venueName}`, 'Undo', { duration: 15000 });
       snackBarRef.onAction().subscribe(() => {
         this.formVenues.insert(i, removed);
       });
@@ -200,8 +196,16 @@ export class ViewFloorComponent implements OnInit {
     return `${this.floorNode.parent.code} ${venue.venueCode} - ${venue.venueName}`;
   }
 
-  findPin(coordinates) {
-    console.log(coordinates);
+  findPin(venue) {
+    this.mapVenue = venue;
+    this.updateCoords(venue);
+  }
+
+  updateCoords(venue) {
+    const marker = document.getElementById('marker');
+    console.log(marker.style);
+    marker.style.left = venue.coordinates.x * 100 + '%';
+    marker.style.top = venue.coordinates.y * 100 + '%';
   }
 
   onFileChange(venue, file) {
@@ -215,6 +219,6 @@ export class ViewFloorComponent implements OnInit {
   }
 
   getImage(building?, floor?, venue?) {
-      return this.venueService.getImage(building, floor, venue);
+    return this.venueService.getImage(building, floor, venue);
   }
 }
