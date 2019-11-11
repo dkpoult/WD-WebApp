@@ -102,7 +102,7 @@ export class UpdatePermissionsComponent implements OnInit, DoCheck {
 
   togglePermission(user: any, identifier: string) {
     if (this.hasPermission(identifier, user.permissions)) {
-      user.permissions = this.permissionService.removePermission(user.permissions, identifier);
+      user.permissions = this.permissionService.togglePermission(user.permissions, identifier);
     } else {
       user.permissions = this.permissionService.addPermission(user.permissions, identifier);
     }

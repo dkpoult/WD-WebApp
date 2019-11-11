@@ -7,7 +7,7 @@ import {FocusMonitor} from '@angular/cdk/a11y';
 import {VenueService} from 'src/app/shared/services/venue.service';
 
 class Venue {
-  constructor(public building: string, public room: string) {
+  constructor(public building: string, public floor: string, public room: string) {
   }
 }
 
@@ -21,6 +21,7 @@ class Venue {
         </mat-autocomplete>
         <div [formGroup]="form">
             <input class="building" formControlName="building" [matAutocomplete]="buildingAuto">
+            <input class="floor" formControlName="floor">
             <input class="room" formControlName="room">
         </div>
     `,
@@ -72,12 +73,12 @@ export class VenueInputComponent implements OnDestroy, MatFormFieldControl<Venue
   @Input()
   get value() {
     const v = this.form.value;
-    return new Venue(v.building, v.room);
+    return new Venue(v.building, v.floor, v.room);
   }
 
   set value(v) {
-    v = v || new Venue('', '');
-    this.form.setValue({building: v.building, room: v.room});
+    v = v || new Venue('', '', '');
+    this.form.setValue({building: v.building, floor: v.floor, room: v.room});
     this.stateChanges.next();
   }
 

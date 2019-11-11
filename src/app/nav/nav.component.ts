@@ -1,3 +1,4 @@
+import { PermissionService } from 'src/app/shared/services/permission.service';
 import { ConfirmDialogComponent } from './../confirm-dialog/confirm-dialog.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -44,12 +45,14 @@ export class NavComponent implements OnInit {
     { path: 'map/', text: 'Map' }
   ];
 
-  // Add menu items here for when NOT logged in
   isDarkMode$: Observable<boolean>;
+
+  globalPermissions;
 
   constructor(
     private sharedService: SharedService,
     private userService: UserService,
+    private permissionService: PermissionService,
     private dialog: MatDialog,
     private router: Router,
     private theme: ThemeService,
@@ -63,6 +66,9 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     this.isDarkMode$ = this.theme.isDarkMode$;
+    this.permissionService.getAllPermissions('g').subscribe(r => {
+      this.globalPermissions = r.permissions;
+    });
   }
 
   openLoginDialog() {
@@ -88,6 +94,11 @@ export class NavComponent implements OnInit {
         this.userService.signOut();
       }
     });
+  }
+
+  isAdmin() {
+    return this.permissionService
+      .isAdmin(this.globalPermissions[this.userService.currentUser.personNumber]);
   }
 
   loggedIn() {

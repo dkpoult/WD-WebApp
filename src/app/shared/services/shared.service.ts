@@ -63,7 +63,9 @@ export class SharedService {
       personNumber: this.currentUser.personNumber,
       userToken: this.currentUser.userToken
     };
-    return this.http.post(`${API.apiRoot}/course/get_courses`, body);
+    const test = this.http.post(`${API.apiRoot}/course/get_courses`, body);
+    console.log(test);
+    return test;
   }
 
   getCourse(courseCode: string): Observable<any> {

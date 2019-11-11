@@ -85,6 +85,7 @@ export class TimetableService {
 
   getSlotStartTime(session, i: number) {
     const duration = session.duration / session.slotCount;
+    console.log(session.startDate);
     const time = new Date(session.startDate).getTime();
     const t = new Date(time + duration * this.minutesToMillis * i);
     const hours = t.getHours();
@@ -166,7 +167,7 @@ export class TimetableService {
   }
 
   repeatsSince(startDate: Date, endDate: Date, repeatType: string, repeatGap: number) {
-    const date = startDate;
+    const date = new Date(startDate);
     date.setMilliseconds(0);
     date.setSeconds(0);
     date.setMinutes(0);
@@ -219,7 +220,7 @@ export class TimetableService {
     let newDay;
     switch (session.repeatType) {
       case 'ONCE':
-        date = session.startDate;
+        date = new Date(session.startDate);
         break;
       case 'DAILY':
         diff = this.diffDays(session.startDate, new Date());

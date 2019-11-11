@@ -37,16 +37,4 @@ export class EventsComponent implements OnInit {
     return this.selectedEvent.eventCode === event.eventCode;
   }
 
-  dummy() {
-    const event: ScriptableEvent = {
-      eventCode: 'TEST',
-      eventDescription: 'For testing',
-      eventName: 'OctoberTest',
-      startDate: this.timetableService.getDateString(new Date()),
-      endDate: this.timetableService.getDateString(new Date()),
-    };
-    this.eventService.createEvent(event);
-    // this.eventService.removeEvent(event);
-  }
-
 }

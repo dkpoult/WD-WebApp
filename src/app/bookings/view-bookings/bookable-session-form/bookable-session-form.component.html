@@ -5,14 +5,17 @@
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{titleCase(form.get('sessionType').value)}} in
-        {{form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] + form.get('venue').value['subCode'] : "unspecified venue"}}
+        {{form.get('venue').value['buildingCode'] ? form.get('venue').value['buildingCode'] +
+              (form.get('venue').value['venueCode'] ? form.get('venue').value['venueCode'] : "") : "unspecified venue"}}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <mat-action-row fxLayoutAlign="start center">
-      <!-- <span fxFlex></span> -->
-      <mat-chip (click)="removeSession()" color="warn" selected>
+    <mat-action-row fxLayoutAlign="start center" fxLayoutGap="10px">
+      <mat-chip matTooltip="Remove Session" (click)="removeSession()" color="warn" selected>
         <mat-icon>delete</mat-icon>
       </mat-chip>
+<!--      <mat-chip matTooltip="Sharable Link"(click)="generateURI()" color="primary" selected>-->
+<!--        <mat-icon>share</mat-icon>-->
+<!--      </mat-chip>-->
     </mat-action-row>
     <!-- Content -->
     <div class="chips">
@@ -30,11 +33,16 @@
       </mat-autocomplete>
       <div class="venue" fxLayout="col" fxLayoutAlign="start center" fxLayoutGap="23px">
         <mat-form-field>
-          <mat-label>Venue</mat-label>
+          <mat-label>Building Code</mat-label>
           <input [matAutocomplete]="buildingAuto" formControlName="buildingCode" matInput>
         </mat-form-field>
         <mat-form-field>
-          <input autocomplete="off" formControlName="subCode" matInput>
+          <mat-label>Floor</mat-label>
+          <input autocomplete="off" formControlName="floor" matInput>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Venue Code</mat-label>
+          <input autocomplete="off" formControlName="venueCode" matInput>
         </mat-form-field>
       </div>
     </form>

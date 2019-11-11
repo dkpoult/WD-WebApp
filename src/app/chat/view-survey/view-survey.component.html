@@ -1,15 +1,15 @@
 <ng-container *ngIf="survey && survey.active; else elseTemplate">
-  <form (submit)="answerSurvey()" *ngIf="!isLecturer()" [formGroup]="form">
+  <form (submit)="answerSurvey()" *ngIf="!isLecturer()" [formGroup]="form" class="container">
     <h2>{{survey.title}}</h2>
     <div [ngSwitch]="survey.responseType">
-      <mat-form-field *ngSwitchCase="'MC'">
+      <div *ngSwitchCase="'MC'">
         <mat-label>Choose an answer</mat-label>
-        <mat-radio-group formControlName="answer">
-          <mat-radio-button *ngFor="let option of survey.options; let i = index" value="i">
+        <mat-radio-group formControlName="answer" fxLayout="column">
+          <mat-radio-button fxFlex *ngFor="let option of survey.options; let i = index" value="i">
             {{option}}
           </mat-radio-button>
         </mat-radio-group>
-      </mat-form-field>
+      </div>
       <mat-form-field *ngSwitchCase="'TEXT'">
         <mat-label>Type an answer</mat-label>
         <textarea formControlName="answer" matInput></textarea>
@@ -19,20 +19,29 @@
         <input autocomplete="off" formControlName="answer" matInput type="number">
       </mat-form-field>
     </div>
-    <button (click)="answerSurvey()" [disabled]="form.pristine" color="primary" mat-raised-button>Submit answer</button>
+    <button id="submit" (click)="answerSurvey()" [disabled]="form.pristine" color="primary" mat-raised-button>Submit
+      answer</button>
   </form>
   <!-- Only for lecturers/mods -->
   <div *ngIf="isLecturer()">
-    <div class="surveySummary">
-      <h2>{{survey.title}}</h2>
+    <div class="container">
+      <div class="surveySummary">
+        <h2>{{survey.title}}</h2>
+      </div>
+      <button (click)="closeSurvey()" color="primary" mat-raised-button>Close this survey</button>
+      <div *ngIf="survey.responseType === 'MC'; else listAnswers">
+        <p *ngFor="let response of survey.results; let i = index">
+          {{survey.options[i]}}: {{response}}
+        </p>
+        <app-chart [data]="survey.results" [labels]="survey.options"></app-chart>
+      </div>
+      <ng-template #listAnswers>
+        <h3>Answers:</h3>
+        <p *ngFor="let response of survey.results; let i = index">
+          {{response}}
+        </p>
+      </ng-template>
     </div>
-    <div *ngIf="survey.responseType === 'MC'">
-      <p *ngFor="let response of survey.results; let i = index">
-        {{survey.options[i]}}: {{response}}
-      </p>
-      <app-chart [data]="survey.results" [labels]="survey.options"></app-chart>
-    </div>
-    <button (click)="closeSurvey()" color="primary" mat-raised-button>Close this survey</button>
   </div>
 </ng-container>
 <ng-template #elseTemplate>

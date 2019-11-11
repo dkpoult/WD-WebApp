@@ -1,0 +1,42 @@
+<form [formGroup]="stage" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-expansion-panel #panel (closed)="panelOpenState = true" (opened)="panelOpenState = false" class="panel" fxFlex>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{stage.value.title ? stage.value.title: 'Untitled'}} ({{steps.length}} steps)
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row fxLayoutAlign="start center">
+            <mat-chip-list>
+                <mat-chip (click)="removeStage()" color="warn" selected>
+                    <mat-icon>delete</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+        </mat-action-row>
+        <!-- Content -->
+        <div fxLayoutAlign="row" fxLayoutGap="5px">
+            <mat-form-field>
+                <mat-label>
+                    Title
+                </mat-label>
+                <input matInput formControlName="title">
+                <mat-error>Please give this stage a title</mat-error>
+            </mat-form-field>
+            <mat-checkbox formControlName="optional">Optional</mat-checkbox>
+        </div>
+        <mat-form-field>
+            <mat-placeholder>Text</mat-placeholder>
+            <textarea matInput formControlName="text"></textarea>
+        </mat-form-field>
+        <div class="header" fxLayout="row" fxLayoutAlign="center center">
+            <h4>Steps</h4>
+            <button mat-icon-button type="button" (click)="addStep()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+        <mat-accordion>
+            <app-edit-step *ngFor="let step of steps.controls | filter:filterDeleted; let i = index"
+                (remove)=removeStep(i) [step]="step">
+            </app-edit-step>
+        </mat-accordion>
+    </mat-expansion-panel>
+</form>

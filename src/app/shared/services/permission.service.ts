@@ -1,9 +1,9 @@
-import {API} from './api';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {Permission} from './models';
-import {UserService} from './user.service';
+import { API } from './api';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, Subject, of } from 'rxjs';
+import { Permission } from './models';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ import {UserService} from './user.service';
 export class PermissionService {
 
   permissions: Permission[] = [];
+  globalPermissions: any[] = [];
   private newPermSubject = new Subject<any>();
   newPermissions$ = this.newPermSubject.asObservable();
   private lookup: any;
@@ -51,6 +52,7 @@ export class PermissionService {
 
   getAllPermissions(context: string): Observable<any> {
     const user = this.userService.currentUser;
+    if (!user) { return of([]); }
     const body = {
       personNumber: user.personNumber,
       userToken: user.userToken,
@@ -69,18 +71,25 @@ export class PermissionService {
     return permissions | this.lookup[identifier];
   }
 
-  removePermission(permissions: number, identifier: string) {
+  togglePermission(permissions: number, identifier: string) {
     return permissions ^ this.lookup[identifier];
   }
 
-  isLecturer(value: any): boolean {
+  isAdmin(value: number | { permissions: number }): boolean {
+    if (typeof (value) === 'number') {
+      return this.hasPermission('EDIT_PERMISSIONS', value) || this.hasPermission('EDIT', value);
+    }
+    return this.hasPermission('EDIT_PERMISSIONS', value.permissions) || this.hasPermission('EDIT', value.permissions);
+  }
+
+  isLecturer(value: number | { permissions: number }): boolean {
     if (typeof (value) === 'number') {
       return this.hasPermission('EDIT_PERMISSIONS', value);
     }
     return this.hasPermission('EDIT_PERMISSIONS', value.permissions);
   }
 
-  isTutor(value: any): boolean {
+  isTutor(value: number | { permissions: number }): boolean {
     if (typeof (value) === 'number') {
       return this.hasPermission('MODERATE', value);
     }

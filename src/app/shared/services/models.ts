@@ -4,6 +4,20 @@ export interface ScriptableEvent {
   eventDescription: string;
   startDate: string;
   endDate: string;
+  temporaryVenues: Building[];
+  stages: EventStage[];
+}
+
+export interface EventStage {
+  title: string;
+  text: string;
+  optional: boolean;
+  steps: EventStep[];
+}
+
+export interface EventStep {
+  text: string;
+  venue?: { buildingCode: string, floor: number, venueCode: string, eventSpecific: boolean };
 }
 
 export interface User {
@@ -25,9 +39,50 @@ export interface Permission {
 
 export interface Venue {
   buildingCode: string;
-  subCode: string;
+  floor: string;
+  venueCode: string;
   coordinates: any | undefined; // TODO: This should be an actual type
+  // venueCode: string;
+  // venueName: string;
+  // hasImage: boolean; // .png
+  // coordinates: {
+  //   x: number,
+  //   y: number,
+  // };
+  // attributes: {
+  //   [key: string]: any
+  // };
 }
+
+export interface Building {
+  buildingCode: string;
+  buildingName: string;
+  coordinates: {
+    lat: number,
+    lng: number,
+  };
+  floors: [
+    {
+      hasImage: boolean,
+      floorName: string,
+      venues: [
+        {
+          venueCode: string,
+          venueName: string,
+          hasImage: boolean, // .png
+          coordinates: {
+            x: number,
+            y: number,
+          },
+          attributes: {
+            [key: string]: any
+          },
+        }
+      ] | [],
+    }
+  ];
+}
+
 
 export enum SessionType {'LECTURE', 'LAB', 'TUTORIAL', 'TEST', 'CONSULTATION', 'MEETING'}
 

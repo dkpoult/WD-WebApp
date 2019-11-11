@@ -35,4 +35,13 @@ $urgentColor: #ab563a;
     background: transparentize($color: $cancelledColor, $amount: 0.6);
     border-radius: 100%;
   }
+
+  .allocated {
+    color: goldenrod;
+  }
+
+  .cancelled-session {
+    color: red;
+    padding-left: 10px;
+  }
 }

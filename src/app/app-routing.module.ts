@@ -16,7 +16,7 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
-  { path: 'login/:redirect', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
   {
     path: 'courses', canActivate: [AuthGuard], canActivateChild: [AuthGuard], children: [
       { path: '', component: CoursesComponent },

@@ -3,7 +3,7 @@
 .container {
   height: 100%;
 }
-.form {
+#view>div {
   @include card(1);
   margin: 15px;
   padding: 15px;
@@ -19,6 +19,9 @@
 #view {
   overflow-y: auto;
 }
+#new-floor {
+  display: inherit;
+}
 .toolbar-header {
   display: flex;
   justify-content: center;
@@ -30,6 +33,12 @@
 #add-btn {
   margin-top: 15px;
   width: 100%;
+}
+.venue-tree {
+  margin: 5px;
+  .mat-form-field {
+    width: calc(100% - 45px);
+  }
 }
 
 .tree-invisible {
@@ -46,8 +55,11 @@
   margin-bottom: 0;
   list-style-type: none;
   box-sizing: content-box;
+  border-radius: 5px;
+  padding: .05em;
 }
 
+.selected,
 .selected>li {
   @include card(1);
 }

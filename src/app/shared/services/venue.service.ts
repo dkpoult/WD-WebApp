@@ -1,30 +1,54 @@
 import {SharedService} from './shared.service';
 import {Injectable} from '@angular/core';
-import {interval, Subject, Subscription} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {Subject} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {API} from './api';
 import {UserService} from './user.service';
+import {Building, Venue} from './models';
+import {map} from 'rxjs/operators';
+import {forEach} from '@angular/router/src/utils/collection';
 
 export interface VenueNode {
   code: string;
-  hasImage: boolean;
-  rooms?: VenueNode[];
+  name: string;
+  nodeType: string;
+  hasImage?: boolean;
+  coordinates?: { lat: number, lng: number } & { x: number, y: number };
+  children?: VenueNode[];
   parent?: VenueNode;
-  coordinates?: number[];
+  attributes?: { [key: string]: any };
+  level?: number;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class VenueService {
-
   venues: any[];
   currentUser = this.userService.currentUser;
-  pollingInterval = 15000;
   private newVenuesSubject = new Subject<any>();
   newVenues$ = this.newVenuesSubject.asObservable();
-  private venueTreeSubject = new Subject<VenueNode[]>();
-  venueTree$ = this.venueTreeSubject.asObservable();
+  venue$ = this.newVenues$.pipe(map((v: Building[]) => {
+    // New venues converted to old style venues
+    const oldVenues: Venue[] = [];
+    console.log('New style:', v);
+    for (const building of v) {
+      const buildingCode = building.buildingCode;
+      for (const floor of building.floors) {
+        for (const venue of floor.venues) {
+          oldVenues.push({
+            buildingCode,
+            floor: null,
+            venueCode: venue.venueCode,
+            coordinates: [building.coordinates.lat, building.coordinates.lng]
+          });
+        }
+      }
+    }
+    console.log('Old-style venues:', oldVenues);
+    return oldVenues;
+  }));
+  private requestNum = 0;
 
   constructor(
     private sharedService: SharedService,
@@ -33,71 +57,84 @@ export class VenueService {
   ) {
   }
 
-  set venueTree(v) {
-    console.log('Setting', v);
-    this.venueTreeSubject.next(v);
+  insertBuilding(v) {
+    this.venue$.subscribe(console.log);
+    this.venues.push(v);
+    this.newVenuesSubject.next(this.venues);
   }
 
-  insertVenue(v) {
-    if (v.rooms) {
-      v.rooms.forEach(r => {
-        this.venues.push({buildingCode: v.buildingCode, subCode: r, hasImage: false});
-      });
-    }
-    const t = this.getVenueTree();
-    console.log('Tree:', t);
-    this.venueTreeSubject.next(t);
+  replaceBuilding(code: string, newBuilding: Building) {
+    // Find building with the right code, and set it to match newBuilding
+    const old: Building = this.venues.find((e: Building) => e.buildingCode === code);
+    old.buildingName = newBuilding.buildingName;
+    old.coordinates = newBuilding.coordinates;
+    old.floors = newBuilding.floors;
+    this.newVenuesSubject.next(this.venues);
   }
 
-  updateVenues() {
-    const req = this.getVenues();
+  refreshVenues() {
+    const req = this.getBuildings();
     req.subscribe((result: any) => {
       switch (result.responseCode) {
         case 'successful':
-          result.venues.forEach(venue => {
-            venue.coordinates = venue.coordinates.split(',');
-          });
           this.venues = result.venues;
           this.newVenuesSubject.next(this.venues);
-          this.venueTreeSubject.next(this.getVenueTree());
           break;
       }
     });
     return req;
   }
 
-  getVenues() {
-    // TODO: Move this out of sharedService
-    return this.sharedService.getVenues();
-  }
-
-  addVenue(buildingCode: string, subCode: string, coordinates: number[]) {
+  addBuilding(b) {
+    const {personNumber, userToken} = this.currentUser;
+    const {buildingCode, buildingName, floors, coordinates} = b;
     const body = {
+      personNumber,
+      userToken,
       buildingCode,
-      subCode,
-      coordinates: coordinates.join(','),
-      personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.userToken
+      buildingName,
+      floors,
+      coordinates
     };
-    const req = this.http.post(`${API.apiRoot}/venue/add_venue`, body);
-    req.subscribe();
+    const req = this.http.post(`${API.apiRoot}/venue/add_building`, body);
+    req.subscribe((result: any) => {
+      if (result.responseCode === 'successful') {
+        this.insertBuilding(b);
+      }
+    });
     return req;
   }
 
-  editVenue(buildingCode: string, subCode: string,
-            coordinates: number[] | undefined, newBuildingCode: string | undefined, newSubCode: string | undefined) {
+  updateBuilding(oldBuildingCode: string, building: Building) {
+    const {personNumber, userToken} = this.currentUser;
+    const {buildingCode, buildingName, floors, coordinates} = building;
+
     const body = {
-      buildingCode,
-      subCode,
-      coordinates: coordinates.join(','),
-      newBuildingCode: newBuildingCode === buildingCode ? undefined : newBuildingCode,
-      newSubCode: newSubCode === subCode ? undefined : newSubCode,
-      personNumber: this.currentUser.personNumber,
-      userToken: this.currentUser.userToken
+      buildingCode: oldBuildingCode,
+      buildingName,
+      floors: floors.map(e => e.floorName),
+      newBuildingCode: buildingCode === oldBuildingCode ? undefined : buildingCode,
+      coordinates,
+      personNumber,
+      userToken
     };
-    const req = this.http.post(`${API.apiRoot}/venue/update_venue`, body);
-    req.subscribe();
+
+    const req = this.http.post(`${API.apiRoot}/venue/update_building`, body);
+    req.subscribe((result: any) => {
+      if (result.responseCode === 'successful') {
+        this.replaceBuilding(oldBuildingCode, building);
+      }
+    });
     return req;
+  }
+
+  getBuildings() {
+    const {personNumber, userToken} = this.currentUser;
+    const body = {
+      personNumber,
+      userToken,
+    };
+    return this.http.post(`${API.apiRoot}/venue/get_buildings`, body);
   }
 
   deleteVenue(buildingCode: string, subCode: string) {
@@ -112,22 +149,78 @@ export class VenueService {
     return req;
   }
 
-  private getVenueTree(): VenueNode[] {
-    if (!this.venues) {
-      return null;
-    }
-    const venues = [];
-    this.venues.forEach(venue => {
-      // Find the current venue's buildingCode in the list of venues
-      let p = venues.find(v => v.code === venue.buildingCode);
-      // and add the subCode to the room list
-      if (!p) {
-        p = {code: venue.buildingCode, hasImage: false, coordinates: venue.coordinates, rooms: []};
-        venues.push(p);
-      }
-      p.rooms.push({code: venue.subCode, hasImage: venue.hasImage, parent: p});
-    });
-    return venues;
+  getImage(buildingCode, floor, venue?) {
+    return API.apiRoot + '/venue/get_venue_image?' +
+      'buildingCode=' + buildingCode +
+      '&floor=' + floor +
+      (venue ? `&venueCode=${venue}` : '') +
+      '&i=' + this.requestNum.toString(10);
   }
 
+  setImage(files, buildingCode, floor, venue?) {
+    const {personNumber, userToken} = this.currentUser;
+    const url = API.apiRoot + '/venue/set_venue_image?' +
+      'buildingCode=' + buildingCode +
+      '&floor=' + floor +
+      (venue ? `&venueCode=${venue}` : '') +
+      '&personNumber=' + personNumber +
+      '&userToken=' + userToken;
+
+    const image = files.item(0);
+
+    const formData = new FormData();
+    formData.append('image', image, image.name);
+
+    const req = this.http.post(url, formData);
+    req.subscribe(e => {
+      this.requestNum++;
+    });
+    return req;
+  }
+
+  removeVenue(buildingCode: string, floor: number, venueCode: any) {
+    const {personNumber, userToken} = this.currentUser;
+    const body = {personNumber, userToken, buildingCode, floor, venueCode};
+    const req = this.http.post(`${API.apiRoot}/venue/remove_venue`, body);
+    req.subscribe(() => this.refreshVenues());
+    return req;
+  }
+
+  updateVenue(buildingCode: string, floor: number, venueCode: any, venue: any) {
+    const {personNumber, userToken} = this.currentUser;
+    const {venueName, newVenueCode, coordinates, attributes} = venue;
+    const body = {
+     personNumber,
+     userToken,
+     venueName,
+     newVenueCode: newVenueCode === venueCode ? undefined : newVenueCode,
+     coordinates,
+     attributes,
+     buildingCode,
+     floor,
+     venueCode,
+    };
+
+    const req = this.http.post(`${API.apiRoot}/venue/update_venue`, body);
+    req.subscribe(() => this.refreshVenues());
+    return req;
+  }
+
+  addVenue(buildingCode: string, floor: number, venue: any) {
+    const {personNumber, userToken} = this.currentUser;
+    const {venueName, venueCode, coordinates, attributes} = venue;
+    const body = {
+      personNumber,
+      userToken,
+      venueName,
+      venueCode,
+      coordinates,
+      attributes,
+      buildingCode,
+      floor,
+    };
+    const req = this.http.post(`${API.apiRoot}/venue/add_venue`, body);
+    req.subscribe(() => this.refreshVenues());
+    return req;
+  }
 }
