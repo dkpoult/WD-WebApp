@@ -65,6 +65,7 @@ import {EventsComponent} from './admin-panel/events/events.component';
 import {ViewEventComponent} from './admin-panel/events/view-event/view-event.component';
 import { ViewFloorComponent } from './admin-panel/venues/view-floor/view-floor.component';
 import { EditFlowComponent } from './admin-panel/events/view-event/edit-flow/edit-flow.component';
+import { EditStepComponent } from './admin-panel/events/view-event/edit-flow/edit-step/edit-step.component';
 
 export function initialiseApp(config: SharedService) {
   return () => config.initialise();
@@ -127,6 +128,7 @@ export function initialiseApp(config: SharedService) {
     ViewEventComponent,
     ViewFloorComponent,
     EditFlowComponent,
+    EditStepComponent,
   ],
   imports: [
     HttpClientModule,

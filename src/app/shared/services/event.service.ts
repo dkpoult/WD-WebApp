@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {UserService} from './user.service';
-import {API} from './api';
-import {ScriptableEvent} from './models';
-import {Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { UserService } from './user.service';
+import { API } from './api';
+import { ScriptableEvent } from './models';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,12 +32,11 @@ export class EventService {
   }
 
   getEvents() {
-    // Do I care about events anywhere though?
-    // Sure I will keep them here anyway, can't hurt to have centralised thing to tell everyone
     const req = this.http.post(`${API.apiRoot}/event/get_events`, {});
     req.subscribe((result: any) => {
       switch (result.responseCode) {
         case 'successful':
+          console.log(result);
           this.events = result.events;
           break;
         default:
@@ -48,14 +47,15 @@ export class EventService {
   }
 
   createEvent(event: ScriptableEvent) {
-    const {eventCode, eventName, eventDescription, startDate, endDate} = event;
-    const {personNumber, userToken} = this.user;
+    const { eventCode, eventName, eventDescription, startDate, endDate, stages } = event;
+    const { personNumber, userToken } = this.user;
     const body = {
       eventCode,
       eventName,
       eventDescription,
       startDate,
       endDate,
+      stages,
       personNumber,
       userToken
     };
@@ -66,9 +66,9 @@ export class EventService {
   }
 
   removeEvent(event: ScriptableEvent) {
-    const {eventCode} = event;
-    const {personNumber, userToken} = this.user;
-    const body = {eventCode, personNumber, userToken};
+    const { eventCode } = event;
+    const { personNumber, userToken } = this.user;
+    const body = { eventCode, personNumber, userToken };
 
     const req = this.http.post(`${API.apiRoot}/event/remove_event`, body);
     req.subscribe(() => this.getEvents());
@@ -76,14 +76,15 @@ export class EventService {
   }
 
   updateEvent(event: ScriptableEvent) {
-    const {eventCode, eventName, eventDescription, startDate, endDate} = event;
-    const {personNumber, userToken} = this.user;
+    const { eventCode, eventName, eventDescription, startDate, endDate, stages } = event;
+    const { personNumber, userToken } = this.user;
     const body = {
       eventCode,
       eventName,
       eventDescription,
       startDate,
       endDate,
+      stages,
       personNumber,
       userToken
     };

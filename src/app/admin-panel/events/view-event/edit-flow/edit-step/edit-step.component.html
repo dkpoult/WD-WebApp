@@ -1,0 +1,56 @@
+<form [formGroup]="step" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <mat-expansion-panel #panel (closed)="panelOpenState = true" (opened)="panelOpenState = false" class="panel" fxFlex>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{step.value.text ? step.value.text : 'Empty'}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-action-row fxLayoutAlign="start center">
+      <mat-chip-list>
+        <mat-chip (click)="removeStep()" color="warn" selected>
+          <mat-icon>delete</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-action-row>
+    <!-- Content -->
+    <mat-form-field>
+      <mat-label>
+        Prompt
+      </mat-label>
+      <input matInput formControlName="text">
+      <mat-error>Please give this step a prompt</mat-error>
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="5px">
+      <!-- Pick a building from a drop down -->
+      <mat-form-field>
+        <mat-label>Building</mat-label>
+        <mat-error>Please select a building</mat-error>
+        <mat-select [formControl]="building">
+          <mat-option *ngFor="let b of buildingList" value="{{b.buildingCode}}">
+            {{b.buildingName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- Pick one of the floors -->
+      <mat-form-field>
+        <mat-label>Floor</mat-label>
+        <mat-error>Please select a floor</mat-error>
+        <mat-select [formControl]="floor" [disabled]="floorList.length === 0">
+          <mat-option *ngFor="let f of floorList; let i = index" value="{{i}}">
+            {{f.floorName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- Pick a venue on that floor -->
+      <mat-form-field>
+        <mat-label>Venue</mat-label>
+        <mat-error>Please select a venue</mat-error>
+        <mat-select [formControl]="venue" [disabled]="venueList.length === 0">
+          <mat-option *ngFor="let v of venueList" value="{{v.venueCode}}">
+            {{v.venueCode}} - {{v.venueName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+</form>

@@ -38,10 +38,20 @@
         <mat-datepicker #endDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
-<!--    <app-edit-flow></app-edit-flow>-->
+    <div class="header" fxLayout="row" fxLayoutAlign="center center">
+      <h4>Stages</h4>
+      <button mat-icon-button type="button" (click)="addStage()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <div *ngFor="let stage of stages.controls | filter:filterDeleted; let i = index">
+      <app-edit-flow (remove)="removeStage(i)" [stage]=stage></app-edit-flow>
+    </div>
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <button fxFlex [disabled]="!canSubmit()" mat-button type="submit">Submit</button>
-      <button fxFlex mat-icon-button *ngIf="event" (click)="delete()" color="warn"><mat-icon>delete</mat-icon></button>
+      <button fxFlex mat-icon-button *ngIf="event" (click)="delete()" color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </form>
 </div>
