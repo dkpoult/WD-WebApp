@@ -68,7 +68,7 @@ export class NavComponent implements OnInit {
     this.isDarkMode$ = this.theme.isDarkMode$;
     this.permissionService.getAllPermissions('g').subscribe(r => {
       this.globalPermissions = r.permissions;
-    })
+    });
   }
 
   openLoginDialog() {

@@ -36,7 +36,6 @@ export class EventService {
     req.subscribe((result: any) => {
       switch (result.responseCode) {
         case 'successful':
-          console.log(result);
           this.events = result.events;
           break;
         default:
