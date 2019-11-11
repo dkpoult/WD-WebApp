@@ -22,9 +22,9 @@
                     </button>
                 </mat-label>
                 <mat-form-field *ngFor="let option of options.controls; let i = index">
-          <span matPrefix>
-            {{'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i % 26]}}:&nbsp;
-          </span>
+                    <span matPrefix>
+                        {{'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[i % 26]}}:&nbsp;
+                    </span>
                     <button (click)="removeOption(i)" mat-icon-button matSuffix>
                         <mat-icon>delete</mat-icon>
                     </button>
@@ -39,5 +39,3 @@
         </mat-dialog-actions>
     </form>
 </section>
-
-<button (click)="log(form)">Test</button>

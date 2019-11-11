@@ -1,7 +1,7 @@
 import { API } from './api';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { Permission } from './models';
 import { UserService } from './user.service';
 
@@ -52,6 +52,7 @@ export class PermissionService {
 
   getAllPermissions(context: string): Observable<any> {
     const user = this.userService.currentUser;
+    if (!user) { return of([]); }
     const body = {
       personNumber: user.personNumber,
       userToken: user.userToken,
