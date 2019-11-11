@@ -1,5 +1,5 @@
 <div id="wrapper">
-    <mat-tab-group (selectedTabChange)="tabChange($event)" animationDuration="0ms" id="tab-group" mat-stretch-tabs>
+    <mat-tab-group (selectedTabChange)="tabChange($event)" animationDuration="0" id="tab-group" mat-stretch-tabs>
         <mat-tab #chat>
             <ng-template matTabLabel>
                 <span matBadge="{{unreadMessages}}" matBadgeColor="warn" matBadgeHidden="{{unreadMessages === 0}}"

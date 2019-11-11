@@ -5,6 +5,10 @@
     transform: translateX(-50%);
 }
 
+#submit {
+    margin: 15px;
+}
+
 .container {
     @include card(1);
     margin: 15px;

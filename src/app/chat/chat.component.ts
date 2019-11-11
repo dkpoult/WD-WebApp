@@ -1,12 +1,12 @@
-import {PermissionService} from '../shared/services/permission.service';
-import {ActivatedRoute, ParamMap} from '@angular/router';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {SharedService} from '../shared/services/shared.service';
-import {startWith, switchMap} from 'rxjs/operators';
-import {SocketService} from '../shared/services/socket.service';
-import {isNullOrUndefined} from 'util';
-import {interval, Subject, Subscription} from 'rxjs';
-import {UserService} from '../shared/services/user.service';
+import { PermissionService } from '../shared/services/permission.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SharedService } from '../shared/services/shared.service';
+import { startWith, switchMap } from 'rxjs/operators';
+import { SocketService } from '../shared/services/socket.service';
+import { isNullOrUndefined } from 'util';
+import { interval, Subject, Subscription } from 'rxjs';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -63,45 +63,44 @@ export class ChatComponent implements OnInit {
       switchMap((params: ParamMap) =>
         params.getAll('code')
       )).subscribe((result: any) => {
-      this.sharedService.getCourse(result).subscribe((response: any) => {
-        this.course = response.course;
-        // Can only do this after we have course
-        if (this.isModerator()) {
-          this.sharedService.getMessages(result, true).subscribe((res: any) => {
-            switch (res.responseCode) {
-              case 'successful':
-                const temp = res.messages.reverse();
-                temp.forEach(message => {
-                  this.handleMessage(message, true);
-                });
-                break;
-            }
-          });
-          this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
-            this.handleMessage(message, true);
-          });
-        }
-      });
-      this.sharedService.getSurvey(result).subscribe((response: any) => {
-        console.log("Got the survey: ", response);
-        this.survey = response.survey;
-        // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
-      });
-      // Get previous messages
-      this.sharedService.getMessages(result, false).subscribe((res: any) => {
-        switch (res.responseCode) {
-          case 'successful':
-            const temp = res.messages.reverse();
-            temp.forEach(message => {
-              this.handleMessage(message, false);
+        this.sharedService.getCourse(result).subscribe((response: any) => {
+          this.course = response.course;
+          // Can only do this after we have course
+          if (this.isModerator()) {
+            this.sharedService.getMessages(result, true).subscribe((res: any) => {
+              switch (res.responseCode) {
+                case 'successful':
+                  const temp = res.messages.reverse();
+                  temp.forEach(message => {
+                    this.handleMessage(message, true);
+                  });
+                  break;
+              }
             });
-            break;
-        }
+            this.socketService.subscribeToCourse(result, true).subscribe((message: any) => {
+              this.handleMessage(message, true);
+            });
+          }
+        });
+        this.sharedService.getSurvey(result).subscribe((response: any) => {
+          this.survey = response.survey;
+          // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
+        });
+        // Get previous messages
+        this.sharedService.getMessages(result, false).subscribe((res: any) => {
+          switch (res.responseCode) {
+            case 'successful':
+              const temp = res.messages.reverse();
+              temp.forEach(message => {
+                this.handleMessage(message, false);
+              });
+              break;
+          }
+        });
+        this.socketService.subscribeToCourse(result).subscribe((message: any) => {
+          this.handleMessage(message, false);
+        });
       });
-      this.socketService.subscribeToCourse(result).subscribe((message: any) => {
-        this.handleMessage(message, false);
-      });
-    });
   }
 
   tabChange(event) {
@@ -157,7 +156,7 @@ export class ChatComponent implements OnInit {
     const question = this.liveQuestions.find((value) => value.id === id);
     const vote = (question.voted === 1) ? 0 : 1; // 0 if it was 1, 1 if it was 0
     question.voted = vote;
-    const content = {id, vote};
+    const content = { id, vote };
     this.socketService.voteQuestion(content);
   }
 
