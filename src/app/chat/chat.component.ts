@@ -83,6 +83,7 @@ export class ChatComponent implements OnInit {
         }
       });
       this.sharedService.getSurvey(result).subscribe((response: any) => {
+        console.log("Got the survey: ", response);
         this.survey = response.survey;
         // this.unansweredSurvey = !this.survey.answered; // ! David must add this to server
       });
@@ -198,6 +199,7 @@ export class ChatComponent implements OnInit {
       // Just once off
       this.sharedService.getSurvey(this.course.courseCode, this.isModerator()).subscribe((result: any) => {
         this.survey = result.survey;
+        console.log(result);
       });
     }
   }

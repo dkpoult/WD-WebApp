@@ -55,6 +55,13 @@ export class TimetableComponent implements OnInit {
         classList.push('inPast');
       }
       if (this.timetableService.sessionFallsOn(session, date)) {
+        const dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
+                    .toISOString()
+                    .split('T')[0];
+
+        if (session.cancellations.includes(dateString)) {
+          classList.push('cancelled');
+        }
         classList.push('fallsOn');
         if (this.urgentSession(session)) {
           classList.push('urgent');
@@ -63,6 +70,16 @@ export class TimetableComponent implements OnInit {
     });
     return classList.join(' ');
   };
+
+  sessionCancelled(session, date: Date) {
+    const dateString = new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
+      .toISOString()
+      .split('T')[0];
+    if (session.cancellations.includes(dateString)) {
+      return true;
+    }
+    return false;
+  }
 
   log(object: any) {
     console.log(object);
@@ -79,6 +96,8 @@ export class TimetableComponent implements OnInit {
 
   bookingsFor(session: any) {
     const i = this.timetableService.repeatsSince(session.startDate, this.selectedDate, session.repeatType, session.repeatGap).toString();
+    console.log(session);
+    console.log(i);
     return session.bookings[i];
   }
 
@@ -86,9 +105,15 @@ export class TimetableComponent implements OnInit {
     return this.timetableService.getSlotStartTime(session, i);
   }
 
+  slotAllocated(bookings, i) {
+    console.log(bookings, i);
+    return bookings[i].allocated;
+  }
+
   getCourses() {
     this.sharedService.getCourses()
       .subscribe((response: any) => {
+        console.log(response);
         if (response.responseCode.startsWith('failed')) {
           console.log(response);
           return;

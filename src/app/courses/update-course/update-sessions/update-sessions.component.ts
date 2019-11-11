@@ -97,7 +97,7 @@ export class UpdateSessionsComponent implements OnInit {
         endStr = this.timetableService.getEndTimeString(date, session.duration);
       }
       if (!session.venue) {
-        session.venue = {building: null, room: null};
+        session.venue = {building: null, floor: null, room: null};
       }
       if (!session.cancellations) {
         session.cancellations = [];
@@ -107,8 +107,9 @@ export class UpdateSessionsComponent implements OnInit {
       });
       const newSession = new FormGroup({
         venue: new FormGroup({
-          buildingCode: new FormControl(session.venue.buildingCode, [Validators.required]),
-          subCode: new FormControl(session.venue.subCode, [Validators.required]),
+          buildingCode: new FormControl(session.venue.buildingCode),
+          floor: new FormControl(session.venue.floor),
+          venueCode: new FormControl(session.venue.venueCode),
         }),
         repeatType: new FormControl(session.repeatType, [Validators.required]),
         repeatGap: new FormControl(session.repeatGap, [Validators.required, Validators.min(1)]),
@@ -127,8 +128,9 @@ export class UpdateSessionsComponent implements OnInit {
   addSession() {
     const newSession = new FormGroup({
       venue: new FormGroup({
-        buildingCode: new FormControl('', [Validators.required]),
-        subCode: new FormControl('', [Validators.required]),
+        buildingCode: new FormControl(''),
+        floor: new FormControl(''),
+        venueCode: new FormControl(''),
       }),
       repeatType: new FormControl('WEEKLY', [Validators.required]),
       repeatGap: new FormControl(1, [Validators.required, Validators.min(1)]),

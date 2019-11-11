@@ -39,7 +39,8 @@ export interface Permission {
 
 export interface Venue {
   buildingCode: string;
-  subCode: string;
+  floor: string;
+  venueCode: string;
   coordinates: any | undefined; // TODO: This should be an actual type
   // venueCode: string;
   // venueName: string;

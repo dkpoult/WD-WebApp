@@ -39,14 +39,20 @@ export class MapComponent implements OnInit {
     let building = null;
     // TODO: This needs to update to new style of venue
     this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        params.getAll('building')
-      )).subscribe((result: any) => {
+      switchMap((params: ParamMap) => params.getAll('building'))).subscribe((result: any) => {
       building = result;
     });
     this.venueService.newVenues$.subscribe((result: any) => {
       this.venues = result;
       console.log(this.venues);
+
+      for (const venue of this.venues) {
+        if (venue.buildingCode === building) {
+          this.lat = venue.coordinates.lat;
+          this.lng = venue.coordinates.lng;
+          this.zoom = 20;
+        }
+      }
     });
     this.venueService.refreshVenues();
   }

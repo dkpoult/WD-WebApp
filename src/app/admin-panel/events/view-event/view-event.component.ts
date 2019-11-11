@@ -29,6 +29,7 @@ export class ViewEventComponent implements OnInit {
   }
 
   @Input() set event(value: ScriptableEvent) {
+    console.log(value);
     if (!value) {
       if (this.form) {
         this.form.reset();
@@ -38,7 +39,7 @@ export class ViewEventComponent implements OnInit {
       this.form = new FormGroup({
         eventCode: new FormControl('', [Validators.required]),
         eventName: new FormControl('', [Validators.required]),
-        eventDescription: new FormControl(''),
+        eventDescription: new FormControl('', [Validators.required]),
         startDate: new FormControl(new Date(), [Validators.required]),
         endDate: new FormControl(new Date(), [Validators.required]),
         stages: new FormArray([])
@@ -48,7 +49,7 @@ export class ViewEventComponent implements OnInit {
       this.form = new FormGroup({
         eventCode: new FormControl(value.eventCode),
         eventName: new FormControl(value.eventName, [Validators.required]),
-        eventDescription: new FormControl(value.eventDescription),
+        eventDescription: new FormControl(value.eventDescription, [Validators.required]),
         startDate: new FormControl(value.startDate, [Validators.required]),
         endDate: new FormControl(value.endDate, [Validators.required]),
         stages: new FormArray([])
@@ -103,9 +104,16 @@ export class ViewEventComponent implements OnInit {
   }
 
   submit() {
-    const event: ScriptableEvent = this.form.value;
+    // const event: ScriptableEvent = this.form.value;
+    const event = this.form.value;
     event.startDate = this.timetableService.getDateString(new Date(event.startDate));
     event.endDate = this.timetableService.getDateString(new Date(event.endDate));
+    event.stages = event.stages.filter(e => !e.delete);
+    event.stages = event.stages.map(e => {
+      e.steps = e.steps.filter(s => !s.delete);
+      return e;
+    });
+
     if (this.event) {
       this.eventService.updateEvent(event);
     } else {
@@ -120,7 +128,7 @@ export class ViewEventComponent implements OnInit {
       title: new FormControl('', [Validators.required]),
       text: new FormControl('', [Validators.required]),
       optional: new FormControl(true, [Validators.required]),
-      steps: new FormArray([])
+      steps: new FormArray([]),
     });
     this.stages.push(control);
     console.log(this.stages);

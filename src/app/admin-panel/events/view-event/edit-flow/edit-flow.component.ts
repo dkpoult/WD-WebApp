@@ -24,6 +24,7 @@ export class EditFlowComponent implements OnInit {
   ) { }
 
   get steps() {
+    console.log(this.stage.get('steps'));
     return this.stage.get('steps') as FormArray;
   }
 
@@ -31,10 +32,10 @@ export class EditFlowComponent implements OnInit {
     const control = new FormGroup({
       text: new FormControl('', [Validators.required]),
       venue: new FormGroup({
-        buildingCode: new FormControl('', [Validators.required]),
-        floor: new FormControl('', [Validators.required]),
-        venueCode: new FormControl('', [Validators.required])
-      }, [Validators.required])
+        buildingCode: new FormControl(''),
+        floor: new FormControl(''),
+        venueCode: new FormControl('')
+      }, [])
     });
     this.steps.push(control);
   }
@@ -52,14 +53,14 @@ export class EditFlowComponent implements OnInit {
     if (removed.value.old) {
       // Just mark it as delete
       removed.get('delete').setValue(true);
-      const snackBarRef = this.snackBar.open(`Removed step`, 'Undo', { duration: 15000 });
+      const snackBarRef = this.snackBar.open(`Removed step`, 'Undo', { duration: 7500 });
       snackBarRef.onAction().subscribe(() => {
         removed.get('delete').setValue(false);
       });
     } else {
       const i = this.steps.controls.findIndex(e => e.value.venueName === removed.value.venueName);
       // Remove it from the form
-      const snackBarRef = this.snackBar.open(`Removed step`, 'Undo', { duration: 15000 });
+      const snackBarRef = this.snackBar.open(`Removed step`, 'Undo', { duration: 7500 });
       snackBarRef.onAction().subscribe(() => {
         this.steps.insert(i, removed);
       });

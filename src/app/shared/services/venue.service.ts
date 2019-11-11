@@ -38,7 +38,8 @@ export class VenueService {
         for (const venue of floor.venues) {
           oldVenues.push({
             buildingCode,
-            subCode: venue.venueCode,
+            floor: null,
+            venueCode: venue.venueCode,
             coordinates: [building.coordinates.lat, building.coordinates.lng]
           });
         }
